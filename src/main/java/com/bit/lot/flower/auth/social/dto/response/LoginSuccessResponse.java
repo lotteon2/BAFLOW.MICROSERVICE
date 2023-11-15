@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class LoginSuccessResponse {
+  private Long userId;
   private boolean isPhoneNumberIsRegistered;
   private String message ="로그인 완료";
 }

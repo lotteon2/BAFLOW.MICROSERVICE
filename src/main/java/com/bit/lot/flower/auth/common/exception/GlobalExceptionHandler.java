@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.exception;
 
 import com.bit.lot.flower.auth.email.exception.EmailCodeException;
+import com.bit.lot.flower.auth.social.SocialAuthException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,14 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(EmailCodeException.class)
-  public ResponseEntity<Map<String, List<String>>> handleNotFoundException(
+  public ResponseEntity<Map<String, List<String>>> emailCodeException(
+      EmailCodeException ex) {
+    List<String> errors = Collections.singletonList(ex.getMessage());
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+  }
+
+  @ExceptionHandler(SocialAuthException.class)
+  public ResponseEntity<Map<String, List<String>>> socialAuthException(
       EmailCodeException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
     return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
