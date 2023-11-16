@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.social.message;
 
-import com.bit.lot.flower.auth.social.dto.message.SocialUserDto;
+import com.bit.lot.flower.auth.social.dto.message.SocialUserCreateDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.feign.LoginSocialUserFeignRequest;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +14,7 @@ public class CreateSocialUserEventPublisherImpl implements LoginSocialUserEventP
   private final LoginSocialUserFeignRequest feignRequest;
 
   @Override
-  public LoginSuccessResponse publish(SocialUserDto dto) {
+  public LoginSuccessResponse publish(SocialUserCreateDto dto) {
    ResponseEntity<LoginSuccessResponse> response = feignRequest.login(dto);
    return response.getBody();
   }

@@ -1,15 +1,14 @@
 package com.bit.lot.flower.auth.social.mapper;
 
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserDto;
-import org.springframework.stereotype.Component;
+import com.bit.lot.flower.auth.social.dto.message.SocialUserCreateDto;
 
 
 public class SocialDataMapper {
 
-  public static SocialUserDto mapCreateSocialAuthToSocialUserDto(
+  public static SocialUserCreateDto mapCreateSocialAuthToSocialUserDto(
       SocialLoginRequestCommand command) {
-    return SocialUserDto.builder().email(command.getEmail()).nickName(command.getNickname())
+    return SocialUserCreateDto.builder().email(command.getEmail()).nickName(command.getNickname())
         .oauthId(command.getSocialId()).build();
   }
 

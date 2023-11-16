@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.social.service;
 
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
+import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -10,34 +11,36 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class SocialAuthServiceImpl implements
-    SocialAuthService {
+    SocialAuthService<SocialAuthId> {
 
-
-  private final SocialLogoutStrategy logoutStrategy;
-  private final SocialAuthResignUpStrategy resignUpStrategy;
-  private final SignUpStrategy signUpWhenUserIsNotExisted;
+  private final SocialUserWithdrawalStrategy<SocialAuthId> userWithdrawalStrategy;
+  private final SocialLogoutStrategy<SocialAuthId> logoutStrategy;
+  private final SignUpStrategy<SocialAuthId> signUpWhenUserIsNotExisted;
   private final SocialAuthJpaRepository repository;
-
+  private final SocialAuthResignUpStrategy resignUpStrategy;
 
 
   @Transactional
   @Override
-  public void login(Long socialId) {
-    Optional<SocialAuth> optionalSocialAuth = repository.findById(socialId);
+  public void login(SocialAuthId socialId) {
+    Optional<SocialAuth> optionalSocialAuth = repository.findById(socialId.getValue());
 
-    if(optionalSocialAuth.isEmpty()) {
+    if (optionalSocialAuth.isEmpty()) {
       signUpWhenUserIsNotExisted.signUp(socialId);
-    }
-    /*
-    isEmpty가 아니라는 조건은 해당 유저가 존재한다는 것을 의미하므로, 최근 회원탈퇴 전략을 위반하지 않는다면
-     */
-    else if(optionalSocialAuth.get().isRecentlyOut()){
+    } else if (optionalSocialAuth.get().isRecentlyOut()) {
       resignUpStrategy.resignUp(optionalSocialAuth.get());
     }
   }
 
   @Override
-  public void logout(Long socialId) {
+  public void logout(SocialAuthId socialId) {
     logoutStrategy.logout(socialId);
   }
+
+  @Override
+  public void userWithdrawalUserSelf(SocialAuthId socialId) {
+    logoutStrategy.logout(socialId);
+    userWithdrawalStrategy.delete(socialId);
+  }
+
 }

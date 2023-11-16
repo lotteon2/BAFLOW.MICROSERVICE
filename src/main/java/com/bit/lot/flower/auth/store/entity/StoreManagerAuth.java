@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class StoreManager {
+public class StoreManagerAuth {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

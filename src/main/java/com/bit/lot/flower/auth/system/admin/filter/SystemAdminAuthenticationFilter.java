@@ -4,7 +4,11 @@ import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.awt.print.Book;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import javax.servlet.FilterChain;
@@ -22,23 +26,28 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  @Value("${system.admin.id}")
-  private final String adminId;
-  @Value("${system.admin.password}")
-  private final String adminPassword;
-  private final AuthenticationManager authenticationManager;
+
+  private final AuthenticationManager systemAuthenticationManager;
   private final TokenHandler tokenHandler;
 
+
+  private SystemAdminLoginDto getLoginDtoFromRequest(HttpServletRequest request)
+      throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    return mapper.readValue(request.getInputStream(),
+        SystemAdminLoginDto.class);
+  }
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) {
     try {
-      return authenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(adminId, adminPassword,
+      SystemAdminLoginDto dto = getLoginDtoFromRequest(request);
+      return systemAuthenticationManager.authenticate(
+          new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(),
               Collections.singleton(new SimpleGrantedAuthority(Role.ROLE_SYSTEM_ADMIN.name()))));
 
-    } catch (AuthenticationException e) {
+    } catch (AuthenticationException | IOException e) {
       throw new SystemAdminAuthException("존재하지 않는 시스템 어드민 유저입니다.");
     }
 

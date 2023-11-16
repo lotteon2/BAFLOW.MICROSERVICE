@@ -1,10 +1,16 @@
 package com.bit.lot.flower.auth.system.admin;
 
+import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/system/admin")
+@RestController("/api/auth/system/admin")
 public class SystemAdminController {
 
 
