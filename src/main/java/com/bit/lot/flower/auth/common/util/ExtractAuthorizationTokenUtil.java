@@ -1,0 +1,16 @@
+package com.bit.lot.flower.auth.common.util;
+
+import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import javax.servlet.http.HttpServletRequest;
+
+public class ExtractAuthorizationTokenUtil {
+
+  public static String extractToken(HttpServletRequest request) {
+
+    String authorizationHeader = request.getHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME);
+    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+      return authorizationHeader.substring(7);
+    }
+    throw new IllegalArgumentException("토큰 정보를 찾을 수 없습니다. 로그인을 먼저 해주세요.");
+  }
+}

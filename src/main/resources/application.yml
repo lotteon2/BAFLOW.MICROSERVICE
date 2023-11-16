@@ -56,6 +56,7 @@ jwt:
     lifetime: ${jwt.refresh.lifetime}
 
 
+
 redis:
   hostname: ${redis.hostname}
   port: ${redis.port}
@@ -65,3 +66,9 @@ cookie:
   refresh:
     token:
       name: ${cookie.refresh.token.name}
+
+
+system:
+  admin:
+    id: ${system.admin.id}
+    password: ${system.admin.password}

@@ -1,10 +1,13 @@
 package com.bit.lot.flower.auth.common.util;
 
 
+import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.crypto.SecretKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,18 +17,34 @@ public class JwtUtil {
 
   @Value("jwt.access.secret")
   private static String ACCESS_SECRET_KEY;
-  @Value("jwt.access.lifetime")
-  private static long ACCESS_EXPIRATION_TIME;
-  @Value("jwt.refresh.lifetime")
-  private static long REFRESH_EXPIRATION_TIME;
   @Value("jwt.refresh.secret")
   private static String REFRESH_SECRET_KEY;
   private static SecretKey refreshSecretKey;
   private static SecretKey accessSecretKey;
 
+  public static String generateAccessTokenWithClaims(String subject,
+      Map<String, Object> claimsList) {
+    Date now = new Date();
+    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME);
+    initKey();
+    return Jwts.builder()
+        .setSubject(subject)
+        .setIssuedAt(now)
+        .setExpiration(expiryDate)
+        .signWith(accessSecretKey)
+        .addClaims(claimsList)
+        .compact();
+  }
+
+  public static Map<String,Object> addClaims(String id, Object value){
+    Map<String,Object> claims =new HashMap<>();
+    claims.put(id,value);
+      return claims;
+  }
+
   public static String generateAccessToken(String subject) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + ACCESS_EXPIRATION_TIME);
+    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME);
     initKey();
     return Jwts.builder()
         .setSubject(subject)
@@ -37,7 +56,7 @@ public class JwtUtil {
 
   public static String generateRefreshToken(String subject) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + REFRESH_EXPIRATION_TIME);
+    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME);
     initKey();
     return Jwts.builder()
         .setSubject(subject)

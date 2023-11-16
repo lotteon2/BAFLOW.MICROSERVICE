@@ -1,5 +1,7 @@
 package com.bit.lot.flower.auth.social.config;
 
+import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
+import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import lombok.RequiredArgsConstructor;
@@ -8,12 +10,16 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SocialSecurityConfig {
 
+  private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final ExceptionHandlerFilter exceptionHandlerFilter;
   private final OAuth2UserLoadService oAuth2UserService;
 
   @Bean
@@ -25,7 +31,8 @@ public class SocialSecurityConfig {
         .successHandler(successHandler())
         .userInfoEndpoint()
         .userService(oAuth2UserService));
-
+    http.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    http.addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
     return http.build();
   }
 

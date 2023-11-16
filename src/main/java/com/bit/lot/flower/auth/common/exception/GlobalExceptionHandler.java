@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.common.exception;
 
 import com.bit.lot.flower.auth.email.exception.EmailCodeException;
 import com.bit.lot.flower.auth.social.SocialAuthException;
+import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,13 @@ public class GlobalExceptionHandler {
     List<String> errors = Collections.singletonList(ex.getMessage());
     return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
   }
+  @ExceptionHandler(StoreManagerAuthException.class)
+  public ResponseEntity<Map<String, List<String>>> storeManagerException(
+      StoreManagerAuthException ex) {
+    List<String> errors = Collections.singletonList(ex.getMessage());
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+  }
+
 
   @ExceptionHandler(SocialAuthException.class)
   public ResponseEntity<Map<String, List<String>>> socialAuthException(
