@@ -70,7 +70,7 @@ public class JwtUtil {
     return extractClaims(token).getSubject();
   }
 
-  private static Claims extractClaims(String token) {
+  public static Claims extractClaims(String token) {
     return Jwts.parserBuilder().setSigningKey(accessSecretKey).build().parseClaimsJws(token)
         .getBody();
   }
