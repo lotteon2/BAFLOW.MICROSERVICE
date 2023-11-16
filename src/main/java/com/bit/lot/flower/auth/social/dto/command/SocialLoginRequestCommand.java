@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SocialLoginRequestCommand {
+public class
+SocialLoginRequestCommand {
   private SocialAuthId socialId;
   private String email;
   private String nickname;

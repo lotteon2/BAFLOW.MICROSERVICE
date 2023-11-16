@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.system.admin.config;
 
 
+import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.system.admin.filter.SystemAdminAuthenticationFilter;
@@ -13,6 +14,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class SystemAdminSecurityConfig {
   private final String adminPassword;
   private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
+  private final ExceptionHandlerFilter exceptionHandlerFilter;
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.regexMatcher("/system/admin")
@@ -33,7 +36,8 @@ public class SystemAdminSecurityConfig {
         .and()
         .addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class);
+        .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class)
+        .addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
     return http.build();
   }
 

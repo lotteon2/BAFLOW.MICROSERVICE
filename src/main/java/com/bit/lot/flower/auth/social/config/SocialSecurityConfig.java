@@ -3,7 +3,9 @@ package com.bit.lot.flower.auth.social.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
+import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
+import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -43,9 +45,10 @@ public class SocialSecurityConfig {
       SocialLoginRequestCommand command = SocialLoginRequestCommand.builder()
           .email(defaultOAuth2User.getAttributes().get("email").toString())
           .nickname(defaultOAuth2User.getAttributes().get("nickname").toString())
-          .socialId(defaultOAuth2User.getAttributes().get("id").toString()).build();
-
+          .socialId(SocialAuthId.builder()
+              .value((Long) defaultOAuth2User.getAttributes().get("id")).build()).build();
       request.setAttribute("command", command);
     });
   }
+
 }

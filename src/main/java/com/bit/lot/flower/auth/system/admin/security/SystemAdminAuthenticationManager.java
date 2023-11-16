@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.system.admin.security;
 
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import java.util.Collections;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
