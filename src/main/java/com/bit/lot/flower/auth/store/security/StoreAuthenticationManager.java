@@ -6,8 +6,8 @@ import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import java.util.Collections;
+import javax.mail.AuthenticationFailedException;
 import javax.transaction.Transactional;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,10 +37,18 @@ public class StoreAuthenticationManager implements AuthenticationManager {
     return storeManagerAuth;
   }
 
+  private void checkStoreMangerStatus(StoreManagerAuth storeManagerAuth) {
+    StoreManagerStatus status = storeManagerAuth.getStatus();
+    if (status.equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
+      throw new StoreManagerAuthException("관리자의 승인을 기다려주세요.");
+    }
+  }
+
   @Transactional
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     StoreManagerAuth storeManagerAuth = checkCredential(authentication);
+    checkStoreMangerStatus(storeManagerAuth);
     if (storeManagerAuth.getStatus().equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
       throw new StoreManagerAuthException("관리자의 승인을 기다려주새요.");
     }

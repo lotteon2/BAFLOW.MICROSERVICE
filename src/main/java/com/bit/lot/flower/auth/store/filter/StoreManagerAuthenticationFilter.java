@@ -5,6 +5,7 @@ import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
+import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -48,8 +50,11 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
       return storeManagerAuthenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(),null));
 
-    } catch (AuthenticationException | IOException e) {
-      throw new SystemAdminAuthException("존재하지 않는 시스템 어드민 유저입니다.");
+    } catch (BadCredentialsException | IOException e){
+      throw new BadCredentialsException("존재하지 않는 시스템 어드민 유저입니다.");
+    }
+    catch (StoreManagerAuthException e){
+      throw new StoreManagerAuthException(e.getMessage());
     }
 
   }
@@ -67,13 +72,6 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME, token);
   }
 
-  @Override
-  protected void unsuccessfulAuthentication(HttpServletRequest request,
-      HttpServletResponse response,
-      AuthenticationException failed) throws IOException, ServletException {
-    SecurityContextHolder.clearContext();
-
-  }
 
 
 }
