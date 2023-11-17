@@ -3,19 +3,16 @@ package com.bit.lot.flower.auth.store.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
-import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.store.filter.StoreManagerAuthenticationFilter;
 import com.bit.lot.flower.auth.store.filter.StoreMangerAuthorizationFilter;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
-import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -31,12 +28,7 @@ public class StoreManagerSecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.regexMatcher("/stores");
-    http.
-        authorizeHttpRequests().antMatchers("/auth/stores/login").permitAll().
-        antMatchers("/auth/stores/business-number")
-        .hasRole(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED.name()).anyRequest().hasRole(
-            Role.ROLE_SOCIAL_MANAGER.name());
-
+    http.csrf().disable();
     http.
         addFilterAt(storeManagerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).
         addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).

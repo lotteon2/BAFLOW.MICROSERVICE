@@ -1,12 +1,10 @@
 package com.bit.lot.flower.auth.store.security;
 
-import com.bit.lot.flower.auth.social.SocialAuthException;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import java.util.Collections;
-import javax.mail.AuthenticationFailedException;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

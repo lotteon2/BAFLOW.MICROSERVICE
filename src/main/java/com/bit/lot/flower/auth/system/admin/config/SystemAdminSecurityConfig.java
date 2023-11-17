@@ -29,12 +29,10 @@ public class SystemAdminSecurityConfig {
   private final ExceptionHandlerFilter exceptionHandlerFilter;
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.regexMatcher("/system/admin")
-        .authorizeRequests()
-        .antMatchers("/system/admin/login").permitAll()
-        .anyRequest().authenticated()
-        .and()
-        .addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+
+    http.regexMatcher("/system/admin");
+    http.csrf().disable();
+    http.addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class)
         .addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
