@@ -2,10 +2,15 @@ package com.bit.lot.flower.auth.common.security;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+
+@RequiredArgsConstructor
 @Component
-public class JwtAccessTokenCreateStrategy {
+public class JwtAccessTokenCreateProcessor {
 
   private String createAccessTokenWithoutClaims(String subject){
     return JwtUtil.generateAccessToken(subject);

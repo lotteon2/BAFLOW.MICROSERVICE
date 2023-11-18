@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SocialUserCreateDto {
+public class SocialUserLoginDto {
   private Long oauthId;
   private String nickName;
   private String email;

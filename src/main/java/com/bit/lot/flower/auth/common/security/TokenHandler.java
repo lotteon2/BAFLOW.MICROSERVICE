@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class TokenHandler {
 
   private final RefreshTokenStrategy refreshTokenStrategy;
-  private final JwtAccessTokenCreateStrategy accessTokenStrategy;
+  private final JwtAccessTokenCreateProcessor accessTokenStrategy;
   private final JwtAccessTokenDeleteStrategy deleteStrategy;
 
   public String createToken(HttpServletRequest request,

@@ -1,14 +1,14 @@
 package com.bit.lot.flower.auth.social.mapper;
 
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserCreateDto;
+import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 
 
 public class SocialDataMapper {
 
-  public static SocialUserCreateDto mapCreateSocialAuthToSocialUserDto(
+  public static SocialUserLoginDto mapCreateSocialAuthToSocialUserDto(
       SocialLoginRequestCommand command) {
-    return SocialUserCreateDto.builder().email(command.getEmail()).nickName(command.getNickname())
+    return SocialUserLoginDto.builder().email(command.getEmail()).nickName(command.getNickname())
         .oauthId(command.getSocialId()).build();
   }
 

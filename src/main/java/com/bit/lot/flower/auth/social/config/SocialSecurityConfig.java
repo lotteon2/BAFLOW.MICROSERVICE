@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.social.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
-import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.filter.SocialAuthorizationFilter;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;

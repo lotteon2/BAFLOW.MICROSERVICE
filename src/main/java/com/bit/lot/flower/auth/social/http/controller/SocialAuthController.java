@@ -1,16 +1,17 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
+import com.bit.lot.flower.auth.social.dto.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserCreateDto;
+import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
+import com.bit.lot.flower.auth.social.http.valueobject.UserId;
 import com.bit.lot.flower.auth.social.mapper.SocialDataMapper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,13 +30,18 @@ public class SocialAuthController {
 
   @PostMapping("/login")
   public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(
-      HttpServletRequest request,
-      @RequestHeader @NotNull SocialLoginRequestCommand command) {
-    SocialUserCreateDto userDto = SocialDataMapper.mapCreateSocialAuthToSocialUserDto(command);
+      HttpServletRequest request) {
+    SocialLoginRequestCommand command = (SocialLoginRequestCommand) request.getAttribute(
+        "loginDto");
+    SocialUserLoginDto userDto = SocialDataMapper.mapCreateSocialAuthToSocialUserDto(command);
+
     socialAuthService.login(command.getSocialId());
-    LoginSuccessResponse response = publisher.publish(userDto);
-    request.setAttribute("userId", response.getUserId());
-    return ResponseEntity.ok(response);
+
+    UserFeignLoginResponse<UserId> userFeignLoginResponse = publisher.publish(userDto);
+    request.setAttribute("userId", userFeignLoginResponse.getUserId());
+
+    return ResponseEntity.ok(
+        new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
   }
 
   @PostMapping("/{provider}/logout")

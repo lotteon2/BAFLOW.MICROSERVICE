@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.common.filter;
 
+import com.bit.lot.flower.auth.common.MutableHttpServletRequest;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import java.io.IOException;
@@ -18,6 +19,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
     return requestURI.contains("/login") || requestURI.contains("/signup");
+
   }
 
 
@@ -28,7 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     if (!JwtUtil.isTokenValid(token)) {
       throw new BadCredentialsException("토큰이 일치하지않습니다.");
     }
-    filterChain.doFilter(request, response);
+    String userId = JwtUtil.extractSubject(token);
+    MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(request);
+    mutableRequest.putHeader("userId", userId);
+    filterChain.doFilter(mutableRequest, response);
   }
 
 
