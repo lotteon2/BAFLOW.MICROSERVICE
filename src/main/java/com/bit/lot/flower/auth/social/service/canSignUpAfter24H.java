@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.social.service;
 
-import com.bit.lot.flower.auth.social.SocialAuthException;
+import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
 import java.time.ZonedDateTime;

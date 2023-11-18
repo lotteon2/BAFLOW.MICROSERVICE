@@ -23,8 +23,11 @@ public class SystemAdminAuthorizationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     if (!Role.ROLE_SYSTEM_ADMIN.name().equals(getRole(request))) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
       throw new InsufficientAuthenticationException("시스템 관리자의 권한이 없습니다. 시스템 관리자로 로그인해주세요");
     }
+    doFilter(request, response, filterChain);
+
   }
 
   private String getRole(HttpServletRequest request) {

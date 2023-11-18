@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social;
+package com.bit.lot.flower.auth.social.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

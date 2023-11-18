@@ -1,5 +1,7 @@
 package com.bit.lot.flower.auth.store.controller;
 
+import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,8 +21,9 @@ public class StoreManagerController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity<String> login() {
-    return ResponseEntity.ok("스토어 매니저 로그인 완료");
+  public ResponseEntity<StoreManagerLoginResponse> login(HttpServletRequest request) {
+     String name = (String) request.getAttribute("name");
+    return ResponseEntity.ok(new StoreManagerLoginResponse(name));
   }
 
   @PostMapping("/logout")

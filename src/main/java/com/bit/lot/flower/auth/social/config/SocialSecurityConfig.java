@@ -4,6 +4,7 @@ import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
+import com.bit.lot.flower.auth.social.filter.SocialAuthorizationFilter;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,16 @@ public class SocialSecurityConfig {
         .userInfoEndpoint()
         .userService(oAuth2UserService));
     http.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    http.addFilterAfter(socialAuthorizationFilter(), JwtAuthenticationFilter.class);
     http.addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
     return http.build();
   }
+
+  @Bean
+  public SocialAuthorizationFilter socialAuthorizationFilter() {
+    return new SocialAuthorizationFilter();
+  }
+
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {

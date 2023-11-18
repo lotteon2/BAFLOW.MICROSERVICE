@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.common;
+package com.bit.lot.flower.auth.common.valueobject;
 
 import java.util.Objects;
 import lombok.AllArgsConstructor;
