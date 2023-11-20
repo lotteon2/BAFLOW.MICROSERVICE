@@ -1,25 +1,26 @@
 package com.bit.lot.flower.auth.system.admin.http;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController("/api/auth/system/admin")
+@RestController("/api/auth/admin")
 public class SystemManagerRestController {
 
   private final UpdateStoreMangerStatusService<AuthId> updateStoreMangerStatusService;
 
-  @PutMapping("/store-manager/{storeManagerId}")
-  public ResponseEntity<String> updateStoreManagerStatus(@PathVariable AuthId storeManagerId,
-      @RequestParam(defaultValue = "false") Boolean status) {
-    updateStoreMangerStatusService.update(storeManagerId,status);
+  @PutMapping("/store-manager")
+  public ResponseEntity<String> updateStoreManagerStatus(
+      @Valid  @RequestBody UpdateStoreManagerStatusDto dto) {
+    updateStoreMangerStatusService.update(dto.getStoreManagerId(),dto.getStatus());
     return ResponseEntity.ok("업데이트 완료");
   }
 

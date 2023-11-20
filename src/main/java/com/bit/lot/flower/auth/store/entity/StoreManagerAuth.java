@@ -24,6 +24,5 @@ public class StoreManagerAuth {
   private String email;
   private String password;
   private StoreManagerStatus status;
-  private boolean isPermitted;
   private ZonedDateTime lastLogoutTime;
 }
