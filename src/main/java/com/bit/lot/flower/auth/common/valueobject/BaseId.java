@@ -15,6 +15,7 @@ public abstract class BaseId<T> {
   private T value;
 
   @Override
+
   public boolean equals(Object o) {
       if (this == o) {
           return true;

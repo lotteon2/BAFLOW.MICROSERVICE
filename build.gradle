@@ -8,7 +8,7 @@ group = 'com.bit.lot.flower.auth'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    sourceCompatibility = '17'
+    sourceCompatibility = '11'
 }
 
 configurations {
@@ -22,7 +22,7 @@ repositories {
 }
 
 ext {
-    set('springCloudVersion', "2022.0.4")
+    set('springCloudVersion', "2021.0.8")
 }
 
 dependencies {

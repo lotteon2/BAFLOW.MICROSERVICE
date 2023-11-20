@@ -10,7 +10,7 @@ import com.bit.lot.flower.auth.social.mapper.SocialDataMapper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
-import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SocialAuthController {
 
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
-  private final SocialAuthService<SocialAuthId> socialAuthService;
+  private final SocialAuthService<AuthId> socialAuthService;
   private final LoginSocialUserEventPublisher publisher;
 
   @PostMapping("/login")
@@ -46,7 +46,7 @@ public class SocialAuthController {
 
   @PostMapping("/{provider}/logout")
   public ResponseEntity<String> logout(HttpServletRequest request,
-      @RequestHeader SocialAuthId socialId,
+      @RequestHeader AuthId socialId,
       @PathVariable AuthenticationProvider provider) {
     socialAuthService.logout(socialId);
     oauthLogoutFacadeHelper.logout(provider, request.getHeader("Authorization"));
@@ -56,7 +56,7 @@ public class SocialAuthController {
   @DeleteMapping
   public ResponseEntity<String> userWithdrawalUserSelf(HttpServletRequest request,
       @PathVariable AuthenticationProvider provider,
-      @RequestHeader SocialAuthId socialId) {
+      @RequestHeader AuthId socialId) {
     socialAuthService.userWithdrawalUserSelf(socialId);
     oauthLogoutFacadeHelper.logout(provider, request.getHeader("Authorization"));
     return ResponseEntity.ok("회원탈퇴 성공");

@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Getter
 @SuperBuilder
-public class SocialAuthId extends BaseId<Long> {
+public class AuthId extends BaseId<Long> {
 
 }
