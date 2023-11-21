@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemAdminController {
 
 
+
   @PostMapping("/login")
   public ResponseEntity<String> login() {
     return ResponseEntity.ok("시스템 관리자 로그인 성공");
