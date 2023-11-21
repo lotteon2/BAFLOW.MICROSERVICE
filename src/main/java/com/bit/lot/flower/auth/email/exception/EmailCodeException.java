@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
 @Getter
-@NoArgsConstructor
 public class EmailCodeException extends RuntimeException {
 
   public EmailCodeException(String input){

@@ -6,32 +6,31 @@ import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
-import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
-import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
-import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
+import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Map;
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
 public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final AuthenticationManager storeManagerAuthenticationManager;
+  private final StoreAuthenticationManager storeManagerAuthenticationManager;
   private final TokenHandler tokenHandler;
+
+  @Override
+  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+    super.setAuthenticationManager(storeManagerAuthenticationManager);
+  }
 
 
   private StoreManagerLoginDto getLoginDtoFromRequest(HttpServletRequest request)

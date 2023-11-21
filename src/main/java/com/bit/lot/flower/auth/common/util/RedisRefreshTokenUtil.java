@@ -10,7 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisRefreshTokenUtil {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+
+    private final RedisTemplate<Object, Object> redisTemplate;
 
     public void saveRefreshToken(String userId, String refreshToken, long expirationTimeInSeconds) {
         String key = getRefreshTokenKey(userId);

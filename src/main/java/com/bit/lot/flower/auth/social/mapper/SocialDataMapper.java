@@ -9,7 +9,7 @@ public class SocialDataMapper {
   public static SocialUserLoginDto mapCreateSocialAuthToSocialUserDto(
       SocialLoginRequestCommand command) {
     return SocialUserLoginDto.builder().email(command.getEmail()).nickName(command.getNickname())
-        .oauthId(command.getSocialId()).build();
+        .oauthId(command.getSocialId().getValue()).build();
   }
 
 }

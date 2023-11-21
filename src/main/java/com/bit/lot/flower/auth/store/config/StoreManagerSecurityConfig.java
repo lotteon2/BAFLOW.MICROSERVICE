@@ -8,8 +8,11 @@ import com.bit.lot.flower.auth.store.filter.StoreMangerAuthorizationFilter;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
+import javax.validation.constraints.NegativeOrZero.List;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -20,13 +23,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 @EnableWebSecurity
+@Configuration
 public class StoreManagerSecurityConfig {
 
   private final StoreManagerAuthRepository repository;
   private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
-  @Bean
+
+  @Bean("StoreManagerSecurityConfigFilterChain")
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.regexMatcher("/stores");
     http.csrf().disable();
@@ -41,7 +46,7 @@ public class StoreManagerSecurityConfig {
   }
 
   @Bean
-  public AuthenticationManager customManger() {
+  public StoreAuthenticationManager customManger() {
     return new StoreAuthenticationManager(repository,passwordEncoder());
   }
 

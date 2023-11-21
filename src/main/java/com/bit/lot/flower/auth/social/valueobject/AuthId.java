@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+
 @NoArgsConstructor
-@AllArgsConstructor
-@Getter
 @SuperBuilder
+@Getter
 public class AuthId extends BaseId<Long> {
 
 }

@@ -10,6 +10,7 @@ import com.bit.lot.flower.auth.system.admin.security.SystemAdminAuthenticationMa
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,6 +19,7 @@ import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
+@Configuration
 @EnableWebSecurity
 public class SystemAdminSecurityConfig {
   @Value("${system.admin.id}")
@@ -27,7 +29,7 @@ public class SystemAdminSecurityConfig {
   private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
-  @Bean
+  @Bean("SystemAdminSecurityConfigFilterChain")
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
     http.regexMatcher("/system/admin");

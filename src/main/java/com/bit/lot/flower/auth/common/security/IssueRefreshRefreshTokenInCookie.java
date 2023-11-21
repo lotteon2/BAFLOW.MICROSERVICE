@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.common.security;
 
 import com.bit.lot.flower.auth.common.util.CookieUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
+import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.time.Duration;
@@ -18,9 +19,9 @@ public class IssueRefreshRefreshTokenInCookie implements
     RefreshTokenStrategy {
 
   @Value("${cookie.http.domain")
-  private final String domain;
+  private  String domain;
   @Value("cookie.refresh.token.name")
-  private final String refreshCookieName;
+  private  String refreshCookieName;
 
 
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
@@ -38,5 +39,6 @@ public class IssueRefreshRefreshTokenInCookie implements
   @Override
   public void invalidateRefreshToken(HttpServletRequest request, HttpServletResponse response) {
     CookieUtil.deleteCookie(refreshCookieName, domain);
+    redisRefreshTokenUtil.deleteRefreshToken(request.getHeader("userId"));
   }
 }

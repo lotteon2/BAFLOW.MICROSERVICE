@@ -8,6 +8,7 @@ import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -17,14 +18,15 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
+@Configuration
 @EnableWebSecurity
 public class SocialSecurityConfig {
 
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
-  private final ExceptionHandlerFilter exceptionHandlerFilter;
   private final OAuth2UserLoadService oAuth2UserService;
+  private final ExceptionHandlerFilter exceptionHandlerFilter;
 
-  @Bean
+  @Bean(name = "SocialSecurityConfigFilterChain")
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http.csrf().disable();
     http.regexMatcher("/oauth");
