@@ -8,6 +8,7 @@ import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.filter.SocialAuthorizationFilter;
+import com.bit.lot.flower.auth.social.security.SocialAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import java.util.Collections;
@@ -38,7 +39,6 @@ public class SocialSecurityConfig {
   private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
-
 
 
   @Order(1)
@@ -82,7 +82,7 @@ public class SocialSecurityConfig {
 
   @Bean
   public AuthenticationSuccessHandler successHandler() {
-
+    return new SocialAuthenticationSuccessHandler(tokenHandler);
   }
 
 }

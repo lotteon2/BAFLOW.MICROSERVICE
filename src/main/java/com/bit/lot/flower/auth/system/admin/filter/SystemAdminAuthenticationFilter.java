@@ -29,6 +29,7 @@ public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticat
   private final TokenHandler tokenHandler;
 
 
+
   @Autowired
   public SystemAdminAuthenticationFilter(
       @Qualifier("systemAuthenticationManager") AuthenticationManager systemAuthenticationManager,

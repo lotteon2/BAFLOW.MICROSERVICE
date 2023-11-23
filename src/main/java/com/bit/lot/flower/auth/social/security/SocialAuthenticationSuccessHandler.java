@@ -8,11 +8,9 @@ import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import java.io.IOException;
 import java.util.Map;
-import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -23,7 +21,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
 
   private final TokenHandler tokenHandler;
 
-  private String createToken(HttpServletRequest request, HttpServletResponse response,
+  private String createToken(HttpServletResponse response,
       Authentication authentication) {
     Map<String, Object> claimMap = JwtUtil.addClaims(
         SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
@@ -49,10 +47,10 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     SocialLoginRequestCommand command = getRequestDto(defaultOAuth2User);
     request.setAttribute("command", command);
 
-    String token = createToken(request, response, authentication);
+    String token = createToken(response, authentication);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
   }
 
 }
-}
+
