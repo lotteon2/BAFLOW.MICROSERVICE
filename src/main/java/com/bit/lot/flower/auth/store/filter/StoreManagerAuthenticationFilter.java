@@ -15,21 +15,26 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequiredArgsConstructor
 public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-  private final StoreAuthenticationManager storeManagerAuthenticationManager;
+  private final AuthenticationManager storeManagerAuthenticationManager;
   private final TokenHandler tokenHandler;
 
-  @Override
-  public void setAuthenticationManager(AuthenticationManager authenticationManager) {
-    super.setAuthenticationManager(storeManagerAuthenticationManager);
+  @Autowired
+  public StoreManagerAuthenticationFilter(
+      @Qualifier("storeAuthenticationManager") AuthenticationManager storeManagerAuthenticationManager,
+      TokenHandler tokenHandler) {
+    super(storeManagerAuthenticationManager);
+    this.storeManagerAuthenticationManager = storeManagerAuthenticationManager;
+    this.tokenHandler = tokenHandler;
   }
 
 
@@ -67,8 +72,9 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
       Authentication authResult) {
     Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
         Role.ROLE_SYSTEM_ADMIN.name());
-    String token = tokenHandler.createToken(request, claimMap);
-    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME, token);
+    String token = tokenHandler.createToken(String.valueOf(authResult.getPrincipal()), claimMap,response);
+    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
   }
 
 

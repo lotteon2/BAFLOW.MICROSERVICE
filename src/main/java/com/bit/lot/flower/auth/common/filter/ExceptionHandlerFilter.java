@@ -27,7 +27,6 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
       ErrorDTO dto = new ErrorDTO(String.valueOf(response.getStatus()), e.getMessage());
       response.setCharacterEncoding("UTF-8");
       response.setStatus(HttpStatus.valueOf(401).value());
-      response.getWriter().write(convertObjectToJson(dto));
     }
   }
 

@@ -1,6 +1,9 @@
 server:
   port: 8081
 spring:
+  redis:
+    host: localhost
+    port: 6379
   config:
     activate:
       on-profile: local
@@ -53,9 +56,9 @@ spring:
           writetimeout: 5000
     auth-code-expiration-millis: 1800000
 
-
-
-
+redis:
+  hostname: localhost
+  port: 6379
 
 
 email:
@@ -63,26 +66,14 @@ email:
     from: bbFlower@no-reply.co.kr
 
 
-jwt:
-  access:
-    secret: bb-access-secret
-    lifetime: 360000
-  refresh:
-    secret: bb-refresh-secret
-    lifetime: 360000
-
-
-
-redis:
-  hostname: localhost
-  port: 6379
 
 
 cookie:
   refresh:
+    http:
+      domain: localhost:8081
     token:
-      name: refresh-cookie
-
+        name: refresh-cookie
 
 system:
   admin:

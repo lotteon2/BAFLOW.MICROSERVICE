@@ -9,15 +9,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RestController("/api/auth/admin")
-public class SystemManagerRestController {
+@RestController
+public class SystemAdminRestController {
 
   private final UpdateStoreMangerStatusService<AuthId> updateStoreMangerStatusService;
 
-  @PutMapping("/store-manager")
+  @PutMapping("/api/auth/admin/store-manager")
   public ResponseEntity<String> updateStoreManagerStatus(
       @Valid  @RequestBody UpdateStoreManagerStatusDto dto) {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(),dto.getStatus());
@@ -25,12 +26,12 @@ public class SystemManagerRestController {
   }
 
 
-  @PostMapping("/login")
+  @PostMapping("/api/auth/admin/login")
   public ResponseEntity<String> login() {
     return ResponseEntity.ok("시스템 관리자 로그인 완료");
   }
 
-  @PostMapping("/logout")
+  @PostMapping("/api/auth/admin/logout")
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("시스템 관리자 로그아웃 완료");
   }

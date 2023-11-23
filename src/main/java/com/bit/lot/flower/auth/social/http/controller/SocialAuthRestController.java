@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/api/auth/social")
+@RequestMapping("/api/auth/social")
 @RequiredArgsConstructor
-public class SocialAuthController {
+public class SocialAuthRestController {
 
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
   private final SocialAuthService<AuthId> socialAuthService;

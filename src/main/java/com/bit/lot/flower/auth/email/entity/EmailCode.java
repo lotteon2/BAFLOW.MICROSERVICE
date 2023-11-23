@@ -1,24 +1,27 @@
 package com.bit.lot.flower.auth.email.entity;
 
 
-import com.sun.istack.NotNull;
+import com.bit.lot.flower.auth.common.entity.BaseEntity;
 import java.time.ZonedDateTime;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Entity
-public class EmailCode {
+public class EmailCode extends BaseEntity {
 
   @Id
   private String emailCode;
-  private ZonedDateTime createdAt;
+  @Column(nullable = false)
   private String email;
 }

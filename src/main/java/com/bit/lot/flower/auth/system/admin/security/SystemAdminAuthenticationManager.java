@@ -4,6 +4,7 @@ import com.bit.lot.flower.auth.common.valueobject.Role;
 import java.util.Collections;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,8 +29,6 @@ public class SystemAdminAuthenticationManager implements AuthenticationManager {
       throw new BadCredentialsException("시스템 어드민의 아이디와 비밀번호가 일치하지 않습니다.");
     }
 
-    return new UsernamePasswordAuthenticationToken(inputId, inputPassword,
-        Collections.singleton(new SimpleGrantedAuthority(
-            Role.ROLE_SYSTEM_ADMIN.toString())));
+    return authentication;
   }
 }

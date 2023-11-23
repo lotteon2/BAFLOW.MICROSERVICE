@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "oauth2")
 public interface OauthFeignClientRequest {
-    @PostMapping("https://kapi.kakao.com/v1/user/logout")
+    @PostMapping("/kauth.kakao.com/v1/user/logout")
     void kakaoLogout(@RequestHeader("Authorization") String accessToken);
 }
-
-

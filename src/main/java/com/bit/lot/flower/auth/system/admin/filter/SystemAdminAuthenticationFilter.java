@@ -7,15 +7,15 @@ import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.print.Book;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,12 +23,28 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@RequiredArgsConstructor
 public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
 
   private final AuthenticationManager systemAuthenticationManager;
   private final TokenHandler tokenHandler;
+
+
+  @Autowired
+  public SystemAdminAuthenticationFilter(
+      @Qualifier("systemAuthenticationManager") AuthenticationManager systemAuthenticationManager,
+      TokenHandler tokenHandler) {
+    super(systemAuthenticationManager);
+    this.systemAuthenticationManager = systemAuthenticationManager;
+    this.tokenHandler = tokenHandler;
+    setFilterProcessesUrl("/api/auth/admin/login");
+  }
+
+  @Override
+  @Autowired
+  public void setAuthenticationManager(
+      @Qualifier("systemAuthenticationManager") AuthenticationManager authenticationManager) {
+    super.setAuthenticationManager(systemAuthenticationManager);
+  }
 
 
   private SystemAdminLoginDto getLoginDtoFromRequest(HttpServletRequest request)
@@ -62,8 +78,9 @@ public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticat
       Authentication authResult) {
       Map<String,Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
         Role.ROLE_SYSTEM_ADMIN.name());
-    String token = tokenHandler.createToken(request,claimMap);
-    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,token);
+    String token = tokenHandler.createToken(String.valueOf(authResult.getPrincipal()),claimMap,response);
+    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
+
   }
 }
 

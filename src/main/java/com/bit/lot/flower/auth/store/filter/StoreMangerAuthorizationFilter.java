@@ -20,8 +20,10 @@ public class StoreMangerAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    return requestURI.contains("/signup") || requestURI.contains("/login");
+    return !requestURI.contains("/stores") || requestURI.contains("/stores/login")||
+    requestURI.contains("/stores/signup");
   }
+
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,

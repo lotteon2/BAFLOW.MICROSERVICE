@@ -8,11 +8,12 @@ import com.bit.lot.flower.auth.store.filter.StoreMangerAuthorizationFilter;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
-import javax.validation.constraints.NegativeOrZero.List;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -31,11 +32,14 @@ public class StoreManagerSecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
-  @Bean("StoreManagerSecurityConfigFilterChain")
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
+  @Order(2)
+  @Bean
+  public SecurityFilterChain storeSecurityFilterChain(HttpSecurity http) throws Exception {
     http.regexMatcher("/stores");
     http.csrf().disable();
-    http.authorizeRequests().antMatchers("/business-number").hasRole(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED.name());
+    http.authorizeRequests().antMatchers("/business-number").hasAuthority(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED.name());
     http.
         addFilterAt(storeManagerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).
         addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
@@ -45,8 +49,10 @@ public class StoreManagerSecurityConfig {
     return http.build();
   }
 
+  @Primary
+  @Qualifier("storeAuthenticationManager")
   @Bean
-  public StoreAuthenticationManager customManger() {
+  public AuthenticationManager storeAuthenticationManager() {
     return new StoreAuthenticationManager(repository,passwordEncoder());
   }
 
@@ -58,7 +64,7 @@ public class StoreManagerSecurityConfig {
 
   @Bean
   public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
-    return new StoreManagerAuthenticationFilter(customManger(), tokenHandler);
+    return new StoreManagerAuthenticationFilter(storeAuthenticationManager(), tokenHandler);
   }
 
   @Bean

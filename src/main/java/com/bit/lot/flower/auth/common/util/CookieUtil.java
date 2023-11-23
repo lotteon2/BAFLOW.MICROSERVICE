@@ -10,14 +10,15 @@ import org.springframework.http.ResponseCookie;
 
 public class CookieUtil {
 
-  public static HttpCookie createHttpOnlyCookie(String name, String value, Duration maxAge,
+  public static Cookie createHttpOnlyCookie(String name, String value, Duration maxAge,
       String path) {
-    return ResponseCookie.from(name, value)
-        .httpOnly(true)
-        .maxAge(maxAge)
-        .path(path)
-        .build();
+    Cookie cookie = new Cookie(name, value);
+    cookie.setHttpOnly(true);
+    cookie.setMaxAge(Math.toIntExact(maxAge.toMillis()));
+    cookie.setPath(path);
+    return cookie;
   }
+
   public static String getCookieValue(HttpServletRequest request, String name) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {

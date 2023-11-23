@@ -15,15 +15,14 @@ public class TokenHandler {
   private final JwtAccessTokenCreateProcessor accessTokenStrategy;
   private final JwtAccessTokenDeleteStrategy deleteStrategy;
 
-  public String createToken(HttpServletRequest request,
-      Map<String, Object> claimList) {
-    refreshTokenStrategy.createRefreshToken(request);
-    return accessTokenStrategy.createAccessToken(
-        request.getHeader(SecurityPolicyStaticValue.USER_ID_HEADER_NAME), claimList);
+  public String createToken(String id,
+      Map<String, Object> claimList,HttpServletResponse response) {
+    refreshTokenStrategy.createRefreshToken(id,response);
+    return accessTokenStrategy.createAccessToken(id, claimList);
   }
 
-  public void invalidateToken(HttpServletRequest request, HttpServletResponse response) {
-    deleteStrategy.invalidateAccessToken(request);
-    refreshTokenStrategy.invalidateRefreshToken(request, response);
+  public void invalidateToken(String id, HttpServletResponse response) {
+    deleteStrategy.invalidateAccessToken(id);
+    refreshTokenStrategy.invalidateRefreshToken(id, response);
   }
 }

@@ -4,6 +4,9 @@ spring:
   config:
     activate:
       on-profile: dev
+  redis:
+    host: ${spring.redis.host}
+    port: ${spring.redis.port}
   datasource:
     url: ${spring.datasoure.url}
     username: ${spring.datasource.username}
@@ -68,18 +71,17 @@ jwt:
     secret: ${jwt.refresh.secret}
     lifetime: ${jwt.refresh.lifetime}
 
-
-
 redis:
-  hostname: ${redis.hostname}
-  port: ${redis.port}
+  hostname: localhost
+  port: 6379
 
 
 cookie:
   refresh:
+    http:
+      domain: ${cookie.refresh.http.domain}
     token:
-      name: ${cookie.refresh.token.name}
-
+        name: ${cookie.refresh.token.name}
 
 system:
   admin:

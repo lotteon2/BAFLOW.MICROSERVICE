@@ -15,8 +15,8 @@ public class RegisterAccessTokenInRedisBlackListWhenLogout implements
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
   @Override
-  public void invalidateAccessToken(HttpServletRequest request) {
-    redisBlackListTokenUtil.addTokenToBlacklist(request.getHeader(ExtractAuthorizationTokenUtil.extractToken(request)),
+  public void invalidateAccessToken(String token) {
+    redisBlackListTokenUtil.addTokenToBlacklist(token,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
   }
 }

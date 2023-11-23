@@ -11,10 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 @RequiredArgsConstructor
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -36,9 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     if (redisBlackListTokenUtil.isTokenBlacklisted(token)) {
       throw new AuthenticationException("해당 토큰은 이미 로그아웃 처리된 토큰이라 사용할 수 없는 토큰입니다.");
     }
-    if (!JwtUtil.isTokenValid(token)) {
-      throw new BadCredentialsException("토큰이 일치하지않습니다.");
-    }
+    JwtUtil.isTokenValid(token);
     String userId = JwtUtil.extractSubject(token);
     MutableHttpServletRequest mutableRequest = new MutableHttpServletRequest(request);
     mutableRequest.putHeader("userId", userId);

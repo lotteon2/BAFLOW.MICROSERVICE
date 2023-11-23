@@ -11,14 +11,16 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+@RequiredArgsConstructor
 public class SocialAuthorizationFilter extends OncePerRequestFilter {
 
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    return requestURI.contains("/login");
+    return !requestURI.contains("/social") || requestURI.contains("/social/login");
   }
 
   @Override
