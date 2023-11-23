@@ -4,7 +4,6 @@ import com.bit.lot.flower.auth.common.util.CookieUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import java.net.HttpCookie;
 import java.time.Duration;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -31,7 +30,7 @@ public class IssueRefreshRefreshTokenInCookie implements
     String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
     redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
-    response.addCookie(CookieUtil.createHttpOnlyCookie(refreshCookieName + userId, refreshToken,
+    response.addCookie(CookieUtil.createHttpOnlyCookie(refreshCookieName, refreshToken,
         Duration.ofDays(1), domain));
   }
 
