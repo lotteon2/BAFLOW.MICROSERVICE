@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.store.controller;
 
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
-import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateMessagePublisher;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController("store")
 public class StoreManagerController {
 
+  private final StoreManagerService
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerSingUpService singUpService;
   private final StoreMangerCreateMessagePublisher storeMangerCreateMessagePublisher;
