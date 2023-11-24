@@ -7,7 +7,7 @@ import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
 import com.bit.lot.flower.auth.store.http.StoreManagerIdRequest;
 import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
-import com.bit.lot.flower.auth.store.message.StoreMangerCreateMessagePublisher;
+import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerSingUpService;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
@@ -30,7 +30,7 @@ public class StoreManagerController {
   private final StoreManagerIdRequest<AuthId> storeManagerIdRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerSingUpService singUpService;
-  private final StoreMangerCreateMessagePublisher storeMangerCreateMessagePublisher;
+  private final StoreMangerCreateRequest storeMangerCreateRequest;
 
 
   @PostMapping("/api/auth/stores/emails/{email}")
@@ -42,7 +42,7 @@ public class StoreManagerController {
   @PostMapping("/api/auth/stores/signup")
   public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpDto dto) {
     singUpService.singUp(dto);
-    storeMangerCreateMessagePublisher.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
+    storeMangerCreateRequest.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
     return ResponseEntity.ok("스토어 매니저 회원가입 신청 완료 관리자의 승인을 기다려주세요");
   }
 

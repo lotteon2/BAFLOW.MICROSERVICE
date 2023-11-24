@@ -10,6 +10,7 @@ import com.bit.lot.flower.auth.system.admin.filter.SystemAdminAuthorizationFilte
 import io.jsonwebtoken.MalformedJwtException;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,6 @@ class SystemAdminAuthorizationFilterTest {
 
   private MvcResult requestWithValidToken()
       throws Exception {
-
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
             .header("Authorization", "Bearer " + validToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
@@ -80,6 +80,8 @@ class SystemAdminAuthorizationFilterTest {
    *                                  JwtAuthetnicationFitler에서 잡아주기 때문이다. JwtAuthenticationFilter를
    *                                  거치지 않고 해당 Filter를 거치지 않는 경우는 없다.
    */
+
+  @DisplayName("JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsNotExist_CatchJwtException()
       throws IllegalArgumentException {
@@ -93,6 +95,7 @@ class SystemAdminAuthorizationFilterTest {
    * 않으면 무조건 IllegalArgumentException이 전파된다.
    */
 
+  @DisplayName("JWT토큰이 존재하지 않을 때 MalformedJwtException catch")
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(testUserId);
@@ -102,6 +105,7 @@ class SystemAdminAuthorizationFilterTest {
   }
 
 
+  @DisplayName("JWT토큰이 valid할 때,Role이 정상적으로 담겨있을 때 status code 200")
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndGeneratedAccessToken_status200()
       throws Exception {

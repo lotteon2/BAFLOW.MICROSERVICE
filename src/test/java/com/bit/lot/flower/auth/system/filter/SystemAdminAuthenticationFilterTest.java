@@ -5,12 +5,17 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+import com.bit.lot.flower.auth.common.util.CookieUtil;
+import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
+import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
 import com.bit.lot.flower.auth.system.admin.filter.SystemAdminAuthenticationFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.servlet.http.Cookie;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,16 +40,23 @@ class SystemAdminAuthenticationFilterTest {
   String id;
   @Value("${system.admin.password}")
   String password;
+  @Value("${cookie.refresh.token.name}")
+  String refreshTokenName;
+
   @Autowired
   SystemAdminAuthenticationFilter authenticationFilter;
   @Autowired
   private WebApplicationContext webApplicationContext;
+  @Autowired
+  RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   MockMvc mvc;
 
+
   @BeforeEach
   public void setUp() {
-    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authenticationFilter).build();
+    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authenticationFilter)
+        .build();
   }
 
   private String asJsonString(Object obj) throws JsonProcessingException {
@@ -86,6 +98,7 @@ class SystemAdminAuthenticationFilterTest {
 
   }
 
+  @DisplayName("잘못된 계정으로 로그인 시도")
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_CatchBadCredentialException()
       throws Exception {
@@ -96,6 +109,7 @@ class SystemAdminAuthenticationFilterTest {
   }
 
 
+  @DisplayName("유효한 계정으로 로그인시 JWT토큰 response에서 확인")
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_JwtTokenInResponse() throws Exception {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
@@ -106,13 +120,21 @@ class SystemAdminAuthenticationFilterTest {
     assertNotNull(authorizationHeader);
   }
 
+  @DisplayName("유효한 계정으로 로그인시 RefreshToken Redis에서 존재 확인")
   @Test
-  void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInRedis() {
+  void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInRedis() throws Exception {
+    SystemAdminLoginDto validDto = createValidSystemAdminAccount();
+    MvcResult validUser = getValidSystemAdminUser(validDto);
+    assertNotNull(redisRefreshTokenUtil.getRefreshToken(validDto.getEmail()));
 
   }
 
+  @DisplayName("유효한 계정으로 로그인시 RefreshToken Cookie에서 존재 확인")
   @Test
-  void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInResponseCookie() {
+  void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInResponseCookie() throws Exception {
+    SystemAdminLoginDto validDto = createValidSystemAdminAccount();
+    MvcResult validUser = getValidSystemAdminUser(validDto);
+    assertNotNull(validUser.getResponse().getCookie(refreshTokenName));
 
   }
 

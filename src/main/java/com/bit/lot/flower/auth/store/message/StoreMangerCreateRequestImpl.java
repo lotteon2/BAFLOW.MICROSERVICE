@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
-public class StoreMangerCreateMessagePublisherImpl implements
-    StoreMangerCreateMessagePublisher {
+public class StoreMangerCreateRequestImpl implements
+    StoreMangerCreateRequest {
 
   private final CreateStoreManagerFeignRequest feignRequest;
   @Override

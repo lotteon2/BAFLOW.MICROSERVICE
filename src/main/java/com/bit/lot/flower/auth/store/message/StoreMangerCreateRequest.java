@@ -5,6 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Component
-public interface StoreMangerCreateMessagePublisher {
+public interface StoreMangerCreateRequest {
   public void publish(CreateStoreMangerDto dto);
 }
