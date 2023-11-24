@@ -10,15 +10,14 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class StoreManagerSingUpServiceImpl implements
+public class OnlyVerifiedStoreManagerEmailCanSignUpService implements
     StoreManagerSingUpService {
 
   private final BCryptPasswordEncoder encoder;
   private final StoreManagerAuthRepository repository;
-
   @Override
   public void singUp(StoreMangerSignUpDto dto) {
-    if (repository.findByEmail(dto.getEmail()).isPresent() || !dto.isEmailVerified()) {
+    if (!dto.isEmailVerified()) {
       throw new StoreManagerAuthException("이메일 중복확인과 인증을 해주세요.");
     }
     repository.save(StoreManagerDataMapper.createStoreManger(dto.getEmail(),

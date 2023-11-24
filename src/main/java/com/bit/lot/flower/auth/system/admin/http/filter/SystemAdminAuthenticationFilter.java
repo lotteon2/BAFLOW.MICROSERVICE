@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.system.admin.filter;
+package com.bit.lot.flower.auth.system.admin.http.filter;
 
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.JwtUtil;

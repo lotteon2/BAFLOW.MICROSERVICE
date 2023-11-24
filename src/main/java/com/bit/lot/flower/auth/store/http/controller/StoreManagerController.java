@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.controller;
+package com.bit.lot.flower.auth.store.http.controller;
 
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
@@ -41,6 +41,7 @@ public class StoreManagerController {
 
   @PostMapping("/api/auth/stores/signup")
   public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpDto dto) {
+    emailDuplicationCheckerService.isDuplicated(dto.getEmail());
     singUpService.singUp(dto);
     storeMangerCreateRequest.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
     return ResponseEntity.ok("스토어 매니저 회원가입 신청 완료 관리자의 승인을 기다려주세요");

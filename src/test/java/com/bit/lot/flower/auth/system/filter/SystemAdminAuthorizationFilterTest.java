@@ -1,12 +1,11 @@
 package com.bit.lot.flower.auth.system.filter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.system.admin.filter.SystemAdminAuthorizationFilter;
+import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
 import io.jsonwebtoken.MalformedJwtException;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.email.controller;
+package com.bit.lot.flower.auth.email.http.controller;
 
 import com.bit.lot.flower.auth.email.dto.VerifyCodeDto;
 import com.bit.lot.flower.auth.email.service.EmailCodeService;
