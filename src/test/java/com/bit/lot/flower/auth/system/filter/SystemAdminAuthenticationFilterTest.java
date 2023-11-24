@@ -1,10 +1,12 @@
 package com.bit.lot.flower.auth.system.filter;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
+import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
 import com.bit.lot.flower.auth.system.admin.filter.SystemAdminAuthenticationFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +25,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -54,8 +55,6 @@ class SystemAdminAuthenticationFilterTest {
 
   private SystemAdminLoginDto createUnValidSystemAdminAccount() {
     return new SystemAdminLoginDto("unValidId", "unValidPassword");
-
-
   }
 
   private SystemAdminLoginDto createValidSystemAdminAccount() {
@@ -66,8 +65,6 @@ class SystemAdminAuthenticationFilterTest {
 
   private MvcResult getValidSystemAdminUser(SystemAdminLoginDto validUserDto)
       throws Exception {
-    //with(csrf()).with(oauth2Login())
-    System.out.println("dto:{}" + validUserDto.getEmail());
     return mvc.perform(MockMvcRequestBuilders
             .post("/api/auth/admin/login")
             .contentType(MediaType.APPLICATION_JSON)
@@ -77,16 +74,25 @@ class SystemAdminAuthenticationFilterTest {
   }
 
 
-  private MvcResult getUnValidSystemAdminUserResult(SystemAdminLoginDto unvalidDto)
+  private MvcResult getUnValidSystemAdminUserResult(SystemAdminLoginDto unValidDto)
       throws Exception {
-    System.out.println("dto:{}" + unvalidDto.getEmail());
-    return null;
+    System.out.println("dto:{}" + unValidDto.getEmail());
+    return
+        mvc.perform(MockMvcRequestBuilders
+                .post("/api/auth/admin/login")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(unValidDto)))
+            .andExpect(status().is4xxClientError()).andReturn();
+
   }
 
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_CatchBadCredentialException()
       throws Exception {
-
+    SystemAdminLoginDto dto = createUnValidSystemAdminAccount();
+    assertThrows(SystemAdminAuthException.class, () -> {
+      getUnValidSystemAdminUserResult(dto);
+    });
   }
 
 

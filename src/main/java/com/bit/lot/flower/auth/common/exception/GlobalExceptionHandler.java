@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.common.exception;
 import com.bit.lot.flower.auth.email.exception.EmailCodeException;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
+import io.jsonwebtoken.JwtException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,6 +33,13 @@ public class GlobalExceptionHandler {
     errorResponse.put("errors", errors);
     return errorResponse;
   }
+  @ExceptionHandler(JwtException.class)
+  public ResponseEntity<Map<String, List<String>>> jwtException(
+      JwtException ex) {
+    List<String> errors = Collections.singletonList(ex.getMessage());
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+  }
+
 
   @ExceptionHandler(EmailCodeException.class)
   public ResponseEntity<Map<String, List<String>>> emailCodeException(

@@ -4,6 +4,7 @@ package com.bit.lot.flower.auth.common.util;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -89,7 +90,7 @@ public class JwtUtil {
     try {
       extractClaims(token);
     } catch (ExpiredJwtException expiredJwtException) {
-      throw new SecurityException("토큰 시간이 만료되었습니다.") {
+      throw new JwtException("토큰 시간이 만료되었습니다.") {
       };
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
       throw new IllegalArgumentException("올바르지 않은 접근입니다.");

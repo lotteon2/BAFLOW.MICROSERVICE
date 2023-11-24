@@ -24,8 +24,6 @@ public class SystemAdminRestController {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(),dto.getStatus());
     return ResponseEntity.ok("업데이트 완료");
   }
-
-
   @PostMapping("/api/auth/admin/login")
   public ResponseEntity<String> login() {
     return ResponseEntity.ok("시스템 관리자 로그인 완료");
