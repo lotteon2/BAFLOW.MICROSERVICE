@@ -30,7 +30,6 @@ public class StoreManagerAuth extends BaseEntity {
   private String email;
   @Column(nullable = false)
   private String password;
-  @Column(nullable = false)
   @Enumerated(EnumType.ORDINAL)
   private StoreManagerStatus status;
   private ZonedDateTime lastLogoutTime;

@@ -1,27 +1,33 @@
 package com.bit.lot.flower.auth.store.controller;
 
 
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.http.StoreManagerIdRequest;
+import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateMessagePublisher;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerSingUpService;
+import com.bit.lot.flower.auth.store.valueobject.StoreId;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController("store")
 public class StoreManagerController {
-  private final StoreManagerLoginService<ID> loginService;
+
+  private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
+  private final StoreManagerIdRequest<AuthId> storeManagerIdRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerSingUpService singUpService;
   private final StoreMangerCreateMessagePublisher storeMangerCreateMessagePublisher;
@@ -41,9 +47,11 @@ public class StoreManagerController {
   }
 
   @PutMapping("/api/auth/stores/login")
-  public ResponseEntity<StoreManagerLoginResponse> login(HttpServletRequest request) {
-    String name = (String) request.getAttribute("name");
-    return ResponseEntity.ok(new StoreManagerLoginResponse(name));
+  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId,
+      HttpServletRequest request) {
+    String name = storeManagerNameRequest.getName(authId).getName();
+    StoreId storeId = storeManagerIdRequest.getId(authId).getStoreId();
+    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(storeId, name));
   }
 
   @PostMapping("/api/auth/stores/logout")
