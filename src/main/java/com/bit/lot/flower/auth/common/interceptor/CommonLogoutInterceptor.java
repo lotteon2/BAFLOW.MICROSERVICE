@@ -23,5 +23,4 @@ public class CommonLogoutInterceptor implements HandlerInterceptor {
     tokenHandler.invalidateToken(token, response);
   }
 
-
 }

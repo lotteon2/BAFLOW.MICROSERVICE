@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.system;
+package com.bit.lot.flower.auth.system.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

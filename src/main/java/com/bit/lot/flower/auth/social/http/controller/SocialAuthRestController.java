@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RequestMapping("/api/auth/social")
+@RestController
 @RequiredArgsConstructor
 public class SocialAuthRestController {
 
@@ -30,7 +30,7 @@ public class SocialAuthRestController {
   private final SocialAuthService<AuthId> socialAuthService;
   private final LoginSocialUserEventPublisher publisher;
 
-  @PostMapping("/login")
+  @PostMapping("/api/auth/social/login")
   public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(
       HttpServletRequest request) {
     SocialLoginRequestCommand command = (SocialLoginRequestCommand) request.getAttribute(
@@ -46,7 +46,7 @@ public class SocialAuthRestController {
         new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
   }
 
-  @PostMapping("/{provider}/logout")
+  @PostMapping("/api/auth/social/logout")
   public ResponseEntity<String> logout(HttpServletRequest request,
       @RequestHeader AuthId socialId,
       @PathVariable AuthenticationProvider provider) {
@@ -55,7 +55,7 @@ public class SocialAuthRestController {
     return ResponseEntity.ok("로그아웃이 성공했습니다.");
   }
 
-  @DeleteMapping
+  @DeleteMapping("/api/auth/social")
   public ResponseEntity<String> userWithdrawalUserSelf(HttpServletRequest request,
       @PathVariable AuthenticationProvider provider,
       @RequestHeader AuthId socialId) {
