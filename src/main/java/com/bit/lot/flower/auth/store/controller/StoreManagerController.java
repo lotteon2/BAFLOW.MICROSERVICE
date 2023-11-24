@@ -19,36 +19,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
-@RequestMapping("/api/auth/stores")
 @RestController("store")
 public class StoreManagerController {
-
-  private final StoreManagerService
+  private final StoreManagerLoginService<ID> loginService;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerSingUpService singUpService;
   private final StoreMangerCreateMessagePublisher storeMangerCreateMessagePublisher;
 
 
-  @PostMapping("/emails/{email}")
+  @PostMapping("/api/auth/stores/emails/{email}")
   public ResponseEntity<String> emailDuplicationCheck(@PathVariable String email) {
     emailDuplicationCheckerService.isDuplicated(email);
     return ResponseEntity.ok("중복 이메일이 아닙니다.");
   }
 
-  @PostMapping("/signup")
+  @PostMapping("/api/auth/stores/signup")
   public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpDto dto) {
     singUpService.singUp(dto);
     storeMangerCreateMessagePublisher.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
     return ResponseEntity.ok("스토어 매니저 회원가입 신청 완료 관리자의 승인을 기다려주세요");
   }
 
-  @PutMapping("/login")
+  @PutMapping("/api/auth/stores/login")
   public ResponseEntity<StoreManagerLoginResponse> login(HttpServletRequest request) {
     String name = (String) request.getAttribute("name");
     return ResponseEntity.ok(new StoreManagerLoginResponse(name));
   }
 
-  @PostMapping("/logout")
+  @PostMapping("/api/auth/stores/logout")
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("스토어 매니저 로그아웃 완료");
   }
