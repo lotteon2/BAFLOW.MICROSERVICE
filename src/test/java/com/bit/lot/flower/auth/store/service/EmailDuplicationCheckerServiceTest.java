@@ -38,7 +38,7 @@ class EmailDuplicationCheckerServiceTest {
 
   }
 
-  @DisplayName("이메일 중복일시 에러 Throw 테스트")
+  @DisplayName("이메일 중복일시 StoreManagerAuthException Throw 테스트")
   @Transactional
   @Test
   void EmailDuplicationCheck_WhenThereIsAlreadyExistEmail_ThrowStoreManagerException() {
