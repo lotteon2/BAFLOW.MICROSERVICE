@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController("store")
-public class StoreManagerController {
+public class StoreManagerRestController {
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
   private final StoreManagerIdRequest<AuthId> storeManagerIdRequest;
