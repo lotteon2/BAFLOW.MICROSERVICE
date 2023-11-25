@@ -48,8 +48,7 @@ public class StoreManagerController {
   }
 
   @PutMapping("/api/auth/stores/login")
-  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId,
-      HttpServletRequest request) {
+  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId) {
     String name = storeManagerNameRequest.getName(authId).getName();
     StoreId storeId = storeManagerIdRequest.getId(authId).getStoreId();
     return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(storeId, name));
