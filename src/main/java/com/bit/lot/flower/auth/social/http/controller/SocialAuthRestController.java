@@ -11,6 +11,7 @@ import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Api(value="social-auth")
 public class SocialAuthRestController {
 
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
@@ -60,7 +62,7 @@ public class SocialAuthRestController {
 
   @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴시 로그아웃이 선행 처리가 되어야함"
       + "따라서 Authroization: Bearer 토큰 제거, Refresh토큰"
-      + "Redis에서 제거, HttpOnlyCookie에서 제거")
+      + "Redis에서 제거, HttpOnlyCookie에서 제거 이후 인증 제공자 OAuth2 로그아웃 처리")
   @DeleteMapping("/api/auth/social")
   public ResponseEntity<String> userWithdrawalUserSelf(HttpServletRequest request,
       @PathVariable AuthenticationProvider provider,

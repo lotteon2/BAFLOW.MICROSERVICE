@@ -11,8 +11,8 @@ import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerSingUpService;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController("store")
+@Api(value="store-auth")
 public class StoreManagerRestController {
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;

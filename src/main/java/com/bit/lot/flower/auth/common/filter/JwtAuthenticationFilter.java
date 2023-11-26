@@ -18,11 +18,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 
+  private boolean shouldNotFilterSwaggerURI(HttpServletRequest request) throws ServletException {
+    String requestURI = request.getRequestURI();
+    return requestURI.contains("/swagger-ui.html") || requestURI.contains("/v2/api-docs")
+        || requestURI.contains("/webjars") || requestURI.contains("/swagger-resources")
+        || requestURI.contains("/favicon");
+  }
+
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    return requestURI.contains("/login") || requestURI.contains("/signup");
-
+    return shouldNotFilterSwaggerURI(request) || requestURI.contains("/signup")
+        || requestURI.contains("/login");
   }
 
   @Override

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -19,8 +21,12 @@ public class CommonLogoutInterceptor implements HandlerInterceptor {
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
       @Nullable ModelAndView modelAndView) throws Exception {
-    String token  = ExtractAuthorizationTokenUtil.extractToken(request);
+
+    log.info(request.getRequestURI());
+    String token = ExtractAuthorizationTokenUtil.extractToken(request);
     tokenHandler.invalidateToken(token, response);
+
+
   }
 
 }

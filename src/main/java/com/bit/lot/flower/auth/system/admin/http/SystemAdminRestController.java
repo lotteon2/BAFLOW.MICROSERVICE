@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.system.admin.http;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@Api(value="system-auth")
 public class SystemAdminRestController {
 
   private final UpdateStoreMangerStatusService<AuthId> updateStoreMangerStatusService;
