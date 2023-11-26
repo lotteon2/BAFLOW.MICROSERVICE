@@ -11,6 +11,7 @@ import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,8 @@ public class SocialAuthRestController {
   private final SocialAuthService<AuthId> socialAuthService;
   private final LoginSocialUserEventPublisher publisher;
 
+  @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
+      + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
   public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(
       HttpServletRequest request) {
@@ -44,7 +47,9 @@ public class SocialAuthRestController {
         new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
   }
 
-  @PostMapping("/api/auth/social/logout")
+  @ApiOperation(value = "유저 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
+      + "Redis에서 제거, HttpOnlyCookie에서 제거")
+  @PostMapping("/api/auth/social/{provider}/logout")
   public ResponseEntity<String> logout(HttpServletRequest request,
       @RequestHeader AuthId socialId,
       @PathVariable AuthenticationProvider provider) {
@@ -53,6 +58,9 @@ public class SocialAuthRestController {
     return ResponseEntity.ok("로그아웃이 성공했습니다.");
   }
 
+  @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴시 로그아웃이 선행 처리가 되어야함"
+      + "따라서 Authroization: Bearer 토큰 제거, Refresh토큰"
+      + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @DeleteMapping("/api/auth/social")
   public ResponseEntity<String> userWithdrawalUserSelf(HttpServletRequest request,
       @PathVariable AuthenticationProvider provider,

@@ -14,8 +14,6 @@ public class SocialAuthServiceImpl implements
   private final SocialLoginStrategy loginStrategy;
   private final SocialUserWithdrawalStrategy<AuthId> userWithdrawalStrategy;
   private final SocialLogoutStrategy<AuthId> logoutStrategy;
-  private final SignUpStrategy<AuthId> signUpWhenUserIsNotExisted;
-  private final SocialAuthJpaRepository repository;
 
 
   @Transactional
