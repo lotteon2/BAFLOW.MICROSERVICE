@@ -94,7 +94,7 @@ class SystemAdminAuthorizationFilterTest {
    * 않으면 무조건 IllegalArgumentException이 전파된다.
    */
 
-  @DisplayName("JWT토큰이 존재하지 않을 때 MalformedJwtException catch")
+  @DisplayName("토큰이 발급된 이후 JWT토큰이 존재하지 않을 때 MalformedJwtException catch")
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(testUserId);
