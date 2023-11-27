@@ -63,7 +63,7 @@ public class SystemAdminSecurityConfig {
   public SystemAdminAuthenticationFilter systemAdminAuthenticationFilter() {
     SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
         systemAuthenticationManager(), tokenHandler);
-    systemAdminAuthenticationFilter.setFilterProcessesUrl("/api/auth/admin/login");
+    systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/admin/login");
     return systemAdminAuthenticationFilter;
   }
 

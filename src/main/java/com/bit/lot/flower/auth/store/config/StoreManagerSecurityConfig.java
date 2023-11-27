@@ -66,7 +66,7 @@ public class StoreManagerSecurityConfig {
   public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
     StoreManagerAuthenticationFilter authenticationFilter = new StoreManagerAuthenticationFilter(
         storeAuthenticationManager(), tokenHandler);
-    authenticationFilter.setFilterProcessesUrl("/api/auth/stores/login");
+    authenticationFilter.setFilterProcessesUrl("/**/stores/login");
     return authenticationFilter;
   }
 
