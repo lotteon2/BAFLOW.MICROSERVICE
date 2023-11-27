@@ -21,12 +21,15 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final AuthenticationManager storeManagerAuthenticationManager;
   private final TokenHandler tokenHandler;
+
 
   @Autowired
   public StoreManagerAuthenticationFilter(
@@ -46,18 +49,21 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
   }
 
 
+  /**
+   * @throws StoreManagerAuthException StoreManager의 Status가 Pending일 경우 StoreMangerAuthException이
+   *                                   던져진다.
+   */
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) {
     try {
       StoreManagerLoginDto dto = getLoginDtoFromRequest(request);
       return storeManagerAuthenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(),null));
+          new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(), null));
 
-    } catch (BadCredentialsException | IOException e){
+    } catch (BadCredentialsException | IOException e) {
       throw new BadCredentialsException("존재하지 않는 시스템 어드민 유저입니다.");
-    }
-    catch (StoreManagerAuthException e){
+    } catch (StoreManagerAuthException e){
       throw new StoreManagerAuthException(e.getMessage());
     }
 

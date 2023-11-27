@@ -37,7 +37,6 @@ public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticat
     super(systemAuthenticationManager);
     this.systemAuthenticationManager = systemAuthenticationManager;
     this.tokenHandler = tokenHandler;
-    setFilterProcessesUrl("/api/auth/admin/login");
   }
 
   @Override

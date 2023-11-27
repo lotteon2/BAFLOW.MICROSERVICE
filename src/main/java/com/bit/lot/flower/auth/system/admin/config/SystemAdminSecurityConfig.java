@@ -4,6 +4,10 @@ package com.bit.lot.flower.auth.system.admin.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
+import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
+import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
+import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
+import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
 import com.bit.lot.flower.auth.system.admin.security.SystemAdminAuthenticationManager;
@@ -12,10 +16,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -33,11 +39,12 @@ public class SystemAdminSecurityConfig {
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
+
   @Order(3)
   @Bean
   public SecurityFilterChain systemSecurityFilterChain(HttpSecurity http) throws Exception {
 
-    http.regexMatcher("/api/auth/admin").csrf().disable()
+    http.regexMatcher("^.*\\/admin\\/.*$").csrf().disable()
         .addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class)
@@ -54,7 +61,10 @@ public class SystemAdminSecurityConfig {
 
   @Bean
   public SystemAdminAuthenticationFilter systemAdminAuthenticationFilter() {
-    return new SystemAdminAuthenticationFilter(systemAuthenticationManager(), tokenHandler);
+    SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
+        systemAuthenticationManager(), tokenHandler);
+    systemAdminAuthenticationFilter.setFilterProcessesUrl("/api/auth/admin/login");
+    return systemAdminAuthenticationFilter;
   }
 
   @Bean

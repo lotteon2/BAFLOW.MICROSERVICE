@@ -36,7 +36,7 @@ public class SocialSecurityConfig {
   @Order(1)
   @Bean
   public SecurityFilterChain socialSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.regexMatcher("/api/auth/social").csrf().disable()
+    http.regexMatcher("^.*\\/social\\/.*$").csrf().disable()
         .authorizeHttpRequests(config -> config.anyRequest().permitAll())
         .oauth2Login(oauth2Configurer -> oauth2Configurer
             .successHandler(successHandler())

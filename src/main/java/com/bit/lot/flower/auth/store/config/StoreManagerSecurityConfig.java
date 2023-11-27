@@ -37,7 +37,7 @@ public class StoreManagerSecurityConfig {
   @Order(2)
   @Bean
   public SecurityFilterChain storeSecurityFilterChain(HttpSecurity http) throws Exception {
-    http.regexMatcher("/stores");
+      http.regexMatcher("^.*\\/stores\\/.*$");
     http.csrf().disable();
     http.authorizeRequests().antMatchers("/business-number").hasAuthority(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED.name());
     http.
@@ -64,7 +64,10 @@ public class StoreManagerSecurityConfig {
 
   @Bean
   public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
-    return new StoreManagerAuthenticationFilter(storeAuthenticationManager(), tokenHandler);
+    StoreManagerAuthenticationFilter authenticationFilter = new StoreManagerAuthenticationFilter(
+        storeAuthenticationManager(), tokenHandler);
+    authenticationFilter.setFilterProcessesUrl("/api/auth/stores/login");
+    return authenticationFilter;
   }
 
   @Bean

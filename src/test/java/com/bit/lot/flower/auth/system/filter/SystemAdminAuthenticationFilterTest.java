@@ -72,7 +72,7 @@ class SystemAdminAuthenticationFilterTest {
 
   }
 
-  private MvcResult getValidSystemAdminUser(SystemAdminLoginDto validUserDto)
+  private MvcResult getValidSystemAdminUserResponse(SystemAdminLoginDto validUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
             .post("/api/auth/admin/login")
@@ -110,7 +110,7 @@ class SystemAdminAuthenticationFilterTest {
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_JwtTokenInResponse() throws Exception {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
-    MvcResult validUser = getValidSystemAdminUser(validDto);
+    MvcResult validUser = getValidSystemAdminUserResponse(validDto);
     MockHttpServletResponse response = validUser.getResponse();
     System.out.println("response:{}" + response);
     String authorizationHeader = response.getHeader("Authorization");
@@ -121,7 +121,7 @@ class SystemAdminAuthenticationFilterTest {
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInRedis() throws Exception {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
-    MvcResult validUser = getValidSystemAdminUser(validDto);
+    MvcResult validUser = getValidSystemAdminUserResponse(validDto);
     assertNotNull(redisRefreshTokenUtil.getRefreshToken(validDto.getEmail()));
 
   }
@@ -130,7 +130,7 @@ class SystemAdminAuthenticationFilterTest {
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInResponseCookie() throws Exception {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
-    MvcResult validUser = getValidSystemAdminUser(validDto);
+    MvcResult validUser = getValidSystemAdminUserResponse(validDto);
     assertNotNull(validUser.getResponse().getCookie(refreshTokenName));
 
   }
