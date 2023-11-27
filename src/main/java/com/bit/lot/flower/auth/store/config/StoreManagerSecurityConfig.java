@@ -39,7 +39,6 @@ public class StoreManagerSecurityConfig {
   public SecurityFilterChain storeSecurityFilterChain(HttpSecurity http) throws Exception {
       http.regexMatcher("^.*\\/stores\\/.*$");
     http.csrf().disable();
-    http.authorizeRequests().antMatchers("/business-number").hasAuthority(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED.name());
     http.
         addFilterAt(storeManagerAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class).
         addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class).
