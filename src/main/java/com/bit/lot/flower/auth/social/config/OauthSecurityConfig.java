@@ -16,17 +16,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class OauthSecurityConfig {
-
-
-  private final SocialLoginStrategy socialLoginStrategy;
-  private final TokenHandler tokenHandler;
 
   @Order(0)
   @Bean
@@ -49,7 +44,7 @@ public class OauthSecurityConfig {
   @Qualifier("socialAuthenticationSuccessHandler")
   @Bean
   AuthenticationSuccessHandler socialAuthenticationSuccessHandler() {
-    return new SocialAuthenticationSuccessHandler(socialLoginStrategy, tokenHandler);
+    return new SocialAuthenticationSuccessHandler();
   }
 
 

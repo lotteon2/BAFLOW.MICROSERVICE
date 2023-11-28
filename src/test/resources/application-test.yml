@@ -1,6 +1,14 @@
 server:
   port: 8081
 spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: basic
   redis:
     host: localhost
     port: 6379
@@ -14,7 +22,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
 
   security:
@@ -33,6 +41,7 @@ spring:
             client-authentication-method: client_secret_post
             redirect-uri: http://localhost:8081/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
+            admin-key: 683205e509c2892ef3444c44e91d1ebe
             client-name: kakao
             scope:
               - profile_nickname
@@ -89,3 +98,10 @@ security:
   authorization:
     header:
       name: Authorization
+
+kakao:
+  login:
+    request:
+      uri: "/api/auth/social/kakao/login"
+  logout:
+    redirect: "http://localhost:8081/login"

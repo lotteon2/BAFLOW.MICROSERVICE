@@ -35,34 +35,17 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-  private final SocialLoginStrategy socialLoginStrategy;
-  private final TokenHandler tokenHandler;
-
-  private String createToken(HttpServletResponse response,
-      Authentication authentication) {
-    Map<String, Object> claimMap = JwtUtil.addClaims(
-        SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        Role.ROLE_SOCIAL_USER.name());
-    return tokenHandler.createToken(authentication.getName(),
-        claimMap, response);
-  }
-
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-    socialLoginStrategy.login(getAuthId(defaultOAuth2User.getName()));
     SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
-
-    String token = createToken(response, authentication);
-    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
-        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
-    setCustomResponseWithLoginDto(response, command, token);
+    setCustomResponseWithLoginDto(response, command);
   }
 
   private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,
-      SocialUserLoginDto dto,String token)
+      SocialUserLoginDto dto)
       throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
     String json = objectMapper.writeValueAsString(dto);
@@ -70,7 +53,6 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(json);
-    response.getWriter().write(token);
     return response;
   }
 
@@ -84,9 +66,6 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
 
-  private AuthId getAuthId(String value) {
-    return AuthId.builder().value(Long.valueOf(value)).build();
-  }
 }
 
 
