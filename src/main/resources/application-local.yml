@@ -89,3 +89,8 @@ security:
   authorization:
     header:
       name: Authorization
+
+kakao:
+  login:
+    request:
+      uri: "/api/auth/social/kakao/login"

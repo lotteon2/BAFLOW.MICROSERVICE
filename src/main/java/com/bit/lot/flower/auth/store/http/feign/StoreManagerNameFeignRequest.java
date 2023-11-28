@@ -1,7 +1,5 @@
 package com.bit.lot.flower.auth.store.http.feign;
 
-import com.bit.lot.flower.auth.social.dto.SoftDeleteSocialUserDto;
-import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.http.feign.dto.StoreManagerNameDto;
 import org.springframework.cloud.openfeign.FeignClient;

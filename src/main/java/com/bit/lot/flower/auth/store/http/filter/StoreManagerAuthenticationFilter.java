@@ -66,18 +66,7 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
   }
 
 
-  @Override
-  protected void successfulAuthentication(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      FilterChain chain,
-      Authentication authResult) {
-    Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        Role.ROLE_SYSTEM_ADMIN.name());
-    String token = tokenHandler.createToken(String.valueOf(authResult.getPrincipal()), claimMap,response);
-    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
-        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
-  }
+
 
 
 

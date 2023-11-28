@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.system.admin.config;
 
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
@@ -16,12 +17,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -36,6 +35,7 @@ public class SystemAdminSecurityConfig {
   @Value("${system.admin.password}")
   private String adminPassword;
   private final TokenHandler tokenHandler;
+  private final SystemAuthenticationSuccessHandler authenticationSuccessHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
@@ -44,7 +44,9 @@ public class SystemAdminSecurityConfig {
   @Bean
   public SecurityFilterChain systemSecurityFilterChain(HttpSecurity http) throws Exception {
 
-    http.regexMatcher("^.*\\/admin\\/.*$").csrf().disable()
+    http
+        .regexMatcher("^.*\\/admin\\/.*$");
+    http.csrf().disable()
         .addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class)
@@ -63,6 +65,7 @@ public class SystemAdminSecurityConfig {
   public SystemAdminAuthenticationFilter systemAdminAuthenticationFilter() {
     SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
         systemAuthenticationManager(), tokenHandler);
+    systemAdminAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/admin/login");
     return systemAdminAuthenticationFilter;
   }

@@ -1,8 +1,5 @@
 package com.bit.lot.flower.auth.store.http.feign;
 
-import com.bit.lot.flower.auth.social.dto.UserFeignLoginResponse;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
-import com.bit.lot.flower.auth.social.http.valueobject.UserId;
 import com.bit.lot.flower.auth.store.dto.CreateStoreMangerDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;

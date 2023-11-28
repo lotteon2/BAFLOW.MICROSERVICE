@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
-import com.bit.lot.flower.auth.social.dto.UserFeignLoginResponse;
+import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;

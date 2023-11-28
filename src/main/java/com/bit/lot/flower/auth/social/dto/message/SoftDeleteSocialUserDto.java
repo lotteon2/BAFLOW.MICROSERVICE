@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social.dto;
+package com.bit.lot.flower.auth.social.dto.message;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

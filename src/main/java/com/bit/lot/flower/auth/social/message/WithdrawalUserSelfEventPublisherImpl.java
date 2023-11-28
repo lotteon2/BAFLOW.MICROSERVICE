@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.social.message;
 
-import com.bit.lot.flower.auth.social.dto.SoftDeleteSocialUserDto;
+import com.bit.lot.flower.auth.social.dto.message.SoftDeleteSocialUserDto;
 import com.bit.lot.flower.auth.social.http.feign.SoftDeleteUserFeignRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

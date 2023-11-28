@@ -20,7 +20,7 @@ public class SocialAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    return !requestURI.contains("/social") || requestURI.contains("/social/login");
+    return !requestURI.contains("/social") || requestURI.contains("/login");
   }
 
   @Override

@@ -4,16 +4,22 @@ import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import com.bit.lot.flower.auth.social.dto.Oauth2LoginDto;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
+import com.bit.lot.flower.auth.social.entity.SocialAuth;
+import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @RequiredArgsConstructor
@@ -30,21 +36,11 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         claimMap, response);
   }
 
-  private SocialLoginRequestCommand getRequestDto(DefaultOAuth2User defaultOAuth2User) {
-    return SocialLoginRequestCommand.builder()
-        .email(defaultOAuth2User.getAttributes().get("email").toString())
-        .nickname(defaultOAuth2User.getAttributes().get("nickname").toString())
-        .socialId(AuthId.builder()
-            .value((Long) defaultOAuth2User.getAttributes().get("id")).build()).build();
-
-  }
-
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-
-    SocialLoginRequestCommand command = getRequestDto(defaultOAuth2User);
+    SocialLoginRequestCommand command = getOauth2LoginDto(defaultOAuth2User);
     request.setAttribute("command", command);
 
     String token = createToken(response, authentication);
@@ -52,5 +48,18 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
   }
 
+
+  private SocialLoginRequestCommand getOauth2LoginDto(OAuth2User oAuth2User) throws IOException {
+    LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
+    LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
+    String id = oAuth2User.getName();
+    String email = kakaoAccount.get("email");
+    String nickname = properties.get("nickname");
+    return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
+        .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
+
+  }
 }
+
+
 

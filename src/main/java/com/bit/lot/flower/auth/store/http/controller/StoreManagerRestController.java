@@ -59,7 +59,6 @@ public class StoreManagerRestController {
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/stores/login")
   public ResponseEntity<StoreManagerLoginResponse> login(HttpServletRequest request, @AuthenticationPrincipal AuthId authId , @Valid @RequestBody StoreManagerLoginDto dto) {
-    log.info("request:{}"+request);
     String name = storeManagerNameRequest.getName(authId).getName();
     StoreId storeId = storeManagerIdRequest.getId(authId).getStoreId();
     return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(storeId, name));
@@ -71,6 +70,4 @@ public class StoreManagerRestController {
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("스토어 매니저 로그아웃 완료");
   }
-
-
 }
