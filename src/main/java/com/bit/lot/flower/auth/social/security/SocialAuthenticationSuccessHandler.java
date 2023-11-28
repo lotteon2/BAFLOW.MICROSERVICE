@@ -6,10 +6,14 @@ import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.social.dto.Oauth2LoginDto;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
+import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
+import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -45,22 +49,33 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
     socialLoginStrategy.login(getAuthId(defaultOAuth2User.getName()));
 
-    SocialLoginRequestCommand command = getOauth2LoginDto(defaultOAuth2User);
-    request.setAttribute("command", command);
+    SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
 
     String token = createToken(response, authentication);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
+    setCustomResponseWithLoginDto(response,command);
   }
 
+  private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,
+      SocialUserLoginDto dto)
+      throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    String json = objectMapper.writeValueAsString(dto);
+    response.setContentType("application/json");
+    response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
+    response.setCharacterEncoding("UTF-8");
+    response.getWriter().write(json);
+    return response;
+  }
 
-  private SocialLoginRequestCommand getOauth2LoginDto(OAuth2User oAuth2User) {
+  private SocialUserLoginDto getOauth2LoginDto(OAuth2User oAuth2User) {
     LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
     LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
     String id = oAuth2User.getName();
     String email = kakaoAccount.get("email");
     String nickname = properties.get("nickname");
-    return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
+    return SocialUserLoginDto.builder().email(email).nickname(nickname)
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
 

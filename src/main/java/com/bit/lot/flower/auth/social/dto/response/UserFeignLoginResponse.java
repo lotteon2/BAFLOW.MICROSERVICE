@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserFeignLoginResponse<ID extends com.bit.lot.flower.auth.social.http.valueobject.UserId> {
-  private ID userId;
+public class UserFeignLoginResponse{
+  private String nickName;
   private boolean isPhoneNumberIsRegistered;
   private final String message ="유저 가져오기 성공";
 

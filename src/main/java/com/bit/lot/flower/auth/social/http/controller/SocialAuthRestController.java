@@ -5,8 +5,6 @@ import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
-import com.bit.lot.flower.auth.social.http.valueobject.UserId;
-import com.bit.lot.flower.auth.social.mapper.SocialDataMapper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
@@ -19,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,14 +33,8 @@ public class SocialAuthRestController {
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
-  public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(
-      HttpServletRequest request) {
-    SocialLoginRequestCommand command = (SocialLoginRequestCommand) request.getAttribute(
-        "loginDto");
-    SocialUserLoginDto userDto = SocialDataMapper.mapCreateSocialAuthToSocialUserDto(command);
-    UserFeignLoginResponse<UserId> userFeignLoginResponse = publisher.publish(userDto);
-    request.setAttribute("userId", userFeignLoginResponse.getUserId());
-
+  public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(@RequestBody SocialUserLoginDto dto, HttpServletRequest request) {
+    UserFeignLoginResponse userFeignLoginResponse = publisher.publish(dto);
     return ResponseEntity.ok(
         new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
   }

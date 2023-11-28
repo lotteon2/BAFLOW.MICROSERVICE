@@ -14,7 +14,7 @@ public class CreateSocialUserEventPublisherImpl implements LoginSocialUserEventP
   private final LoginSocialUserFeignRequest feignRequest;
 
   @Override
-  public UserFeignLoginResponse<UserId> publish(SocialUserLoginDto dto) {
+  public UserFeignLoginResponse publish(SocialUserLoginDto dto) {
    return feignRequest.login(dto).getBody();
   }
 }

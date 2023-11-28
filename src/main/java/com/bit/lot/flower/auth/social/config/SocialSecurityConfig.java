@@ -4,6 +4,7 @@ import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
+import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.security.SocialAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
@@ -24,6 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SocialSecurityConfig {
+
 
   private final SocialLoginStrategy socialLoginStrategy;
   private final TokenHandler tokenHandler;

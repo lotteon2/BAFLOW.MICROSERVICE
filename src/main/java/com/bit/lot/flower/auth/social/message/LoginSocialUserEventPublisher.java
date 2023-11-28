@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface LoginSocialUserEventPublisher {
-  public UserFeignLoginResponse<UserId> publish(SocialUserLoginDto dto);
+  public UserFeignLoginResponse publish(SocialUserLoginDto dto);
 }
