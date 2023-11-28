@@ -5,10 +5,6 @@ import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
-import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
-import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
-import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
-import com.bit.lot.flower.auth.store.security.StoreAuthenticationManager;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
 import com.bit.lot.flower.auth.system.admin.security.SystemAdminAuthenticationManager;
@@ -34,7 +30,6 @@ public class SystemAdminSecurityConfig {
   private String adminId;
   @Value("${system.admin.password}")
   private String adminPassword;
-  private final TokenHandler tokenHandler;
   private final SystemAuthenticationSuccessHandler authenticationSuccessHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
@@ -64,7 +59,7 @@ public class SystemAdminSecurityConfig {
   @Bean
   public SystemAdminAuthenticationFilter systemAdminAuthenticationFilter() {
     SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
-        systemAuthenticationManager(), tokenHandler);
+        systemAuthenticationManager());
     systemAdminAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/admin/login");
     return systemAdminAuthenticationFilter;

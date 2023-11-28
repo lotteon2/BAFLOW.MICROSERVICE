@@ -8,6 +8,7 @@ import com.bit.lot.flower.auth.social.dto.Oauth2LoginDto;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
+import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+  private final SocialLoginStrategy socialLoginStrategy;
   private final TokenHandler tokenHandler;
 
   private String createToken(HttpServletResponse response,
@@ -32,14 +34,17 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     Map<String, Object> claimMap = JwtUtil.addClaims(
         SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
         Role.ROLE_SOCIAL_USER.name());
-    return tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),
+    return tokenHandler.createToken(authentication.getName(),
         claimMap, response);
   }
+
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
+    socialLoginStrategy.login(getAuthId(defaultOAuth2User.getName()));
+
     SocialLoginRequestCommand command = getOauth2LoginDto(defaultOAuth2User);
     request.setAttribute("command", command);
 
@@ -49,7 +54,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
   }
 
 
-  private SocialLoginRequestCommand getOauth2LoginDto(OAuth2User oAuth2User) throws IOException {
+  private SocialLoginRequestCommand getOauth2LoginDto(OAuth2User oAuth2User) {
     LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
     LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
     String id = oAuth2User.getName();
@@ -57,7 +62,10 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     String nickname = properties.get("nickname");
     return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
+  }
 
+  private AuthId getAuthId(String value) {
+    return AuthId.builder().value(Long.valueOf(value)).build();
   }
 }
 

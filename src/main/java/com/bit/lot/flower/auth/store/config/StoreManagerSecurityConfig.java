@@ -29,7 +29,6 @@ public class StoreManagerSecurityConfig {
 
   private final SystemAuthenticationSuccessHandler authenticationSuccessHandler;
   private final StoreManagerAuthRepository repository;
-  private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
@@ -65,7 +64,7 @@ public class StoreManagerSecurityConfig {
   @Bean
   public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
     StoreManagerAuthenticationFilter authenticationFilter = new StoreManagerAuthenticationFilter(
-        storeAuthenticationManager(), tokenHandler);
+        storeAuthenticationManager());
     authenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     authenticationFilter.setFilterProcessesUrl("/**/stores/login");
     return authenticationFilter;

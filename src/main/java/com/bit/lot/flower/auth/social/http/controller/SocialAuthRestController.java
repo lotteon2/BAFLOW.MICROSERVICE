@@ -39,9 +39,6 @@ public class SocialAuthRestController {
     SocialLoginRequestCommand command = (SocialLoginRequestCommand) request.getAttribute(
         "loginDto");
     SocialUserLoginDto userDto = SocialDataMapper.mapCreateSocialAuthToSocialUserDto(command);
-
-    socialAuthService.login(command.getSocialId());
-
     UserFeignLoginResponse<UserId> userFeignLoginResponse = publisher.publish(userDto);
     request.setAttribute("userId", userFeignLoginResponse.getUserId());
 

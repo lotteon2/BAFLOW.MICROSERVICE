@@ -25,10 +25,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         || requestURI.contains("/favicon");
   }
 
+  private boolean shouldNotFilterOauth2(HttpServletRequest request) throws ServletException {
+
+    String requestURI = request.getRequestURI();
+    return requestURI.contains("/kauth")
+        || requestURI.contains("/oauth") || requestURI.contains("/")
+        || requestURI.contains("/kapi");
+  }
+
   @Override
   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
     String requestURI = request.getRequestURI();
-    return shouldNotFilterSwaggerURI(request) || requestURI.contains("/signup")
+    return shouldNotFilterSwaggerURI(request) || shouldNotFilterOauth2(request)
+        || requestURI.contains("/signup")
         || requestURI.contains("/login");
   }
 

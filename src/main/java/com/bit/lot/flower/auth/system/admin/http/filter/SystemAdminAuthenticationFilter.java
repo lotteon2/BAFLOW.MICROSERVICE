@@ -26,17 +26,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final AuthenticationManager systemAuthenticationManager;
-  private final TokenHandler tokenHandler;
 
 
 
   @Autowired
   public SystemAdminAuthenticationFilter(
-      @Qualifier("systemAuthenticationManager") AuthenticationManager systemAuthenticationManager,
-      TokenHandler tokenHandler) {
+      @Qualifier("systemAuthenticationManager") AuthenticationManager systemAuthenticationManager) {
     super(systemAuthenticationManager);
     this.systemAuthenticationManager = systemAuthenticationManager;
-    this.tokenHandler = tokenHandler;
   }
 
   @Override

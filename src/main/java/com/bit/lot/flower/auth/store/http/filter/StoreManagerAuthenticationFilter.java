@@ -24,16 +24,13 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final AuthenticationManager storeManagerAuthenticationManager;
-  private final TokenHandler tokenHandler;
 
 
   @Autowired
   public StoreManagerAuthenticationFilter(
-      @Qualifier("storeAuthenticationManager") AuthenticationManager storeManagerAuthenticationManager,
-      TokenHandler tokenHandler) {
+      @Qualifier("storeAuthenticationManager") AuthenticationManager storeManagerAuthenticationManager) {
     super(storeManagerAuthenticationManager);
     this.storeManagerAuthenticationManager = storeManagerAuthenticationManager;
-    this.tokenHandler = tokenHandler;
   }
 
 
