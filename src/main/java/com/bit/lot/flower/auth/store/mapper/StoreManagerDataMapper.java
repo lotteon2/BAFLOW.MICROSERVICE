@@ -1,8 +1,8 @@
 package com.bit.lot.flower.auth.store.mapper;
 
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
+import java.time.ZonedDateTime;
 
 public class StoreManagerDataMapper {
 
@@ -16,6 +16,14 @@ public class StoreManagerDataMapper {
     return StoreManagerAuth.builder().email(storeManagerAuth.getEmail())
         .id(storeManagerAuth.getId()).status(status)
         .lastLogoutTime(storeManagerAuth.getLastLogoutTime())
+        .password(storeManagerAuth.getPassword()).build();
+  }
+
+    public static StoreManagerAuth updatedCurrentLogOutTime(StoreManagerAuth storeManagerAuth,
+      ZonedDateTime currentTime) {
+    return StoreManagerAuth.builder().email(storeManagerAuth.getEmail())
+        .id(storeManagerAuth.getId()).status(storeManagerAuth.getStatus())
+        .lastLogoutTime(currentTime)
         .password(storeManagerAuth.getPassword()).build();
   }
 }

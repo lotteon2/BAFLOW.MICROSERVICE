@@ -4,7 +4,6 @@ import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
-import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
 import com.bit.lot.flower.auth.social.security.SocialAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
@@ -37,7 +36,7 @@ public class SocialSecurityConfig {
   public SecurityFilterChain socialSecurityFilterChain(HttpSecurity http) throws Exception {
     http.csrf().disable()
         .authorizeRequests(authorize -> authorize.
-            regexMatchers("^.*\\/social\\/.*$").authenticated()
+            regexMatchers("^.*\\/social\\/.*$").permitAll()
             .regexMatchers("/login/oauth2/.*$").permitAll()
             .regexMatchers("/login").permitAll()
             .regexMatchers("kauth.*$").permitAll()

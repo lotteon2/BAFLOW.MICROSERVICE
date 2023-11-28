@@ -15,7 +15,7 @@ public class ExtractAuthorizationTokenUtil {
 
     String authorizationHeader = request.getHeader(
         SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME);
-    if (authorizationHeader != null && authorizationHeader.startsWith(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX)) {
+    if (authorizationHeader != null && authorizationHeader.startsWith(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME)) {
       return authorizationHeader.substring(7);
     } else {
       throw new IllegalArgumentException("토큰 정보를 찾을 수 없습니다. 로그인을 먼저 해주세요.");

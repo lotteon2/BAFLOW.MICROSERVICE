@@ -54,11 +54,11 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     String token = createToken(response, authentication);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
-    setCustomResponseWithLoginDto(response,command);
+    setCustomResponseWithLoginDto(response,command,token);
   }
 
   private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,
-      SocialUserLoginDto dto)
+      SocialUserLoginDto dto,String token)
       throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
     String json = objectMapper.writeValueAsString(dto);
@@ -66,6 +66,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
     response.setCharacterEncoding("UTF-8");
     response.getWriter().write(json);
+    response.getWriter().write(token);
     return response;
   }
 
