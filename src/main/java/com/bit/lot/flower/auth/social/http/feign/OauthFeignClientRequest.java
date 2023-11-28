@@ -1,11 +1,13 @@
 package com.bit.lot.flower.auth.social.http.feign;
 
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 
-@FeignClient(name = "oauth2")
+@FeignClient(name = "oauth2", url = "https://kauth.kakao.com")
 public interface OauthFeignClientRequest {
-    @PostMapping("/kauth.kakao.com/v1/user/logout")
-    void kakaoLogout(@RequestHeader("Authorization") String accessToken);
+
+    @GetMapping("/oauth/logout")
+    void kakaoLogout(@RequestParam String client_id, @RequestParam String logout_redirect_uri);
 }

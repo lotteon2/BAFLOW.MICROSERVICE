@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
+import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
-import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
@@ -14,11 +14,11 @@ import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -42,23 +42,24 @@ public class SocialAuthRestController {
   @ApiOperation(value = "유저 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/api/auth/social/{provider}/logout")
-  public ResponseEntity<String> logout(HttpServletRequest request,
-      @RequestHeader AuthId socialId,
+  public ResponseEntity<String> logout(
+      @AuthenticationPrincipal Object socialId,
       @PathVariable AuthenticationProvider provider) {
-    socialAuthService.logout(socialId);
-    oauthLogoutFacadeHelper.logout(provider, request.getHeader("Authorization"));
+    socialAuthService.logout(AuthId.builder().value(Long.valueOf((String) socialId)).build());
+    oauthLogoutFacadeHelper.logout(provider);
     return ResponseEntity.ok("로그아웃이 성공했습니다.");
   }
 
   @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴시 로그아웃이 선행 처리가 되어야함"
       + "따라서 Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거 이후 인증 제공자 OAuth2 로그아웃 처리")
-  @DeleteMapping("/api/auth/social")
-  public ResponseEntity<String> userWithdrawalUserSelf(HttpServletRequest request,
+  @DeleteMapping("/api/auth/social/{provider}")
+  public ResponseEntity<String> userWithdrawalUserSelf(
       @PathVariable AuthenticationProvider provider,
-      @RequestHeader AuthId socialId) {
-    socialAuthService.userWithdrawalUserSelf(socialId);
-    oauthLogoutFacadeHelper.logout(provider, request.getHeader("Authorization"));
+      @AuthenticationPrincipal Object socialId) {
+    oauthLogoutFacadeHelper.logout(provider);
+    socialAuthService.userWithdrawalUserSelf(
+        AuthId.builder().value(Long.valueOf((String) socialId)).build());
     return ResponseEntity.ok("회원탈퇴 성공");
   }
 

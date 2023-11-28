@@ -21,8 +21,13 @@ import java.util.Optional;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -48,13 +53,12 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
     socialLoginStrategy.login(getAuthId(defaultOAuth2User.getName()));
-
     SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
 
     String token = createToken(response, authentication);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
-    setCustomResponseWithLoginDto(response,command,token);
+    setCustomResponseWithLoginDto(response, command, token);
   }
 
   private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,

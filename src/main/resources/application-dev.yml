@@ -87,3 +87,18 @@ system:
   admin:
     id: ${system.admin.id}
     password: ${system.admin.password}
+
+
+security:
+  authorization:
+    header:
+      name: Authorization
+
+kakao:
+  login:
+    request:
+      uri: ${kakao.login.request.uri}
+
+kakao:
+  logout:
+    redirect: ${kakao.logout.redirect}
