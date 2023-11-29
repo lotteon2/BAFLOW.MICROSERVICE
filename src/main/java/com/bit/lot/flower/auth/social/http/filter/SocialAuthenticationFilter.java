@@ -63,7 +63,7 @@ public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFi
       socialAuthenticationManager.authenticate(authentication);
       return authentication;
     } catch (SocialAuthException e) {
-      throw new StoreManagerAuthException(e.getMessage());
+      throw new SocialAuthException(e.getMessage());
     }
 
 

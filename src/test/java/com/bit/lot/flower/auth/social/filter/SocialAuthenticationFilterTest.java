@@ -1,17 +1,22 @@
 package com.bit.lot.flower.auth.social.filter;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
+import com.bit.lot.flower.auth.social.entity.SocialAuth;
+import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.ZonedDateTime;
 import javax.swing.Spring;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,9 +35,8 @@ import org.springframework.web.context.WebApplicationContext;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class SocialAuthenticationFilterTest {
+class SocialAuthenticationFilterTest {
 
-  private final Long unValidStoreManagerId = 10000L;
   @Value("${cookie.refresh.token.name}")
   String refreshTokenName;
   @Value("${security.authorization.header.name}")
@@ -63,6 +67,21 @@ public class SocialAuthenticationFilterTest {
   private SocialLoginRequestCommand getSocialLoginRequestCommand() {
     return SocialLoginRequestCommand.builder().socialId(getAuthIdFromValue(1L))
         .email("test@gmail.com").nickname("testNickName").build();
+  }
+
+  private void saveStatusNotRecentlyOut(SocialLoginRequestCommand command) {
+    repository.save(new SocialAuth(command.getSocialId().getValue(), false, null));
+  }
+
+
+  private void saveStatusRecentlyOutNotPassedOneDay(SocialLoginRequestCommand command) {
+    repository.save(new SocialAuth(command.getSocialId().getValue(), true,
+        ZonedDateTime.now().minusHours(23L)));
+  }
+
+  private void saveStatusRecentlyOutPassedOneDay(SocialLoginRequestCommand command) {
+    repository.save(new SocialAuth(command.getSocialId().getValue(), true,
+        ZonedDateTime.now().minusHours(25L)));
   }
 
   private String asJsonString(Object obj) throws JsonProcessingException {
@@ -101,25 +120,39 @@ public class SocialAuthenticationFilterTest {
 
   @DisplayName("유저가 존재하지 않을 때 소셜 자동 회원가입 후 Refresh토큰 Cookie에 담겨있는지 확인")
   @Test
-  void socialUserLoginTest_WhenUserIsNotExist_RefreshTokenInCookie() {
+  void socialUserLoginTest_WhenUserIsNotExist_RefreshTokenInCookie() throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    MvcResult refreshTokenAtCookieResponse = socialUserLoginRequest(command);
+    assertNotNull(refreshTokenAtCookieResponse.getResponse().getCookie(refreshTokenName));
 
   }
 
   @DisplayName("유저가 존재하지 않을 때 소셜 자동 회원입 후 Refresh토큰 Redis에 담겨있는지 확인")
   @Test
-  void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() {
-
+  void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    socialUserLoginRequest(command);
+    assertNotNull(redisRefreshTokenUtil.getRefreshToken(command.getSocialId().toString()));
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithNotOutRecentlyStatus_Status200() {
-
+  void socialUserLoginTest_WhenUserIsExistWithNotOutRecentlyStatus_Status200() throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    saveStatusNotRecentlyOut(command);
+    MvcResult status200Result = socialUserLoginRequest(command);
+    assertEquals(200, status200Result.getResponse().getStatus());
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 한 후 24시간이 지나지 않은 회원 에러 확인 테스트")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsNotPassed24H_ThrowSocialAuthException() {
+  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsNotPassed24H_ThrowSocialAuthException()
+      throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    saveStatusRecentlyOutNotPassedOneDay(command);
+    assertThrowsExactly(SocialAuthException.class, ()->{
+      socialUserLoginRequest(command);
+    });
 
   }
 
