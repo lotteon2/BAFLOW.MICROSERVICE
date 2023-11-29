@@ -8,12 +8,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 public class SecurityContextUtil {
 
 
-  private static AuthId setStringPrincipalToAuthId(String userId){
-    return AuthId.builder().value(Long.valueOf(userId)).build();
-  }
 
   public static void setSecurityContextWithUserId(String userId) {
-    Authentication authentication = new UsernamePasswordAuthenticationToken(setStringPrincipalToAuthId(userId), null);
+    Authentication authentication = new UsernamePasswordAuthenticationToken(userId, null);
     SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 

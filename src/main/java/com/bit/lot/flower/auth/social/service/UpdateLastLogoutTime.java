@@ -10,13 +10,13 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UpdateLastLogoutTime implements
-    SocialLogoutStrategy<AuthId> {
+public class UpdateLastLogoutTime<ID extends AuthId> implements
+    SocialLogoutStrategy<ID> {
 
   private final SocialAuthJpaRepository repository;
 
   @Override
-  public void logout(AuthId socialId) {
+  public void logout(ID socialId) {
     SocialAuth socialAuth = repository.findById(socialId.getValue()).orElseThrow(() -> {
       throw new SocialAuthException("존재하지 않은 유저입니다.");
     });

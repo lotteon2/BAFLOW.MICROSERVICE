@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class SignUpWhenUserIsNotExist implements
-    SocialLoginStrategy {
+public class SignUpWhenUserIsNotExist<ID extends AuthId> implements
+    SocialLoginStrategy<ID> {
 
   private final SocialAuthJpaRepository repository;
   private final SocialAuthResignUpStrategy resignUpStrategy;
   private final SignUpStrategy<AuthId> signUpWhenUserIsNotExisted;
 
   @Override
-  public void login(AuthId socialId) {
+  public void login(ID socialId) {
     Optional<SocialAuth> optionalSocialAuth = repository.findById(socialId.getValue());
     if (optionalSocialAuth.isEmpty()) {
       signUpWhenUserIsNotExisted.signUp(socialId);

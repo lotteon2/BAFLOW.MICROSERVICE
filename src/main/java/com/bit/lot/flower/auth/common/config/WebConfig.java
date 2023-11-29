@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
             "/swagger-resources/**",
             "/v2/api-docs",
             "/webjars/**"
-        ).addPathPatterns("**/logout");
+        ).addPathPatterns("/**/logout");
   }
 
 

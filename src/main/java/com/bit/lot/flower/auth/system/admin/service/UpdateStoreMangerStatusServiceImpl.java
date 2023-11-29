@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class UpdateStoreMangerStatusServiceImpl implements
-    UpdateStoreMangerStatusService<AuthId> {
+public class UpdateStoreMangerStatusServiceImpl<ID extends AuthId> implements
+    UpdateStoreMangerStatusService<ID> {
 
   private final StoreManagerAuthRepository storeManagerAuthRepository;
 

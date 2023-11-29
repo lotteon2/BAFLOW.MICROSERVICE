@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class SoftDeleteSocialUser implements
-    SocialUserWithdrawalStrategy<AuthId> {
+public class SoftDeleteSocialUser<ID extends AuthId> implements
+    SocialUserWithdrawalStrategy<ID> {
 
   private final SocialAuthJpaRepository repository;
 
   @Transactional
   @Override
-  public void delete(AuthId userId) {
+  public void delete(ID userId) {
     SocialAuth socialAuth = repository.findById(userId.getValue()).orElseThrow(() -> {
       throw new SocialAuthException("존재하지 않는 소셜 계정입니다.");
     });

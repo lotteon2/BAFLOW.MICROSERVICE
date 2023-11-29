@@ -1,6 +1,8 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
+import com.bit.lot.flower.auth.common.util.AuthIdCreator;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
+import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
@@ -43,9 +45,9 @@ public class SocialAuthRestController {
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/api/auth/social/{provider}/logout")
   public ResponseEntity<String> logout(
-      @AuthenticationPrincipal AuthId socialId,
+      @AuthenticationPrincipal String socialId,
       @PathVariable AuthenticationProvider provider) {
-    socialAuthService.logout(socialId);
+    socialAuthService.logout((AuthIdCreator.getAuthIdFromString(socialId)));
     oauthLogoutFacadeHelper.logout(provider);
     return ResponseEntity.ok("로그아웃이 성공했습니다.");
   }
@@ -56,9 +58,9 @@ public class SocialAuthRestController {
   @DeleteMapping("/api/auth/social/{provider}")
   public ResponseEntity<String> userWithdrawalUserSelf(
       @PathVariable AuthenticationProvider provider,
-      @AuthenticationPrincipal AuthId socialId) {
+      @AuthenticationPrincipal String socialId) {
     oauthLogoutFacadeHelper.logout(provider);
-    socialAuthService.userWithdrawalUserSelf(socialId);
+    socialAuthService.logout((AuthIdCreator.getAuthIdFromString(socialId)));
     return ResponseEntity.ok("회원탈퇴 성공");
   }
 
