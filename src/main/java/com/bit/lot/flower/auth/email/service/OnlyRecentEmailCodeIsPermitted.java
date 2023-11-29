@@ -30,7 +30,6 @@ public class OnlyRecentEmailCodeIsPermitted implements
     if (emailCodeList == null || emailCodeList.isEmpty()) {
       throw new EmailCodeException("해당 이메일에 이메일 코드가 보내진 적이 없습니다.");
     }
-
     return Collections.max(emailCodeList, Comparator.comparing(EmailCode::getCreatedAt));
   }
 }

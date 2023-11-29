@@ -19,7 +19,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Entity
 public class EmailCode extends BaseEntity {
-
   @Id
   private String emailCode;
   @Column(nullable = false)
