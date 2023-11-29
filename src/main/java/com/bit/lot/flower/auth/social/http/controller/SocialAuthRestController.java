@@ -43,9 +43,9 @@ public class SocialAuthRestController {
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/api/auth/social/{provider}/logout")
   public ResponseEntity<String> logout(
-      @AuthenticationPrincipal Object socialId,
+      @AuthenticationPrincipal AuthId socialId,
       @PathVariable AuthenticationProvider provider) {
-    socialAuthService.logout(AuthId.builder().value(Long.valueOf((String) socialId)).build());
+    socialAuthService.logout(socialId);
     oauthLogoutFacadeHelper.logout(provider);
     return ResponseEntity.ok("로그아웃이 성공했습니다.");
   }
@@ -56,10 +56,9 @@ public class SocialAuthRestController {
   @DeleteMapping("/api/auth/social/{provider}")
   public ResponseEntity<String> userWithdrawalUserSelf(
       @PathVariable AuthenticationProvider provider,
-      @AuthenticationPrincipal Object socialId) {
+      @AuthenticationPrincipal AuthId socialId) {
     oauthLogoutFacadeHelper.logout(provider);
-    socialAuthService.userWithdrawalUserSelf(
-        AuthId.builder().value(Long.valueOf((String) socialId)).build());
+    socialAuthService.userWithdrawalUserSelf(socialId);
     return ResponseEntity.ok("회원탈퇴 성공");
   }
 
