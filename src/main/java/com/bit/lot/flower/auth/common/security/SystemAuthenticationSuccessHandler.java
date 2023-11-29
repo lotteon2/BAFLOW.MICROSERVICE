@@ -36,7 +36,8 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
-    tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),
-        createClaimsRoleMap(), response);
+    String token = tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),createClaimsRoleMap(),response);
+    response.setHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX +token );
+
   }
 }

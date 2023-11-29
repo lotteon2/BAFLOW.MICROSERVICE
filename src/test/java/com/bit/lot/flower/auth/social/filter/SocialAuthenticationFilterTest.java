@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.social.filter;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -90,9 +91,13 @@ public class SocialAuthenticationFilterTest {
 
   @DisplayName("유저가 존재하지 않을 때 소셜 자동 회원가입 후 JWT토큰 확인")
   @Test
-  void socialUserLoginTest_WhenUserIsNotExist_JWTTokenInResponse() {
-
+  void socialUserLoginTest_WhenUserIsNotExist_JWTTokenInResponse() throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    MvcResult resultWithJwtToken = socialUserLoginRequest(command);
+    assertNotNull(
+        resultWithJwtToken.getResponse().getHeader(authorizationHeaderName));
   }
+
 
   @DisplayName("유저가 존재하지 않을 때 소셜 자동 회원가입 후 Refresh토큰 Cookie에 담겨있는지 확인")
   @Test
