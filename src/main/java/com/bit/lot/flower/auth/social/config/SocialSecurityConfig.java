@@ -2,21 +2,30 @@ package com.bit.lot.flower.auth.social.config;
 
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.security.TokenHandler;
+import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
+import com.bit.lot.flower.auth.social.security.SocialAuthenticationManager;
+import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SocialSecurityConfig {
 
+  private final SocialLoginStrategy socialLoginStrategy;
+  private final TokenHandler tokenHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
@@ -35,8 +44,22 @@ public class SocialSecurityConfig {
   }
 
   @Bean
-  SocialAuthorizationFilter socialAuthorizationFilter(){
+  SocialAuthorizationFilter socialAuthorizationFilter() {
     return new SocialAuthorizationFilter();
+  }
+
+  @Qualifier("socialAuthenticationManager")
+  @Bean
+  AuthenticationManager socialAuthenticationManager() {
+    return new SocialAuthenticationManager(socialLoginStrategy);
+  }
+
+  @Bean
+  SocialAuthenticationFilter socialAuthenticationFilter() {
+    SocialAuthenticationFilter filter = new SocialAuthenticationFilter(socialAuthenticationManager(),
+        tokenHandler);
+    filter.setFilterProcessesUrl("/api/auth/social/**/login");
+    return filter;
   }
 
 }

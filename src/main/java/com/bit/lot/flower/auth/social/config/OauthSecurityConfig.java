@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.social.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
+import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
 import com.bit.lot.flower.auth.social.security.SocialAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
@@ -22,6 +23,8 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @EnableWebSecurity
 public class OauthSecurityConfig {
+
+
 
   @Order(0)
   @Bean
@@ -46,6 +49,7 @@ public class OauthSecurityConfig {
   AuthenticationSuccessHandler socialAuthenticationSuccessHandler() {
     return new SocialAuthenticationSuccessHandler();
   }
+
 
 
   @Bean

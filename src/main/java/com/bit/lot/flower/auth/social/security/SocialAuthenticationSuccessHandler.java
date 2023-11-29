@@ -1,33 +1,16 @@
 package com.bit.lot.flower.auth.social.security;
 
-import com.bit.lot.flower.auth.common.security.TokenHandler;
-import com.bit.lot.flower.auth.common.util.JwtUtil;
-import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.social.dto.Oauth2LoginDto;
-import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
-import com.bit.lot.flower.auth.social.entity.SocialAuth;
-import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
-import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
-import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -35,6 +18,13 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @RequiredArgsConstructor
 public class SocialAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      FilterChain chain,
+      Authentication authentication) throws IOException, ServletException {
+    onAuthenticationSuccess(request, response, authentication);
+    chain.doFilter(request, response);
+  }
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -42,6 +32,7 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
     SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
     setCustomResponseWithLoginDto(response, command);
+
   }
 
   private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,
