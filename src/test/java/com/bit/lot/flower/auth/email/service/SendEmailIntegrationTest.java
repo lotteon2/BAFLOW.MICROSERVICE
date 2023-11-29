@@ -8,6 +8,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class VerifyEmailServiceTest {
+public class SendEmailIntegrationTest {
+
+
 
 }

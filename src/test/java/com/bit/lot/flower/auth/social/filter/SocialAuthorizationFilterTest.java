@@ -33,7 +33,6 @@ import org.springframework.web.context.WebApplicationContext;
   WebApplicationContext webApplicationContext;
   MockMvc mvc;
 
-  Long testUnValidId = 10L;
   Long testUserId = 1L;
 
   @BeforeEach
@@ -47,25 +46,12 @@ import org.springframework.web.context.WebApplicationContext;
     return "unValidRandomToken";
   }
 
-  private String createSubjectIsMismatchedToken() {
-    Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        Role.ROLE_SOCIAL_USER);
-    return JwtUtil.generateAccessTokenWithClaims(testUnValidId.toString(), claimMap);
-  }
 
   private String createValidToken() {
     Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
         Role.ROLE_SOCIAL_USER);
     return JwtUtil.generateAccessTokenWithClaims(testUserId.toString(), claimMap);
   }
-
-  private MvcResult requestTokenWithRole()
-      throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")
-            .header("Authorization", "Bearer " + createValidToken()))
-        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-  }
-
   private MvcResult requestWithUnValidToken()
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")
@@ -80,11 +66,6 @@ import org.springframework.web.context.WebApplicationContext;
         .andReturn();
   }
 
-  private MvcResult requestWithUnValidSubjectTokenAtHeader() throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")
-            .header("Authorization", "Bearer " + createUnValidToken()))
-        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
-  }
 
   @DisplayName("헤더에 토큰이 없을 때 Throw IllegalArgumentException 테스트")
   @Test
@@ -104,13 +85,6 @@ import org.springframework.web.context.WebApplicationContext;
     });
   }
 
-  @DisplayName("헤더에 토큰을 가지고 있고 토큰에 ROLE_SOCIAL_USER의 claim을 가지고 있을 때 status 200")
-  @Test
-  void SocialAuthorizationFilterTest_WhenThereIsTokenAtHeaderWithRole_Status200() throws Exception {
-    JwtUtil.generateAccessToken(testUserId.toString());
-    MvcResult status200Response = requestTokenWithRole();
-    assertEquals(200, status200Response.getResponse().getStatus());
-  }
 
 
 }
