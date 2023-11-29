@@ -158,21 +158,40 @@ class SocialAuthenticationFilterTest {
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 한 후 24시간이 지난 회원 isRecentlyOut 상태 false 변경")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_UserRecentlyStatusToFalse() {
+  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_UserRecentlyStatusToFalse()
+      throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    saveStatusRecentlyOutPassedOneDay(command);
+    socialUserLoginRequest(command);
+    assertTrue(repository.findById(command.getSocialId().getValue()).get().isRecentlyOut());
 
   }
 
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 한 후 24시간이 지난 회원 로그인 성공 status 200")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_Status() {
-
+  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_Status()
+      throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    saveStatusRecentlyOutPassedOneDay(command);
+    socialUserLoginRequest(command);
   }
 
+
+  /**
+   *
+   * 이후 JWT토큰과 Redis, Coookie는 모든 같은 클래스 메소드 내에서 실행되는 로직이라
+   * 위의 테스트 코드와 같다.
+   */
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 한 후 24시간이 지난 회원 로그인 성공후 header에 JWT토큰 존재")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_JwtTokenIsExistedInHeader() {
-
+  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsPassed24H_JwtTokenIsExistedInHeader()
+      throws Exception {
+    SocialLoginRequestCommand command = getSocialLoginRequestCommand();
+    saveStatusRecentlyOutPassedOneDay(command);
+    MvcResult resultWithJwtToken = socialUserLoginRequest(command);
+    assertNotNull(
+        resultWithJwtToken.getResponse().getHeader(authorizationHeaderName));
   }
 
 }
