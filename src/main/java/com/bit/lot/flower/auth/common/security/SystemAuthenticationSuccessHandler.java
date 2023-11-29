@@ -3,15 +3,13 @@ package com.bit.lot.flower.auth.common.security;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -22,25 +20,23 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
   private final TokenHandler tokenHandler;
 
 
-  private String getRole(Authentication authentication) {
-    List<SimpleGrantedAuthority> simpleGrantedAuthorityList = (List<SimpleGrantedAuthority>) authentication.getAuthorities()
-        .stream().limit(1).collect(Collectors.toList());
-    return simpleGrantedAuthorityList.get(0).getAuthority();
+  private String getRoleFromSecurityContext() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    if (authentication != null && !authentication.getAuthorities().isEmpty()) {
+      return authentication.getAuthorities().iterator().next().getAuthority();
+    }
+    throw new IllegalArgumentException("토큰에 해당 유저의 역할이 담겨있지 않습니다.");
   }
 
-  private String createToken(HttpServletResponse response,
-      Authentication authentication) {
-
-    Map<String, Object> claimMap = JwtUtil.addClaims(
-        SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        getRole(authentication));
-    return tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),
-        claimMap, response);
+  private Map<String, Object> createClaimsRoleMap() {
+    return JwtUtil.addClaims(
+        SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME, getRoleFromSecurityContext());
   }
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
-    createToken(response, authentication);
+    tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),
+        createClaimsRoleMap(), response);
   }
 }

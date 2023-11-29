@@ -33,7 +33,7 @@ public class SocialAuthRestController {
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
-  public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(@RequestBody SocialUserLoginDto dto, HttpServletRequest request) {
+  public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(@RequestBody SocialUserLoginDto dto) {
     UserFeignLoginResponse userFeignLoginResponse = publisher.publish(dto);
     return ResponseEntity.ok(
         new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));

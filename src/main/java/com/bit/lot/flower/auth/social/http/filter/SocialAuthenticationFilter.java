@@ -30,25 +30,14 @@ public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 
   private final AuthenticationManager socialAuthenticationManager;
-  private final TokenHandler tokenHandler;
 
   @Autowired
   public SocialAuthenticationFilter(
-      AuthenticationManager socialAuthenticationManager,
-      TokenHandler tokenHandler) {
+      AuthenticationManager socialAuthenticationManager) {
     super(socialAuthenticationManager);
     this.socialAuthenticationManager = socialAuthenticationManager;
-    this.tokenHandler = tokenHandler;
   }
 
-  private String createToken(HttpServletResponse response,
-      String oauthId) {
-    Map<String, Object> claimMap = JwtUtil.addClaims(
-        SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        Role.ROLE_SOCIAL_USER.name());
-    return tokenHandler.createToken(oauthId,
-        claimMap, response);
-  }
 
   private SocialLoginRequestCommand getSocialLoginRequestCommand(HttpServletRequest request)
       throws IOException {
@@ -72,13 +61,14 @@ public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFi
     try {
       Authentication authentication = getAuthenticationFromCommand(command);
       socialAuthenticationManager.authenticate(authentication);
-      String token = createToken(response, command.getSocialId().toString());
-      response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
-          SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + token);
       return authentication;
     } catch (SocialAuthException e) {
       throw new StoreManagerAuthException(e.getMessage());
     }
+
+
+
+
 
   }
 }
