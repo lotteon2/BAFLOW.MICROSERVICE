@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.email.dto;
+package com.bit.lot.flower.auth.email.dto.command;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class VerifyCodeDto {
+public class VerifyCodeCommand {
 
   @NotNull
   private String code;

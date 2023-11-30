@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.store.service;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
@@ -18,7 +18,7 @@ public class StoreManagerServiceImpl<ID extends AuthId> implements StoreManagerS
   private final StoreManagerSingUpService singUpService;
 
   @Override
-  public void signUp(StoreMangerSignUpDto signUpDto) {
+  public void signUp(StoreMangerSignUpCommand signUpDto) {
     singUpService.singUp(signUpDto);
   }
 

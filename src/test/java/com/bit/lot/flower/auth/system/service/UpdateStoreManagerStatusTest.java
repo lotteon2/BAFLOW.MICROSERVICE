@@ -5,7 +5,7 @@ import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
-import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
+import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import java.util.Optional;
 import javax.transaction.Transactional;

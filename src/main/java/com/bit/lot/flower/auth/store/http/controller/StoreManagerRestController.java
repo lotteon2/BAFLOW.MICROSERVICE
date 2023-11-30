@@ -3,9 +3,9 @@ package com.bit.lot.flower.auth.store.http.controller;
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreManagerLoginCommand;
+import com.bit.lot.flower.auth.store.dto.response.StoreManagerLoginResponse;
+import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.http.StoreManagerIdRequest;
 import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
@@ -47,7 +47,7 @@ public class StoreManagerRestController {
 
   @ApiOperation(value = "회원가입",notes = "회원가입시 이메일 인증을 완료한 스토어 매니저만 회원가입이 가능함")
   @PostMapping("/api/auth/stores/signup")
-  public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpDto dto) {
+  public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpCommand dto) {
     emailDuplicationCheckerService.isDuplicated(dto.getEmail());
     storeManagerService.signUp(dto);
     storeMangerCreateRequest.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
@@ -57,7 +57,7 @@ public class StoreManagerRestController {
   @ApiOperation(value = "스토어 매니저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/stores/login")
-  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal String authId , @Valid @RequestBody StoreManagerLoginDto dto) {
+  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal String authId , @Valid @RequestBody StoreManagerLoginCommand dto) {
     String name = storeManagerNameRequest.getName(AuthIdCreator.getAuthIdFromString(authId)).getName();
     StoreId storeId = storeManagerIdRequest.getId(AuthIdCreator.getAuthIdFromString(authId)).getStoreId();
     return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(storeId, name));

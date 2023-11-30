@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.dto;
+package com.bit.lot.flower.auth.store.dto.command;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CreateStoreMangerDto {
+public class CreateStoreMangerCommand {
   @NotNull
   private String email;
   @NotNull

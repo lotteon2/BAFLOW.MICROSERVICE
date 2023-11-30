@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreManagerLoginCommand;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 
@@ -20,14 +20,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -93,21 +89,21 @@ class StoreManagerAuthenticationFilterTest {
   }
 
 
-  private StoreManagerLoginDto createValidStoreManagerAccountWithPermittedStatus() {
-    return StoreManagerLoginDto.builder().email(id).password(password).build();
+  private StoreManagerLoginCommand createValidStoreManagerAccountWithPermittedStatus() {
+    return StoreManagerLoginCommand.builder().email(id).password(password).build();
   }
 
-  private StoreManagerLoginDto createValidStoreManagerAccountWithPendingStatus() {
-    return StoreManagerLoginDto.builder().email(id).password(password).build();
+  private StoreManagerLoginCommand createValidStoreManagerAccountWithPendingStatus() {
+    return StoreManagerLoginCommand.builder().email(id).password(password).build();
   }
 
-  private StoreManagerLoginDto createIdAndPasswordMistMatchedStoreManagerAccount() {
-    return StoreManagerLoginDto.builder().email(unValidStoreManagerId)
+  private StoreManagerLoginCommand createIdAndPasswordMistMatchedStoreManagerAccount() {
+    return StoreManagerLoginCommand.builder().email(unValidStoreManagerId)
         .password(unValidStoreManagerPassword).build();
   }
 
 
-  private MvcResult getValidStoreManagerResponse(StoreManagerLoginDto validUserDto)
+  private MvcResult getValidStoreManagerResponse(StoreManagerLoginCommand validUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
             .post("/api/auth/stores/login")
@@ -117,7 +113,7 @@ class StoreManagerAuthenticationFilterTest {
         .andReturn();
   }
 
-  private MvcResult getUnValidStoreManagerResponse(StoreManagerLoginDto unValidUserDto)
+  private MvcResult getUnValidStoreManagerResponse(StoreManagerLoginCommand unValidUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
             .post("/api/auth/stores/login")

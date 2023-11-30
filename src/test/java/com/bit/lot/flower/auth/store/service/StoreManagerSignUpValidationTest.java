@@ -3,7 +3,7 @@ package com.bit.lot.flower.auth.store.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -35,7 +35,7 @@ class StoreManagerSignUpValidationTest {
   }
 
 
-  public Set<ConstraintViolation<StoreMangerSignUpDto>> validateDto(StoreMangerSignUpDto dto) {
+  public Set<ConstraintViolation<StoreMangerSignUpCommand>> validateDto(StoreMangerSignUpCommand dto) {
     return validator.validate(dto);
   }
 
@@ -44,7 +44,7 @@ class StoreManagerSignUpValidationTest {
   @Test
   void ValidationCheck_WhenEmailIsNotValid_setSize1() {
     assertEquals(validateDto(
-        StoreMangerSignUpDto.builder().email(UNVALID_EMAIL).password(VALID_PASSWORD)
+        StoreMangerSignUpCommand.builder().email(UNVALID_EMAIL).password(VALID_PASSWORD)
             .name(VALID_NAME_LENGTH_LESS_6)
             .businessNumberImage(VALID_IMAGE_URL)
             .isEmailVerified(true).build()).size(), 1);
@@ -54,7 +54,7 @@ class StoreManagerSignUpValidationTest {
   @Test
   void ValidationCheck_WhenPasswordIsNotSatisfiedByCriteria_setSize1() {
     assertEquals(validateDto(
-        StoreMangerSignUpDto.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
+        StoreMangerSignUpCommand.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
             .name(VALID_NAME_LENGTH_LESS_6).password(UNVALID_PASSWORD_INCLUDE_SPECIAL_LETTER).email(
                 VALID_EMAIL)
             .build()).size(), 1);
@@ -65,7 +65,7 @@ class StoreManagerSignUpValidationTest {
   @Test
   void ValidationCheck_WhenImageIsNotURL_setSize1() {
     assertEquals(validateDto(
-        StoreMangerSignUpDto.builder().isEmailVerified(true).businessNumberImage(UNVALID_IMAGE_URL)
+        StoreMangerSignUpCommand.builder().isEmailVerified(true).businessNumberImage(UNVALID_IMAGE_URL)
             .name(VALID_NAME_LENGTH_LESS_6).password(VALID_PASSWORD).email(VALID_EMAIL)
             .build()).size(), 1);
   }
@@ -74,7 +74,7 @@ class StoreManagerSignUpValidationTest {
   @Test
   void ValidationCheck_WhenNameLengthOver6_setSize1() {
     assertEquals(validateDto(
-        StoreMangerSignUpDto.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
+        StoreMangerSignUpCommand.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
             .name(UNVALID_NAME_LENGTH_OVER_6).password(VALID_PASSWORD).email(VALID_EMAIL)
             .build()).size(), 1);
 
@@ -84,7 +84,7 @@ class StoreManagerSignUpValidationTest {
   @Test
   void ValidationCheck_WhenAllRegexIsSatisfied_setSize0() {
     assertEquals(validateDto(
-        StoreMangerSignUpDto.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
+        StoreMangerSignUpCommand.builder().isEmailVerified(true).businessNumberImage(VALID_IMAGE_URL)
             .name(VALID_NAME_LENGTH_LESS_6).password(VALID_PASSWORD).email(VALID_EMAIL)
             .build()).size(), 0);
   }

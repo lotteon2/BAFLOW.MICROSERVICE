@@ -3,7 +3,7 @@ package com.bit.lot.flower.auth.store.service;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import javax.transaction.Transactional;
@@ -33,16 +33,16 @@ class StoreManagerSingUpTest {
  @InjectMocks
   OnlyVerifiedStoreManagerEmailCanSignUpService storeManagerSingUpService;
 
- private StoreMangerSignUpDto emailVerifiedDto() {
-  return StoreMangerSignUpDto.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
+ private StoreMangerSignUpCommand emailVerifiedDto() {
+  return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
       .name(VALID_NAME_LENGTH_LESS_6)
       .businessNumberImage(VALID_IMAGE_URL)
       .isEmailVerified(true).build();
  }
 
 
- private StoreMangerSignUpDto emailNotVerifiedDto() {
-  return StoreMangerSignUpDto.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
+ private StoreMangerSignUpCommand emailNotVerifiedDto() {
+  return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
       .name(VALID_NAME_LENGTH_LESS_6)
       .businessNumberImage(VALID_IMAGE_URL)
       .isEmailVerified(false).build();
@@ -53,7 +53,7 @@ class StoreManagerSingUpTest {
  @DisplayName("이메일 인증을 하지 않은 경우 ThrowStoreManagerException")
  @Test
  void SignUp_WhenAllValidationCheckIsSatisfiedButNotEmailIsVerified_ThrowStoreManagerException() {
- StoreMangerSignUpDto emailVerifiedDto =  emailNotVerifiedDto();
+ StoreMangerSignUpCommand emailVerifiedDto =  emailNotVerifiedDto();
  assertThrows(StoreManagerAuthException.class,()->{
   storeManagerSingUpService.singUp(emailVerifiedDto);
  });
@@ -64,7 +64,7 @@ class StoreManagerSingUpTest {
  @Transactional
  @Test
  void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthException() {
-   StoreMangerSignUpDto emailVerifiedDto =  emailVerifiedDto();
+   StoreMangerSignUpCommand emailVerifiedDto =  emailVerifiedDto();
   assertDoesNotThrow(()->{
      storeManagerSingUpService.singUp(emailVerifiedDto);
   });

@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.service;
 
-import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpDto;
+import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
@@ -16,7 +16,7 @@ public class OnlyVerifiedStoreManagerEmailCanSignUpService implements
   private final BCryptPasswordEncoder encoder;
   private final StoreManagerAuthRepository repository;
   @Override
-  public void singUp(StoreMangerSignUpDto dto) {
+  public void singUp(StoreMangerSignUpCommand dto) {
     if (!dto.getIsEmailVerified()) {
       throw new StoreManagerAuthException("이메일 중복확인과 인증을 해주세요.");
     } else {

@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.system.admin.dto;
+package com.bit.lot.flower.auth.system.admin.dto.command;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

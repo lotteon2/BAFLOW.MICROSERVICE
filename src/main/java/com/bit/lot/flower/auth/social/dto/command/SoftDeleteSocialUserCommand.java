@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social.dto.message;
+package com.bit.lot.flower.auth.social.dto.command;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SoftDeleteSocialUserDto {
+public class SoftDeleteSocialUserCommand {
   private Long socialId;
 }

@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.system.admin.http;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
+import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor

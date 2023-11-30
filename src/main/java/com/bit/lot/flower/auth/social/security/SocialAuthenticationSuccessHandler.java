@@ -1,9 +1,8 @@
 package com.bit.lot.flower.auth.social.security;
 
 import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
+import com.bit.lot.flower.auth.social.dto.command.SocialUserLoginCommand;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import javax.servlet.FilterChain;
@@ -31,18 +30,18 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-    SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
+    SocialUserLoginCommand command = getOauth2LoginDto(defaultOAuth2User);
     JsonBinderUtil.setResponseWithJson(response,200, command);
 
   }
 
-  private SocialUserLoginDto getOauth2LoginDto(OAuth2User oAuth2User) {
+  private SocialUserLoginCommand getOauth2LoginDto(OAuth2User oAuth2User) {
     LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
     LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
     String id = oAuth2User.getName();
     String email = kakaoAccount.get("email");
     String nickname = properties.get("nickname");
-    return SocialUserLoginDto.builder().email(email).nickname(nickname)
+    return SocialUserLoginCommand.builder().email(email).nickname(nickname)
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
 

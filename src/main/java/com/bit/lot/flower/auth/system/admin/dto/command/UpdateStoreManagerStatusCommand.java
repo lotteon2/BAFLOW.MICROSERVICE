@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.system.admin.dto;
+package com.bit.lot.flower.auth.system.admin.dto.command;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;

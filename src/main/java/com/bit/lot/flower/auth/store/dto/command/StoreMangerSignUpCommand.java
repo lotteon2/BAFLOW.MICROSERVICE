@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.dto;
+package com.bit.lot.flower.auth.store.dto.command;
 
 import com.bit.lot.flower.auth.store.http.validator.ValidPassword;
 import javax.validation.Valid;
@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.URL;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class StoreMangerSignUpDto {
+public class StoreMangerSignUpCommand {
 
   @Email
   @NotNull

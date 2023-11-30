@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social.dto.message;
+package com.bit.lot.flower.auth.social.dto.command;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SocialUserLoginDto {
+public class SocialUserLoginCommand {
   private AuthId socialId;
   private String nickname;
   private String email;
