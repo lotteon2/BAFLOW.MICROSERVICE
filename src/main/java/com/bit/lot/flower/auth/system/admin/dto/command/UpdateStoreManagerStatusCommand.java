@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class
-UpdateStoreManagerStatusDto {
+public class UpdateStoreManagerStatusCommand {
 
   @NotNull
   private StoreManagerStatus status;

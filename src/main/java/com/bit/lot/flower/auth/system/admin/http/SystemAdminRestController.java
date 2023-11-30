@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.system.admin.http;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusDto;
+import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusCommand;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +27,7 @@ public class SystemAdminRestController {
       + "  ROLE_STORE_MANAGER_DENIED")
   @PutMapping("/api/auth/admin/store-manager")
   public ResponseEntity<String> updateStoreManagerStatus(
-      @Valid @RequestBody UpdateStoreManagerStatusDto dto) {
+      @Valid @RequestBody UpdateStoreManagerStatusCommand dto) {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(), dto.getStatus());
     return ResponseEntity.ok("업데이트 완료");
   }

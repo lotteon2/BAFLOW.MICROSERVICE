@@ -5,7 +5,7 @@ import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
-import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusDto;
+import com.bit.lot.flower.auth.system.admin.dto.command.UpdateStoreManagerStatusCommand;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -30,7 +30,7 @@ class UpdateStoreManagerStatusTest {
   @Autowired
   private WebApplicationContext webApplicationContext;
 
-  private UpdateStoreManagerStatusDto dto;
+  private UpdateStoreManagerStatusCommand dto;
 
 
   private AuthId idBuilder(Long id) {
@@ -38,7 +38,7 @@ class UpdateStoreManagerStatusTest {
   }
 
   private void setValidStoreManagerId() {
-    dto = new UpdateStoreManagerStatusDto(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING,
+    dto = new UpdateStoreManagerStatusCommand(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING,
         idBuilder(1L));
   }
 
