@@ -1,19 +1,16 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
-import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
-import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
-import com.bit.lot.flower.auth.social.message.LoginSocialUserEventPublisher;
+import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,13 +27,13 @@ public class SocialAuthRestController {
 
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
   private final SocialAuthService<AuthId> socialAuthService;
-  private final LoginSocialUserEventPublisher publisher;
+  private final LoginSocialUserRequest userDataRequest;
 
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
   public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(@RequestBody SocialUserLoginDto dto) {
-    UserFeignLoginResponse userFeignLoginResponse = publisher.publish(dto);
+    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(dto);
     return ResponseEntity.ok(
         new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
   }
