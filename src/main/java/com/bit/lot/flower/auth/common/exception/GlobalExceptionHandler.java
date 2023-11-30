@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, List<String>>> jwtException(
       JwtException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
 
@@ -45,13 +45,13 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, List<String>>> emailCodeException(
       EmailCodeException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
   @ExceptionHandler(StoreManagerAuthException.class)
   public ResponseEntity<Map<String, List<String>>> storeManagerException(
       StoreManagerAuthException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
 
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<Map<String, List<String>>> socialAuthException(
       EmailCodeException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
 
   @ExceptionHandler(Exception.class)
