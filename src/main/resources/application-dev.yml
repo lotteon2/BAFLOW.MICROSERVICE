@@ -98,7 +98,10 @@ kakao:
   login:
     request:
       uri: ${kakao.login.request.uri}
-
-kakao:
   logout:
     redirect: ${kakao.logout.redirect}
+
+
+service:
+  user:
+    domain: ${service.user.domain}

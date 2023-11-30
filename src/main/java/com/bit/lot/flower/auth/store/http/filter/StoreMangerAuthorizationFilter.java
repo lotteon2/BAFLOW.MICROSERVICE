@@ -26,6 +26,7 @@ public class StoreMangerAuthorizationFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
+
     if (StoreManagerStatus.ROLE_STORE_MANAGER_PENDING.name().equals(
         ExtractAuthorizationTokenUtil.extractRole(request))) {
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

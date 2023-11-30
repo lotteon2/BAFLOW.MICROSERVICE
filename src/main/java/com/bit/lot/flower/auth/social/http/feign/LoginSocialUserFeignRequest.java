@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient("user-login")
+@FeignClient(name = "user-login",url="${service.user.domain}")
 public interface LoginSocialUserFeignRequest {
 
   @RequestMapping(method = RequestMethod.POST, value = "/users")

@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.social.http.controller;
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
-import com.bit.lot.flower.auth.social.dto.response.LoginSuccessResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
@@ -32,10 +31,10 @@ public class SocialAuthRestController {
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
-  public ResponseEntity<LoginSuccessResponse> loginWithUserServiceResponse(@RequestBody SocialUserLoginDto dto) {
+  public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
+      @RequestBody SocialUserLoginDto dto) {
     UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(dto);
-    return ResponseEntity.ok(
-        new LoginSuccessResponse(userFeignLoginResponse.isPhoneNumberIsRegistered()));
+    return ResponseEntity.ok(userFeignLoginResponse);
   }
 
   @ApiOperation(value = "유저 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"

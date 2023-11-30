@@ -102,3 +102,7 @@ kakao:
       uri: "/api/auth/social/kakao/login"
   logout:
     redirect: "http://localhost:8081/login"
+
+service:
+  user:
+    domain: "http://localhost:8082"
