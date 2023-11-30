@@ -6,8 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@FeignClient("user-soft-delete")
+@FeignClient(name = "user-soft-delete", url = "${service.user.domain}")
 public interface SoftDeleteUserFeignRequest {
   @RequestMapping(method = RequestMethod.DELETE, value = "/users")
-  ResponseEntity<LoginSuccessResponse> delete(SoftDeleteSocialUserDto deleteUserDto);
+  ResponseEntity<Boolean> delete(SoftDeleteSocialUserDto deleteUserDto);
 }
