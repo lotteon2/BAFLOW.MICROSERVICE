@@ -3,7 +3,7 @@ package com.bit.lot.flower.auth.store.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
+import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;

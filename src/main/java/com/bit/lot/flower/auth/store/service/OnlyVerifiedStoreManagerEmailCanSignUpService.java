@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.service;
 
-import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
+import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;

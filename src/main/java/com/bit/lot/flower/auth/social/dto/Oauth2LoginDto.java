@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.dto.command;
+package com.bit.lot.flower.auth.social.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class StoreManagerLoginCommand {
+public class Oauth2LoginDto {
 
+  private String id;
   private String email;
-  private String password;
+  private String nickname;
 
 }

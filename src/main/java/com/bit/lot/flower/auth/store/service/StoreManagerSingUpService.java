@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.service;
 
-import com.bit.lot.flower.auth.store.dto.command.StoreMangerSignUpCommand;
+import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import org.springframework.stereotype.Service;
 
 @Service

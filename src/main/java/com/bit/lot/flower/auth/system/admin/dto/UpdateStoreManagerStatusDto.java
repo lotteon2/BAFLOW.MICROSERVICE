@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.system.admin.dto.command;
+package com.bit.lot.flower.auth.system.admin.dto;
 
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UpdateStoreManagerStatusCommand {
+public class
+UpdateStoreManagerStatusDto {
 
   @NotNull
   private StoreManagerStatus status;

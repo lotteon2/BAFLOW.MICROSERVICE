@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
-import com.bit.lot.flower.auth.system.admin.dto.command.SystemAdminLoginDto;
+import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.fasterxml.jackson.core.JsonProcessingException;

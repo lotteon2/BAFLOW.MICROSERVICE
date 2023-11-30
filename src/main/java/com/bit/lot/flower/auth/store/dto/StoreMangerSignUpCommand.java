@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.dto.command;
+package com.bit.lot.flower.auth.store.dto;
 
 import com.bit.lot.flower.auth.store.http.validator.ValidPassword;
 import javax.validation.Valid;

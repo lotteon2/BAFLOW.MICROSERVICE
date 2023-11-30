@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.dto.command;
+package com.bit.lot.flower.auth.store.dto;
 
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

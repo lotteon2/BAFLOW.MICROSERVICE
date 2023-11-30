@@ -1,11 +1,17 @@
 package com.bit.lot.flower.auth.system.admin.http.filter;
 
+import com.bit.lot.flower.auth.common.security.TokenHandler;
+import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.system.admin.dto.command.SystemAdminLoginDto;
+import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import com.bit.lot.flower.auth.system.admin.dto.SystemAdminLoginDto;
 import com.bit.lot.flower.auth.system.admin.exception.SystemAdminAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Map;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;

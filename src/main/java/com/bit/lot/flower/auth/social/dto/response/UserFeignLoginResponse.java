@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class UserLoginResponse {
+public class UserFeignLoginResponse{
   private String nickName;
   private boolean isPhoneNumberIsRegistered;
+  private final String message ="유저 가져오기 성공";
+
 }

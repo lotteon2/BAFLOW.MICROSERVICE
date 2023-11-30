@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.message;
 
-import com.bit.lot.flower.auth.store.dto.CreateStoreMangerDto;
+import com.bit.lot.flower.auth.store.dto.CreateStoreMangerCommand;
 import com.bit.lot.flower.auth.store.http.feign.CreateStoreManagerFeignRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ public class StoreMangerCreateRequestImpl implements
 
   private final CreateStoreManagerFeignRequest feignRequest;
   @Override
-  public void publish(CreateStoreMangerDto dto) {
+  public void publish(CreateStoreMangerCommand dto) {
     feignRequest.create(dto);
   }
 }

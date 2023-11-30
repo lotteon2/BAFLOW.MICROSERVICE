@@ -1,9 +1,15 @@
 package com.bit.lot.flower.auth.store.http.filter;
 
-import com.bit.lot.flower.auth.store.dto.command.StoreManagerLoginCommand;
+import com.bit.lot.flower.auth.common.security.TokenHandler;
+import com.bit.lot.flower.auth.common.util.JwtUtil;
+import com.bit.lot.flower.auth.common.valueobject.Role;
+import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
+import java.util.Map;
+import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +34,11 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
   }
 
 
-  private StoreManagerLoginCommand getLoginDtoFromRequest(HttpServletRequest request)
+  private StoreManagerLoginDto getLoginDtoFromRequest(HttpServletRequest request)
       throws IOException {
     ObjectMapper mapper = new ObjectMapper();
     return mapper.readValue(request.getInputStream(),
-        StoreManagerLoginCommand.class);
+        StoreManagerLoginDto.class);
   }
 
 
@@ -44,7 +50,7 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
   public Authentication attemptAuthentication(HttpServletRequest request,
       HttpServletResponse response) {
     try {
-      StoreManagerLoginCommand dto = getLoginDtoFromRequest(request);
+      StoreManagerLoginDto dto = getLoginDtoFromRequest(request);
       return storeManagerAuthenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(), null));
 
