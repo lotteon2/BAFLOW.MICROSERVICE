@@ -71,9 +71,7 @@ jwt:
     secret: ${jwt.refresh.secret}
     lifetime: ${jwt.refresh.lifetime}
 
-redis:
-  hostname: localhost
-  port: 6379
+
 
 
 cookie:
