@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.social.security;
 
+import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
 import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,20 +32,8 @@ public class SocialAuthenticationSuccessHandler implements AuthenticationSuccess
       Authentication authentication) throws IOException, ServletException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
     SocialUserLoginDto command = getOauth2LoginDto(defaultOAuth2User);
-    setCustomResponseWithLoginDto(response, command);
+    JsonBinderUtil.setResponseWithJson(response,200, command);
 
-  }
-
-  private HttpServletResponse setCustomResponseWithLoginDto(HttpServletResponse response,
-      SocialUserLoginDto dto)
-      throws IOException {
-    ObjectMapper objectMapper = new ObjectMapper();
-    String json = objectMapper.writeValueAsString(dto);
-    response.setContentType("application/json");
-    response.setStatus(HttpServletResponse.SC_TEMPORARY_REDIRECT);
-    response.setCharacterEncoding("UTF-8");
-    response.getWriter().write(json);
-    return response;
   }
 
   private SocialUserLoginDto getOauth2LoginDto(OAuth2User oAuth2User) {

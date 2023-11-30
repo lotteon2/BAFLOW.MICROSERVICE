@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.filter;
 
 import com.bit.lot.flower.auth.common.exception.ErrorDTO;
+import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
@@ -23,18 +24,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     try {
       filterChain.doFilter(request, response);
     } catch (RuntimeException e) {
-      log.info(e.getMessage());
-      ErrorDTO dto = new ErrorDTO(String.valueOf(response.getStatus()), e.getMessage());
-      response.setCharacterEncoding("UTF-8");
-      response.setStatus(HttpStatus.valueOf(401).value());
+      ErrorDTO dto = new ErrorDTO(String.valueOf(401), e.getMessage());
+      JsonBinderUtil.setResponseWithJson(response, 401, dto);
     }
   }
 
-  public String convertObjectToJson(Object object) throws JsonProcessingException {
-    if (object == null) {
-      throw new IllegalArgumentException("ErrorDto가 공백입니다.");
-    }
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.writeValueAsString(object);
-  }
+
 }

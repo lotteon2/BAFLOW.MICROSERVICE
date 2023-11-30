@@ -46,9 +46,13 @@ public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticat
 
   private SystemAdminLoginDto getLoginDtoFromRequest(HttpServletRequest request)
       throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    return mapper.readValue(request.getInputStream(),
-        SystemAdminLoginDto.class);
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(request.getInputStream(),
+          SystemAdminLoginDto.class);
+    } catch (IOException e) {
+      throw new SystemAdminAuthException("잘못된 입력입니다. 다시 입력해주세요.");
+    }
   }
 
   @Override
