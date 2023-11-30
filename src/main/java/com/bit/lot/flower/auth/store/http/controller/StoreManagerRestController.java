@@ -48,6 +48,7 @@ public class StoreManagerRestController {
   @ApiOperation(value = "회원가입",notes = "회원가입시 이메일 인증을 완료한 스토어 매니저만 회원가입이 가능함")
   @PostMapping("/api/auth/stores/signup")
   public ResponseEntity<String> signup(@Valid @RequestBody StoreMangerSignUpDto dto) {
+    emailDuplicationCheckerService.isDuplicated(dto.getEmail());
     storeManagerService.signUp(dto);
     storeMangerCreateRequest.publish(StoreManagerMessageMapper.createStoreManagerMessage(dto));
     return ResponseEntity.ok("스토어 매니저 회원가입 신청 완료 관리자의 승인을 기다려주세요");
