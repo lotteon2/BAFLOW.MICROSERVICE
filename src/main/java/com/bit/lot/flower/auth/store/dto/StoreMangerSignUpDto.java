@@ -24,7 +24,7 @@ public class StoreMangerSignUpDto {
   @NotNull
   private String name;
   @NotNull
-  private boolean isEmailVerified;
+  private Boolean isEmailVerified;
   @ValidPassword
   @Length(min = 6)
   @NotNull

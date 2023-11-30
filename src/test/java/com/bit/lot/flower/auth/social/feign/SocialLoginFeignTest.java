@@ -24,8 +24,8 @@ public class SocialLoginFeignTest {
   @Mock
   private LoginSocialUserFeignRequest feignClient;
 
-  @InjectMocks
-  private LoginSocialUserFeignRequest loginSocialUserFeignRequest; // Inject the class using the Feign client
+  @Mock
+  private LoginSocialUserFeignRequest loginSocialUserFeignRequest;
 
 
   @Test
@@ -41,6 +41,5 @@ public class SocialLoginFeignTest {
     ResponseEntity<UserFeignLoginResponse> actualResponse = loginSocialUserFeignRequest.login(
         dto);
     assertEquals(expectedResponse, actualResponse);
-  }
+  }}
 
-}

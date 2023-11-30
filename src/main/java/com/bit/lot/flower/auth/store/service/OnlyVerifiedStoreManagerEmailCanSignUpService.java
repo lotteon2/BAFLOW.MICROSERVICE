@@ -17,10 +17,12 @@ public class OnlyVerifiedStoreManagerEmailCanSignUpService implements
   private final StoreManagerAuthRepository repository;
   @Override
   public void singUp(StoreMangerSignUpDto dto) {
-    if (!dto.isEmailVerified()) {
+    if (!dto.getIsEmailVerified()) {
       throw new StoreManagerAuthException("이메일 중복확인과 인증을 해주세요.");
+    } else {
+      repository.save(StoreManagerDataMapper.createStoreManger(dto.getEmail(),
+          encoder.encode(dto.getPassword())));
     }
-    repository.save(StoreManagerDataMapper.createStoreManger(dto.getEmail(),
-        encoder.encode(dto.getPassword())));
+
   }
 }

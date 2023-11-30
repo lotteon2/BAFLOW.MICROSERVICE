@@ -27,7 +27,7 @@ import org.springframework.web.util.NestedServletException;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class CommonLogoutInterceptorTest {
+ class CommonLogoutInterceptorTest {
 
 
   private final String refreshCookieName ="refresh-cookie";
