@@ -38,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     String requestURI = request.getRequestURI();
     return shouldNotFilterSwaggerURI(request) || shouldNotFilterOauth2(request)
         || requestURI.contains("/signup")
-        || requestURI.contains("/login");
+        || requestURI.contains("/login")  || requestURI.contains("/emails");
   }
 
   @Override
