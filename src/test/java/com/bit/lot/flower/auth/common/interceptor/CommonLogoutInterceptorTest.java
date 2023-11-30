@@ -1,11 +1,15 @@
 package com.bit.lot.flower.auth.common.interceptor;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
+import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,9 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
 
 @Transactional
@@ -26,7 +32,11 @@ import org.springframework.web.context.WebApplicationContext;
 public class CommonLogoutInterceptorTest {
 
 
+  private final String refreshCookieName ="refresh-cookie";
   private final String jwtSubject = "1";
+  private final String authenticationHeaderPrefix = "Bearer ";
+  private final String authorizationHeaderName = "Authorization";
+  private String token;
   @Autowired
   WebApplicationContext webApplicationContext;
   MockMvc mvc;
@@ -35,21 +45,18 @@ public class CommonLogoutInterceptorTest {
   @Autowired
   RedisRefreshTokenUtil redisRefreshTokenUtil;
 
-  void setJwtTokenAtRequestHeader() throws Exception {
-    String yourHeaderKey = "Authorization";
-    String yourHeaderValue = JwtUtil.generateAccessToken(jwtSubject);
 
-    mvc.perform(MockMvcRequestBuilders.post("/api/auth/system/logout")
-            .header(yourHeaderKey, yourHeaderValue))
+  MvcResult setJwtTokenAtRequestHeader() throws Exception {
+    token = JwtUtil.generateAccessToken(jwtSubject);
+
+    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+            .header(authorizationHeaderName, authenticationHeaderPrefix + token))
         .andExpect(status().isOk())
         .andReturn();
   }
 
   void setWithoutTokenAtRequestHeader() throws Exception {
-
-
     mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout"));
-
   }
 
   @BeforeEach
@@ -59,10 +66,15 @@ public class CommonLogoutInterceptorTest {
   }
 
 
-  @DisplayName("request에 토큰이 존재하지 않을 때 IllegalArgumentException throw 테스트 ")
+  /**
+   * 해당 테스트는 JWTAuthenticationFilter가 동작하지 않은 상태의 테스트입니다. 해당 Interceptor의 전제 조건은
+   * JWTAuthenticationFilter가 작동한 이후라 토큰이 없다면 JWTAuthenticationFilter에서 에러를 던지게 됩니다. 따라서 현재는
+   * NestedServletException를 Servlet API에서 던지게 됩니다.
+   */
+  @DisplayName("request에 토큰이 존재하지 않을 때 NestedServletException throw 테스트 ")
   @Test
-  void InvalidateToken_WhenThereIsNotTokenAtHeader_ThrowIllegalArgumentException() {
-    assertThrowsExactly(IllegalArgumentException.class,()->{
+  void InvalidateToken_WhenThereIsNotTokenAtHeaderAndNotFilteredByJWTAuthenticationFilter_ThrowNestedServletException() {
+    assertThrowsExactly(NestedServletException.class, () -> {
       setWithoutTokenAtRequestHeader();
     });
   }
@@ -71,21 +83,23 @@ public class CommonLogoutInterceptorTest {
   @Test
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsTokenAtRedisBlackList() throws Exception {
     setJwtTokenAtRequestHeader();
-
+    assertTrue(redisBlackListTokenUtil.isTokenBlacklisted(token));
 
   }
 
   @DisplayName("request에 토큰이 존재할 때 refresh-cookie 제거")
   @Test
-  void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtCookie() {
-
+  void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtCookie() throws Exception {
+    MvcResult response = setJwtTokenAtRequestHeader();
+    assertNull(response.getResponse().getCookie(refreshCookieName));
   }
-
 
   @DisplayName("request에 토큰이 존재할 때 Redis Refresh토큰 제거 ")
   @Test
-  void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtRedisRefreshTokenUtil() {
-
+  void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtRedisRefreshTokenUtil()
+      throws Exception {
+    setJwtTokenAtRequestHeader();
+    assertNull(redisRefreshTokenUtil.getRefreshToken(jwtSubject));
   }
 }
 
