@@ -14,8 +14,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.test.context.TestPropertySource;
 
-
+@TestPropertySource(locations="classpath:application-test.yml")
 @ExtendWith(MockitoExtension.class)
 class StoreManagerSingUpTest {
 

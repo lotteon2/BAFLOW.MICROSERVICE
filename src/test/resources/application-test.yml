@@ -67,7 +67,6 @@ spring:
 
 
 
-
 email:
   send:
     from: bbFlower@no-reply.co.kr
@@ -80,7 +79,7 @@ cookie:
     http:
       domain: localhost:8081
     token:
-        name: refresh-cookie
+      name: refresh-cookie
 
 system:
   admin:
@@ -100,10 +99,11 @@ security:
 kakao:
   login:
     request:
-      uri: /api/auth/social/kakao/login
+      uri: "/api/auth/social/kakao/login"
   logout:
-    redirect: http://localhost:8081/login
+    redirect: "http://localhost:8081/login"
+
 
 service:
   user:
-    domain: http://localhost:8082
+    domain: "http://localhost:8082"

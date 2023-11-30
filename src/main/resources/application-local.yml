@@ -75,7 +75,7 @@ cookie:
     http:
       domain: localhost:8081
     token:
-        name: refresh-cookie
+      name: refresh-cookie
 
 system:
   admin:

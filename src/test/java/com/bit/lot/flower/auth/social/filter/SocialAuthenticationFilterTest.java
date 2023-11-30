@@ -17,6 +17,8 @@ import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import javax.annotation.PostConstruct;
 import javax.swing.Spring;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -24,23 +26,28 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-
+@TestPropertySource(locations="classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class SocialAuthenticationFilterTest {
 
   @Value("${cookie.refresh.token.name}")
-  String refreshTokenName;
+  private String refreshTokenName;
   @Value("${security.authorization.header.name}")
-  String authorizationHeaderName;
+  private String authorizationHeaderName;
   @Autowired
   SocialAuthenticationFilter socialAuthenticationFilter;
   @Autowired
@@ -52,6 +59,14 @@ class SocialAuthenticationFilterTest {
 
   MockMvc mvc;
 
+@Autowired
+private ConfigurableApplicationContext context;
+
+@BeforeEach
+public void logActiveProfiles() {
+    String[] activeProfiles = context.getEnvironment().getActiveProfiles();
+    Arrays.stream(activeProfiles).forEach(System.out::println);
+}
 
   @BeforeEach
   public void setUp() {
