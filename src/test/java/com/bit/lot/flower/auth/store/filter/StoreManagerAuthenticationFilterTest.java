@@ -20,14 +20,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -46,7 +42,7 @@ class StoreManagerAuthenticationFilterTest {
   private final String unValidStoreManagerId = "unValidStoreManagerId";
   private final String unValidStoreManagerPassword = "unValidStoreManagerPassword";
   @Value("${store.manager.id}")
-  String id;
+  String email;
   @Value("${store.manager.password}")
   String password;
   @Value("${cookie.refresh.token.name}")
@@ -68,6 +64,7 @@ class StoreManagerAuthenticationFilterTest {
   MockMvc mvc;
 
 
+
   @BeforeEach
   public void setUp() {
     mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authenticationFilter)
@@ -76,7 +73,8 @@ class StoreManagerAuthenticationFilterTest {
 
   private void saveEncodedPasswordPermittedStoreManager() {
     repository.save(
-        StoreManagerAuth.builder().lastLogoutTime(null).password(encoder.encode(password)).email(id)
+        StoreManagerAuth.builder().lastLogoutTime(null).password(encoder.encode(password)).email(
+                email)
             .status(
                 StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).build());
   }
@@ -84,7 +82,8 @@ class StoreManagerAuthenticationFilterTest {
 
   private void saveEncodedPasswordPendingStoreManager() {
     repository.save(
-        StoreManagerAuth.builder().lastLogoutTime(null).password(encoder.encode(password)).email(id)
+        StoreManagerAuth.builder().lastLogoutTime(null).password(encoder.encode(password)).email(
+                email)
             .status(
                 StoreManagerStatus.ROLE_STORE_MANAGER_PENDING).build());
   }
@@ -96,11 +95,11 @@ class StoreManagerAuthenticationFilterTest {
 
 
   private StoreManagerLoginDto createValidStoreManagerAccountWithPermittedStatus() {
-    return StoreManagerLoginDto.builder().email(id).password(password).build();
+    return StoreManagerLoginDto.builder().email(email).password(password).build();
   }
 
   private StoreManagerLoginDto createValidStoreManagerAccountWithPendingStatus() {
-    return StoreManagerLoginDto.builder().email(id).password(password).build();
+    return StoreManagerLoginDto.builder().email(email).password(password).build();
   }
 
   private StoreManagerLoginDto createIdAndPasswordMistMatchedStoreManagerAccount() {
@@ -156,7 +155,7 @@ class StoreManagerAuthenticationFilterTest {
   @Test
   void storeManagerLogin_WhenStoreManagerIsExist_RefreshTokenInRedis() throws Exception {
     saveEncodedPasswordPermittedStoreManager();
-    String refreshRedisIdName = id;
+    String refreshRedisIdName = email;
     MvcResult validStoreManager = getValidStoreManagerResponse(
         createValidStoreManagerAccountWithPermittedStatus());
     assertNotNull(redisRefreshTokenUtil.getRefreshToken(refreshRedisIdName));

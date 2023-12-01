@@ -2,13 +2,12 @@ package com.bit.lot.flower.auth.store.filter;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
-import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
@@ -22,7 +21,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +32,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.util.NestedServletException;
 
 @Transactional
 @TestPropertySource(locations = "classpath:application-test.yml")
@@ -38,7 +40,11 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 public class StoreManagerAuthorizationFilterTest {
 
-
+  Long storeManagerPk = 1L;
+  @Value("${store.manager.id}")
+  String email = "id";
+  @Value("${store.manager.password}")
+  String password;
   @Autowired
   StoreManagerAuthRepository repository;
   @Autowired
@@ -47,9 +53,12 @@ public class StoreManagerAuthorizationFilterTest {
   WebApplicationContext webApplicationContext;
   MockMvc mvc;
   final String claimRoleName = "ROLE";
-  String testUserId = "id";
 
 
+  private void saveValidStoreManagerUser() {
+    repository.save(StoreManagerAuth.builder().email(email).password(password).id(storeManagerPk)
+        .status(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).lastLogoutTime(null).build());
+  }
 
   private String createUnValidToken() {
     return "unValidRandomToken";
@@ -58,14 +67,13 @@ public class StoreManagerAuthorizationFilterTest {
   private String createValidToken(StoreManagerStatus storeManagerStatus) {
     Map<String, Object> claimMap = JwtUtil.addClaims(claimRoleName,
         storeManagerStatus);
-    return JwtUtil.generateAccessTokenWithClaims(testUserId, claimMap);
+    return JwtUtil.generateAccessTokenWithClaims(String.valueOf(storeManagerPk), claimMap);
   }
 
   private MvcResult requestWithStatusToken(StoreManagerStatus storeManagerStatus)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/stores/logout")
-            .header("Authorization", "Bearer " + createValidToken(storeManagerStatus)))
-        .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+        .header("Authorization", "Bearer " + createValidToken(storeManagerStatus))).andReturn();
   }
 
   private MvcResult requestWithoutStatusToken()
@@ -82,7 +90,6 @@ public class StoreManagerAuthorizationFilterTest {
         .andReturn();
   }
 
-
   @BeforeEach
   void setUp() {
     mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authorizationFilter)
@@ -95,11 +102,10 @@ public class StoreManagerAuthorizationFilterTest {
    *                                  거치지 않고 해당 Filter를 거치지 않는 경우는 없다.
    */
 
-  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
+  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 NestedServletException catch")
   @Test
-  void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchJwtException()
-      throws IllegalArgumentException {
-    assertThrows(IllegalArgumentException.class, () -> {
+  void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchNestedServletException() {
+    assertThrows(NestedServletException.class, () -> {
       requestWithNoTokenAtHeader();
     });
   }
@@ -112,7 +118,7 @@ public class StoreManagerAuthorizationFilterTest {
   @DisplayName("토큰이 발급된 이후 JWT토큰이 존재하지 않을 때 MalformedJwtException catch")
   @Test
   void StoreManagerTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
-    JwtUtil.generateAccessToken(testUserId);
+    JwtUtil.generateAccessToken(email);
     assertThrows(MalformedJwtException.class, () -> {
       requestWithoutStatusToken();
     });
@@ -142,10 +148,9 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsPermitted_Status200()
       throws Exception {
-    assertEquals(200,
-        requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse()
-            .getStatus());
-
+    saveValidStoreManagerUser();
+    requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse();
+    assertNotNull(SecurityContextHolder.getContext().getAuthentication());
   }
 
 

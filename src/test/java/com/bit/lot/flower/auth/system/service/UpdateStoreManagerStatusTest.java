@@ -8,7 +8,10 @@ import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
+import javax.validation.constraints.AssertTrue;
+import net.bytebuddy.asm.Advice.Unused;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.context.WebApplicationContext;
 
+@Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class UpdateStoreManagerStatusTest {
@@ -30,6 +34,7 @@ class UpdateStoreManagerStatusTest {
   @Autowired
   private WebApplicationContext webApplicationContext;
 
+
   private UpdateStoreManagerStatusDto dto;
 
 
@@ -42,7 +47,7 @@ class UpdateStoreManagerStatusTest {
         idBuilder(1L));
   }
 
-  private StoreManagerAuth saveStoreManager() {
+  private StoreManagerAuth savePendingStoreManager() {
     StoreManagerAuth auth = repository.save(
         StoreManagerAuth.builder().lastLogoutTime(null).email("random@gmail.com")
             .password("randomPassword").status(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)
@@ -50,25 +55,22 @@ class UpdateStoreManagerStatusTest {
     return auth;
   }
 
-  @Transactional
   @Test
   void UpdateStoreManagerStatus_WhenStoreManagerIsPending_ChangeStoreManagerStatusToROLE_STORE_MANAGER_PERMITTED() {
-    setValidStoreManagerId();
-    StoreManagerAuth auth = saveStoreManager();
-    updateStoreMangerStatusService.update(idBuilder(auth.getId()),
+    StoreManagerAuth storeManagerAuth = savePendingStoreManager();
+    repository.save(storeManagerAuth);
+    Optional<StoreManagerAuth> found = repository.findById(storeManagerAuth.getId());
+    Assertions.assertNotNull(found.get());
+    updateStoreMangerStatusService.update(idBuilder(storeManagerAuth.getId()),
         StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED);
-
-    Optional<StoreManagerAuth> storeManagerAuthOptional = repository.findById(1L);
-    Assertions.assertTrue(storeManagerAuthOptional.isPresent());
-    StoreManagerAuth storeManagerAuth = storeManagerAuthOptional.get();
     Assertions.assertEquals(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED,
-        storeManagerAuth.getStatus());
+        found.get().getStatus());
   }
 
   @Transactional
   @Test
   void UpdateStoreManagerStatus_WhenStoreMangerIsNotExisted_ThrowStoreManagerException() {
-    StoreManagerAuth auth = saveStoreManager();
+    StoreManagerAuth auth = savePendingStoreManager();
     StoreManagerAuthException exception = Assertions.assertThrowsExactly(
         StoreManagerAuthException.class,
         () -> updateStoreMangerStatusService.update(idBuilder(2L),
