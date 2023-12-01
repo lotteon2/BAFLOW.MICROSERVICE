@@ -41,7 +41,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 @Transactional
-@TestPropertySource(locations="classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class SocialAuthenticationFilterTest {

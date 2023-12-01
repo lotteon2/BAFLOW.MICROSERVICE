@@ -20,7 +20,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 
-@TestPropertySource(locations="classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class UserWithdrawalServiceTest {

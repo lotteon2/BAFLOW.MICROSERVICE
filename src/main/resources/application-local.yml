@@ -15,15 +15,30 @@ spring:
   config:
     activate:
       on-profile: local
+
   datasource:
-    url: jdbc:mysql://localhost:3306/bb-auth-service?serverTimezone=Asia/Seoul
-    username: root
-    password: k1651227
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
+  h2:
+    console:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
     show-sql: true
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.H2Dialect
+#  datasource:
+#    url: jdbc:mysql://localhost:3306/bb-auth-service?serverTimezone=Asia/Seoul
+#    username: root
+#    password: k1651227
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
 
   security:
     oauth2:

@@ -35,7 +35,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 @Transactional
-@TestPropertySource(locations = "classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class StoreManagerAuthorizationFilterTest {

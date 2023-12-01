@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-@TestPropertySource(locations="classpath:application-test.yml")
 @Import(LocalValidatorFactoryBean.class)
 class StoreManagerSignUpValidationTest {
 

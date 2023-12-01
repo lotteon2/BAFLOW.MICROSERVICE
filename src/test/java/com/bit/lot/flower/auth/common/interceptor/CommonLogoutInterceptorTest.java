@@ -14,8 +14,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -25,12 +26,10 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.util.NestedServletException;
 
 
-@TestPropertySource(locations = "classpath:application-test.yml")
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class CommonLogoutInterceptorTest {
-
 
   private final String refreshCookieName ="refresh-cookie";
   private final String jwtSubject = "1";
