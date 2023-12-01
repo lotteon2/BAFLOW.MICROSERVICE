@@ -3,14 +3,11 @@ spring:
   redis:
     host: localhost
     port: 6379
-  config:
-    activate:
-      on-profile: local
   datasource:
     username: sa
     password:
     driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
   h2:
     console:
       enabled: true
