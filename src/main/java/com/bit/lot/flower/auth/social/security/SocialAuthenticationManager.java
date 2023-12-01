@@ -14,7 +14,6 @@ public class SocialAuthenticationManager implements AuthenticationManager {
 
   private final SocialLoginStrategy socialLoginStrategy;
 
-
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     try {

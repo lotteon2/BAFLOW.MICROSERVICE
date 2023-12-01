@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import com.bit.lot.flower.auth.email.entity.EmailCode;
 import com.bit.lot.flower.auth.email.exception.EmailCodeException;
 import com.bit.lot.flower.auth.email.repository.EmailCodeJpaRepository;
+import java.util.List;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -49,14 +50,23 @@ public class VerifyEmailServiceTest {
   @DisplayName("가장 최근에 보내지지 않은 이메일 랜덤 Value로 인증시 EmailCodeException Throw")
   @Test
   void VerifyEmail_WhenEmailIsNotLastSent_ThrowEmailCodeException() {
+
     sendFirstEmail();
     sendSecondEmail();
-    EmailCode notRecentSentEmailCode = repository.findAll().get(0);
+    List<EmailCode> emailList = repository.findAll();
     assertThrowsExactly(EmailCodeException.class, () -> {
-      emailCodeService.verify(testEmail,notRecentSentEmailCode.getEmailCode());
+      emailCodeService.verify(testEmail, findNotRecentEmailCode(emailList).getEmailCode());
     });
   }
 
+  private EmailCode findNotRecentEmailCode(List<EmailCode> emailCodeList) {
+    EmailCode notRecentEmailCode = emailCodeList.get(0);
+    if (notRecentEmailCode.getCreatedAt().compareTo(emailCodeList.get(1).getCreatedAt())>0){
+      notRecentEmailCode = emailCodeList.get(1);
+
+    }
+      return notRecentEmailCode;
+  }
 
 }
 

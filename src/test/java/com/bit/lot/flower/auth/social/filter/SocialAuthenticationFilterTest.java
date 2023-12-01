@@ -20,6 +20,7 @@ import java.time.ZonedDateTime;
 import java.util.Arrays;
 import javax.annotation.PostConstruct;
 import javax.swing.Spring;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+@Transactional
 @TestPropertySource(locations="classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -49,6 +51,8 @@ class SocialAuthenticationFilterTest {
   @Value("${security.authorization.header.name}")
   private String authorizationHeaderName;
   @Autowired
+  SocialAuthJpaRepository socialAuthJpaRepository;
+  @Autowired
   SocialAuthenticationFilter socialAuthenticationFilter;
   @Autowired
   RedisRefreshTokenUtil redisRefreshTokenUtil;
@@ -58,6 +62,8 @@ class SocialAuthenticationFilterTest {
   WebApplicationContext webApplicationContext;
 
   MockMvc mvc;
+
+
 
 @Autowired
 private ConfigurableApplicationContext context;

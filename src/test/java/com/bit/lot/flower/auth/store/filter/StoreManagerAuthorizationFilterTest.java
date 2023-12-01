@@ -9,11 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
+import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
+import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import io.jsonwebtoken.MalformedJwtException;
 import java.util.Map;
+import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,26 +32,31 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@TestPropertySource(locations="classpath:application-test.yml")
+@Transactional
+@TestPropertySource(locations = "classpath:application-test.yml")
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 public class StoreManagerAuthorizationFilterTest {
 
 
   @Autowired
+  StoreManagerAuthRepository repository;
+  @Autowired
   StoreMangerAuthorizationFilter authorizationFilter;
   @Autowired
   WebApplicationContext webApplicationContext;
   MockMvc mvc;
+  final String claimRoleName = "ROLE";
+  String testUserId = "id";
 
-   String testUserId = "id";
+
 
   private String createUnValidToken() {
     return "unValidRandomToken";
   }
 
   private String createValidToken(StoreManagerStatus storeManagerStatus) {
-    Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
+    Map<String, Object> claimMap = JwtUtil.addClaims(claimRoleName,
         storeManagerStatus);
     return JwtUtil.generateAccessTokenWithClaims(testUserId, claimMap);
   }
@@ -87,7 +95,7 @@ public class StoreManagerAuthorizationFilterTest {
    *                                  거치지 않고 해당 Filter를 거치지 않는 경우는 없다.
    */
 
-  @DisplayName("JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
+  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
   @Test
   void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchJwtException()
       throws IllegalArgumentException {

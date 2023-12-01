@@ -20,7 +20,7 @@ public class OnlyRecentEmailCodeIsPermitted implements
   public void verify(EmailCode targetEmailCode) {
     List<EmailCode> emailCodeList = repository.findAllByEmail(targetEmailCode.getEmail());
     EmailCode foundRecentEmailCode =findRecent(emailCodeList);
-    if(targetEmailCode!=foundRecentEmailCode){
+    if(targetEmailCode.getEmailCode()!=foundRecentEmailCode.getEmailCode()){
       throw new EmailCodeException("가장 최근에 보내진 이메일 코드로 인증하십시오");
     }
 

@@ -51,7 +51,7 @@ public class StoreAuthenticationManager implements AuthenticationManager {
     if (storeManagerAuth.getStatus().equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
       throw new StoreManagerAuthException("관리자의 승인을 기다려주새요.");
     }
-    return new UsernamePasswordAuthenticationToken(storeManagerAuth.getEmail(),
+    return new UsernamePasswordAuthenticationToken(storeManagerAuth.getId(),
         storeManagerAuth.getPassword(), Collections.singleton(
         new SimpleGrantedAuthority(storeManagerAuth.getStatus().toString())));
   }
