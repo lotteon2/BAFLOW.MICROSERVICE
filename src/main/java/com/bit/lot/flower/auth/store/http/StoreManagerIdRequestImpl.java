@@ -15,6 +15,6 @@ public class StoreManagerIdRequestImpl implements StoreManagerIdRequest<AuthId> 
   @Override
   public StoreIdResponse getId(AuthId storeManagerId) {
     return storeManagerIdFeignRequest.request(
-        String.valueOf(storeManagerId.getValue())).getBody();
+        storeManagerId.getValue()).getBody();
   }
 }
