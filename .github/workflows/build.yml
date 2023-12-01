@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DEV_DOCKER_ID }}
+          password: ${{ secrets.DEV_DOCKER_PW }}
       - name: redis run 
         run: docker run -p 6379:6379 -d reids redis-server --appendonly yes --requirepass "12345"
 
