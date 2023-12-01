@@ -1,7 +1,6 @@
 
 spring:
   redis:
-    host: localhost
     port: 6379
   datasource:
     username: sa
