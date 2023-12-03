@@ -7,12 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Component
-public class StoreMangerCreateRequestImpl<ID extends BaseId> implements
-    StoreMangerCreateRequest<ID> {
+public class StoreMangerCreateRequestImpl implements
+    StoreMangerCreateRequest {
 
-  private final CreateStoreManagerFeignRequest<ID> feignRequest;
+  private final CreateStoreManagerFeignRequest feignRequest;
   @Override
-  public void publish(CreateStoreMangerCommand<ID> dto) {
+  public void publish(CreateStoreMangerCommand dto) {
     feignRequest.create(dto);
   }
 }

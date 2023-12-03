@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CreateStoreMangerCommand<ID extends BaseId> {
+public class CreateStoreMangerCommand {
   @NotNull
-  private ID id;
+  private Long id;
   @NotNull
   private String email;
   @NotNull

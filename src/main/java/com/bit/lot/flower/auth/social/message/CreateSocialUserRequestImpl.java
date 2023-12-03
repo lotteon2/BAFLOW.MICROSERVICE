@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CreateSocialUserRequestImpl<ID extends BaseId> implements LoginSocialUserRequest<ID> {
+public class CreateSocialUserRequestImpl implements LoginSocialUserRequest {
 
-  private final LoginSocialUserFeignRequest<ID> feignRequest;
+  private final LoginSocialUserFeignRequest feignRequest;
 
   @Override
-  public UserFeignLoginResponse request(SocialLoginRequestCommand<ID> dto) {
+  public UserFeignLoginResponse request(SocialLoginRequestCommand dto) {
    return (UserFeignLoginResponse) feignRequest.login(dto).getBody();
   }
 }

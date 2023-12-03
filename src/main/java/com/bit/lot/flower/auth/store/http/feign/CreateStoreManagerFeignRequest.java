@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(value = "create-store-manager-request", url = "${service.user.domain}")
-public interface CreateStoreManagerFeignRequest<ID extends BaseId> {
+public interface CreateStoreManagerFeignRequest {
   @RequestMapping(method = RequestMethod.POST, value = "/users/store-manager")
-  ResponseEntity<String> create(CreateStoreMangerCommand<ID> createStoreMangerCommand);
+  ResponseEntity<String> create(CreateStoreMangerCommand createStoreMangerCommand);
 }

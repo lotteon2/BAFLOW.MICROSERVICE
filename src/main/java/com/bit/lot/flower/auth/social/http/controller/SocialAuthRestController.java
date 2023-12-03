@@ -28,7 +28,7 @@ public class SocialAuthRestController {
 
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
   private final SocialAuthService<AuthId> socialAuthService;
-  private final LoginSocialUserRequest<AuthId> userDataRequest;
+  private final LoginSocialUserRequest userDataRequest;
 
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")

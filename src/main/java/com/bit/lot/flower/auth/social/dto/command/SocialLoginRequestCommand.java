@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class
-SocialLoginRequestCommand<ID extends BaseId> {
-  private ID socialId;
+SocialLoginRequestCommand {
+  private AuthId socialId;
   private String email;
   private String nickname;
 }

@@ -35,7 +35,7 @@ public class StoreManagerRestController {
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerService<AuthId> storeManagerService;
-  private final StoreMangerCreateRequest<AuthId> storeMangerCreateRequest;
+  private final StoreMangerCreateRequest storeMangerCreateRequest;
 
 
   @ApiOperation(value = "중복 이메일 체크",notes = "회원가입시 중복 이메일을 체크한다.")
@@ -55,15 +55,6 @@ public class StoreManagerRestController {
     return ResponseEntity.ok("스토어 매니저 회원가입 신청 완료 관리자의 승인을 기다려주세요");
   }
 
-  @PostMapping("/api/test")
-  public ResponseEntity<StoreManagerLoginResponse> test() {
-    String name = storeManagerNameRequest.getName(AuthIdCreator.getAuthIdFromString("248"))
-        .getName();
-    log.info("store-manager name: " + name);
-    log.info("store-manager name: " + name);
-    log.info("store-manager name: " + name);
-    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(name));
-  }
 
   @ApiOperation(value = "스토어 매니저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
