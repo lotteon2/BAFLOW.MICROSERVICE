@@ -1,8 +1,8 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
+import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
-import com.bit.lot.flower.auth.social.dto.message.SocialUserLoginDto;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
@@ -32,7 +32,7 @@ public class SocialAuthRestController {
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/social/login")
   public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
-      @RequestBody SocialUserLoginDto dto) {
+      @RequestBody SocialLoginRequestCommand dto) {
     UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(dto);
     return ResponseEntity.ok(userFeignLoginResponse);
   }

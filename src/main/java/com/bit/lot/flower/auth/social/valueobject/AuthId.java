@@ -12,4 +12,8 @@ import lombok.experimental.SuperBuilder;
 @Getter
 public class AuthId extends BaseId<Long> {
 
+  public AuthId(Long value) {
+    super(value);
+  }
+
 }

@@ -5,6 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface StoreManagerSingUpService {
-
-  public void singUp(StoreMangerSignUpCommand dto);
+  public Long signup(StoreMangerSignUpCommand dto);
 }

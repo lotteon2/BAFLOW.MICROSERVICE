@@ -12,6 +12,8 @@ import lombok.NoArgsConstructor;
 @Getter
 public class CreateStoreMangerCommand {
   @NotNull
+  private Long id;
+  @NotNull
   private String email;
   @NotNull
   private String businessNumberImage;

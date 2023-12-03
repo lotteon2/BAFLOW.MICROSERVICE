@@ -18,8 +18,8 @@ public class StoreManagerServiceImpl<ID extends AuthId> implements StoreManagerS
   private final StoreManagerSingUpService singUpService;
 
   @Override
-  public void signUp(StoreMangerSignUpCommand signUpDto) {
-    singUpService.singUp(signUpDto);
+  public Long signUp(StoreMangerSignUpCommand signUpDto) {
+    return singUpService.signup(signUpDto);
   }
 
   @Override
