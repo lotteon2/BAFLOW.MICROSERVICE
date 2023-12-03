@@ -35,7 +35,7 @@ public class StoreManagerRestController {
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerService<AuthId> storeManagerService;
-  private final StoreMangerCreateRequest storeMangerCreateRequest;
+  private final StoreMangerCreateRequest<AuthId> storeMangerCreateRequest;
 
 
   @ApiOperation(value = "중복 이메일 체크",notes = "회원가입시 중복 이메일을 체크한다.")

@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.store.dto;
 
+import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CreateStoreMangerCommand {
+public class CreateStoreMangerCommand<ID extends BaseId> {
   @NotNull
-  private Long id;
+  private ID id;
   @NotNull
   private String email;
   @NotNull
