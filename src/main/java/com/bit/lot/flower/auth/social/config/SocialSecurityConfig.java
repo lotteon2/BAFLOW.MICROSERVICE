@@ -3,11 +3,12 @@ package com.bit.lot.flower.auth.social.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
-import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
 import com.bit.lot.flower.auth.social.security.SocialAuthenticationManager;
+import com.bit.lot.flower.auth.social.security.OauthAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +27,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SocialSecurityConfig {
 
   private final SystemAuthenticationSuccessHandler systemAuthenticationSuccessHandler;
-  private final SocialLoginStrategy socialLoginStrategy;
+  private final SocialLoginStrategy<AuthId> socialLoginStrategy;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
 
@@ -57,7 +58,8 @@ public class SocialSecurityConfig {
 
   @Bean
   SocialAuthenticationFilter socialAuthenticationFilter() {
-    SocialAuthenticationFilter filter = new SocialAuthenticationFilter(socialAuthenticationManager());
+    SocialAuthenticationFilter filter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,
+        socialAuthenticationManager());
     filter.setFilterProcessesUrl("/api/auth/social/**/login");
     filter.setAuthenticationSuccessHandler(systemAuthenticationSuccessHandler);
     return filter;

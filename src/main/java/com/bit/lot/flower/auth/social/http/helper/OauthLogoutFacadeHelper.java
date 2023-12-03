@@ -2,8 +2,6 @@ package com.bit.lot.flower.auth.social.http.helper;
 
 import com.bit.lot.flower.auth.social.http.feign.OauthFeignClientRequest;
 import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
-import java.util.HashMap;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

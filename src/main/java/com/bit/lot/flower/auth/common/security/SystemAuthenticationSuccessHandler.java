@@ -4,6 +4,7 @@ import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.io.IOException;
 import java.util.Map;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,9 +36,16 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException, ServletException {
-    String token = tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),createClaimsRoleMap(),response);
-    response.setHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX +token );
+      FilterChain chain, Authentication authentication) throws IOException, ServletException {
+    onAuthenticationSuccess(request, response, authentication);
+    chain.doFilter(request,response);
+  }
 
+  @Override
+  public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+      Authentication authentication) throws IOException, ServletException {
+    String token = tokenHandler.createToken(String.valueOf(authentication.getPrincipal()),
+        createClaimsRoleMap(), response);
+    response.setHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX +token );
   }
 }

@@ -1,14 +1,8 @@
 server:
   port: 8081
 spring:
-  cloud:
-    openfeign:
-      client:
-        config:
-          default:
-            connectTimeout: 5000
-            readTimeout: 5000
-            loggerLevel: basic
+  application:
+    name: auth-service
   redis:
     host: localhost
     port: 6379
@@ -68,7 +62,13 @@ email:
     from: bbFlower@no-reply.co.kr
 
 
-
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
 
 cookie:
   refresh:
@@ -102,4 +102,4 @@ kakao:
 
 service:
   user:
-    domain: "http://localhost:8082"
+    domain: http://localhost:8082

@@ -62,7 +62,7 @@ class StoreManagerSingUpTest {
  void SignUp_WhenAllValidationCheckIsSatisfiedButNotEmailIsVerified_ThrowStoreManagerException() {
  StoreMangerSignUpCommand emailVerifiedDto =  emailNotVerifiedDto();
  assertThrows(StoreManagerAuthException.class,()->{
-  storeManagerSingUpService.singUp(emailVerifiedDto);
+  storeManagerSingUpService.signup(emailVerifiedDto);
  });
 
  }
@@ -73,7 +73,7 @@ class StoreManagerSingUpTest {
  void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthException() {
    StoreMangerSignUpCommand emailVerifiedDto =  emailVerifiedDto();
   assertDoesNotThrow(()->{
-     storeManagerSingUpService.singUp(emailVerifiedDto);
+     storeManagerSingUpService.signup(emailVerifiedDto);
   });
  }
 }

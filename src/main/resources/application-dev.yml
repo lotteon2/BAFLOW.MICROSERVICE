@@ -1,6 +1,8 @@
 server:
   port: ${server.port}
 spring:
+  application:
+    name: auth-service
   config:
     activate:
       on-profile: dev
@@ -55,8 +57,13 @@ spring:
     auth-code-expiration-millis: 1800000
 
 
-
-
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
 
 email:
   send:

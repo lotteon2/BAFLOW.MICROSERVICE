@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.store.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
-import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
@@ -64,7 +63,7 @@ public class StoreManagerSecurityConfig {
   @Bean
   public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
     StoreManagerAuthenticationFilter authenticationFilter = new StoreManagerAuthenticationFilter(
-        storeAuthenticationManager());
+        authenticationSuccessHandler,storeAuthenticationManager());
     authenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     authenticationFilter.setFilterProcessesUrl("/**/stores/login");
     return authenticationFilter;
