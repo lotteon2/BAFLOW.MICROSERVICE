@@ -59,8 +59,7 @@ public class StoreManagerRestController {
   @PostMapping("/api/auth/stores/login")
   public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal String authId , @Valid @RequestBody StoreManagerLoginDto dto) {
     String name = storeManagerNameRequest.getName(AuthIdCreator.getAuthIdFromString(authId)).getName();
-    StoreId storeId = storeManagerIdRequest.getId(AuthIdCreator.getAuthIdFromString(authId)).getStoreId();
-    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(storeId, name));
+    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(name));
   }
 
   @ApiOperation(value = "스토어 매니저 로그아웃",notes = "Authroization: Bearer 토큰 제거, Refresh토큰"

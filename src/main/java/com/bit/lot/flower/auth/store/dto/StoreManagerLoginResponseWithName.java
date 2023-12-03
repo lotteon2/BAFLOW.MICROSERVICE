@@ -9,9 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
-public class StoreManagerLoginResponseWithStoreIdAndName extends
+public class StoreManagerLoginResponseWithName extends
     StoreManagerLoginResponse {
-  private StoreId storeId;
 }

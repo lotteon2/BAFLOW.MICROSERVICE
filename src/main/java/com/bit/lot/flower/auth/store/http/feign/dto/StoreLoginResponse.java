@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class StoreIdResponse {
-  StoreId storeId;
+public class StoreLoginResponse {
+  String name;
 }
