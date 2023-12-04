@@ -2,8 +2,14 @@ package com.bit.lot.flower.auth.store.service;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
+import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import javax.transaction.Transactional;
@@ -12,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -60,6 +67,7 @@ class StoreManagerSingUpTest {
   @DisplayName("이메일 인증을 하지 않은 경우 ThrowStoreManagerException")
   @Test
   void SignUp_WhenAllValidationCheckIsSatisfiedButNotEmailIsVerified_ThrowStoreManagerException() {
+
     StoreMangerSignUpCommand emailVerifiedDto = emailNotVerifiedDto();
     assertThrows(StoreManagerAuthException.class, () -> {
       storeManagerSingUpService.signup(emailVerifiedDto);
@@ -67,13 +75,19 @@ class StoreManagerSingUpTest {
 
   }
 
-  @DisplayName("이메일 인증을 한 경우 NotThrowStoreManagerAuthException")
+  @DisplayName("이메일 인증을 한 경우 NotThrowStoreManagerAuthException, entity 저장")
   @Transactional
   @Test
-  void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthException() {
+  void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthExceptionAndEntityIsSaved() {
+    when(encoder.encode(anyString())).thenReturn("encodedPassword");
+    when(repository.save(any(StoreManagerAuth.class))).thenReturn(mock(StoreManagerAuth.class));
+
     StoreMangerSignUpCommand emailVerifiedDto = emailVerifiedDto();
     assertDoesNotThrow(() -> {
       storeManagerSingUpService.signup(emailVerifiedDto);
     });
+    verify(repository).save(any(StoreManagerAuth.class));
+
+
   }
 }

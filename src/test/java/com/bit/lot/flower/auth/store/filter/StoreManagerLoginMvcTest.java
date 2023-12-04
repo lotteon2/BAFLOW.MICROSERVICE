@@ -2,8 +2,9 @@ package com.bit.lot.flower.auth.store.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -54,6 +55,7 @@ import org.springframework.web.context.WebApplicationContext;
 @SpringBootTest
 class StoreManagerLoginMvcTest {
 
+  final Long testId = 1L;
   final String unValidStoreManagerId = "unValidStoreManagerId";
   final String unValidStoreManagerPassword = "unValidStoreManagerPassword";
   final Long refreshLifeTime = 360000L;
@@ -111,7 +113,7 @@ class StoreManagerLoginMvcTest {
             lastLogoutTime(null).
             password(encoder.encode(password)).
             email(email).
-            id(1L).
+            id(testId).
             status(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING).
             build());
   }
@@ -122,13 +124,10 @@ class StoreManagerLoginMvcTest {
   }
 
 
-  private StoreManagerLoginDto createValidStoreManagerAccountWithPermittedStatus() {
+  private StoreManagerLoginDto LoginValidStoreManagerAccount() {
     return StoreManagerLoginDto.builder().email(email).password(password).build();
   }
 
-  private StoreManagerLoginDto createValidStoreManagerAccountWithPendingStatus() {
-    return StoreManagerLoginDto.builder().email(email).password(password).build();
-  }
 
   private StoreManagerLoginDto createIdAndPasswordMistMatchedStoreManagerAccount() {
     return StoreManagerLoginDto.builder().email(unValidStoreManagerId)
@@ -160,13 +159,13 @@ class StoreManagerLoginMvcTest {
   @DisplayName("스토어매니저 로그인시 JWT토큰 response에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerISExist_JWTTokenInResponse() throws Exception {
-    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+    when(storeManagerNameRequest.getName(any(AuthId.class))).thenReturn(mock(
         StoreManagerNameDto.class));
 
     saveEncodedPasswordPermittedStoreManager();
 
     MvcResult validStoreManger = getValidStoreManagerResponse(
-        createValidStoreManagerAccountWithPermittedStatus());
+        LoginValidStoreManagerAccount());
     assertNotNull(
         validStoreManger.getResponse().getHeader(authorizationHeaderName));
   }
@@ -175,13 +174,13 @@ class StoreManagerLoginMvcTest {
   @DisplayName("스토어매니저 로그인시 refresh토큰 HttpOnly쿠키에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerIsExist_RefreshTokenInHttpOnlyCookie() throws Exception {
-    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+    when(storeManagerNameRequest.getName(any(AuthId.class))).thenReturn(mock(
         StoreManagerNameDto.class));
 
     saveEncodedPasswordPermittedStoreManager();
 
     MvcResult validStoreManager = getValidStoreManagerResponse(
-        createValidStoreManagerAccountWithPermittedStatus());
+        LoginValidStoreManagerAccount());
     assertNotNull(validStoreManager.getResponse().getCookie(refreshTokenName));
 
 
@@ -190,34 +189,33 @@ class StoreManagerLoginMvcTest {
   @DisplayName("스토어매니저 로그인시 refresh토큰 Redis에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerIsExist_RefreshTokenInRedis() throws Exception {
-
-    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+    when(storeManagerNameRequest.getName(any(AuthId.class))).thenReturn(mock(
         StoreManagerNameDto.class));
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(email, randomCreator.toString(),
-            refreshLifeTime);
+        .saveRefreshToken(eq(String.valueOf(testId)), anyString(),
+            eq(refreshLifeTime));
 
     saveEncodedPasswordPermittedStoreManager();
 
     getValidStoreManagerResponse(
-        createValidStoreManagerAccountWithPermittedStatus());
+        LoginValidStoreManagerAccount());
 
-    verify(redisRefreshTokenUtil).saveRefreshToken(
-        email, randomCreator.toString(), refreshLifeTime);
+   verify(redisRefreshTokenUtil).saveRefreshToken(
+    eq(String.valueOf(testId)), anyString(), eq(refreshLifeTime));
 
   }
 
   @DisplayName("스토어매니저 상태 Pending일 경우 ThrowStoreMangerAuthException")
   @Test
   void storeManagerLogin_WhenStoreManagerIsExistButStatusIsPending_ThrowStoreMangerAuthException() {
-    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+    when(storeManagerNameRequest.getName(any(AuthId.class))).thenReturn(mock(
         StoreManagerNameDto.class));
 
     saveEncodedPasswordPendingStoreManager();
 
     assertThrowsExactly(StoreManagerAuthException.class, () -> {
-      getUnValidStoreManagerResponse(createValidStoreManagerAccountWithPendingStatus());
+      getUnValidStoreManagerResponse(LoginValidStoreManagerAccount());
     });
 
 
@@ -229,7 +227,7 @@ class StoreManagerLoginMvcTest {
   @DisplayName("스토어매니저 올바르지 않은 계정으로 로그인시 BadCredentialExceptionThrow 테스트 ")
   @Test
   void storeManagerLogin_WhenStoreManagerIsNotExist_ThrowBadCredentialException() throws Exception {
-    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+    when(storeManagerNameRequest.getName(any(AuthId.class))).thenReturn(mock(
         StoreManagerNameDto.class));
 
     saveEncodedPasswordPendingStoreManager();

@@ -2,7 +2,12 @@ package com.bit.lot.flower.auth.system.filter;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static reactor.core.publisher.Mono.when;
 
 
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
@@ -16,9 +21,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ActiveProfiles;
@@ -48,8 +57,12 @@ class SystemAdminAuthenticationFilterTest {
   SystemAdminAuthenticationFilter authenticationFilter;
   @Autowired
   private WebApplicationContext webApplicationContext;
-  @Autowired
+  @MockBean
+  RedisTemplate<Object, Object> redisTemplate;
+  @MockBean
   RedisRefreshTokenUtil redisRefreshTokenUtil;
+  @MockBean
+  RedisKeyValueAdapter keyValueAdapter;
 
   MockMvc mvc;
 
@@ -87,15 +100,14 @@ class SystemAdminAuthenticationFilterTest {
   }
 
 
-  private MvcResult getUnValidSystemAdminUserResult(SystemAdminLoginDto unValidDto)
+  private void getUnValidSystemAdminUserResult(SystemAdminLoginDto unValidDto)
       throws Exception {
     System.out.println("dto:{}" + unValidDto.getEmail());
-    return
-        mvc.perform(MockMvcRequestBuilders
-                .post("/api/auth/admin/login")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(unValidDto)))
-            .andExpect(status().is4xxClientError()).andReturn();
+    mvc.perform(MockMvcRequestBuilders
+            .post("/api/auth/admin/login")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(asJsonString(unValidDto)))
+        .andExpect(status().is4xxClientError()).andReturn();
 
   }
 
@@ -125,8 +137,13 @@ class SystemAdminAuthenticationFilterTest {
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_RefreshTokenInRedis() throws Exception {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
-    MvcResult validUser = getValidSystemAdminUserResponse(validDto);
-    assertNotNull(redisRefreshTokenUtil.getRefreshToken(validDto.getEmail()));
+
+    Mockito.doNothing()
+        .when(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
+
+    getValidSystemAdminUserResponse(validDto);
+
+    verify(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
 
   }
 

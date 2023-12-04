@@ -173,8 +173,10 @@ class SocialLoginMvcTest {
         .saveRefreshToken(eq(String.valueOf(testId)), anyString(), eq(refreshTokenLifeTime));
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
+
     when(loginSocialUserRequest.request(command)).thenReturn(
         mock(UserFeignLoginResponse.class));
+
     socialUserLoginRequest(command);
 
     verify(redisRefreshTokenUtil).saveRefreshToken(

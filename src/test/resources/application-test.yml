@@ -6,7 +6,6 @@ spring:
     activate:
       on-profile: test
 
-
   datasource:
     username: sa
     password:

@@ -4,7 +4,6 @@ package com.bit.lot.flower.auth.system.admin.config;
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
-import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
 import com.bit.lot.flower.auth.system.admin.security.SystemAdminAuthenticationManager;
@@ -27,7 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SystemAdminSecurityConfig {
 
   @Value("${system.admin.id}")
-  private String adminId;
+  private Long adminId;
   @Value("${system.admin.password}")
   private String adminPassword;
   private final SystemAuthenticationSuccessHandler authenticationSuccessHandler;
