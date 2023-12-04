@@ -1,21 +1,31 @@
 package com.bit.lot.flower.auth.common.interceptor;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static reactor.core.publisher.Mono.when;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 
+import com.google.common.base.Verify;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -30,6 +40,7 @@ import org.springframework.web.util.NestedServletException;
 @TestPropertySource(locations = "classpath:application-test.yml")
 @ActiveProfiles("test")
 @Transactional
+@ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class CommonLogoutInterceptorTest {
@@ -44,16 +55,19 @@ class CommonLogoutInterceptorTest {
   @Autowired
   WebApplicationContext webApplicationContext;
   MockMvc mvc;
-  @Autowired
+  @MockBean
   RedisBlackListTokenUtil redisBlackListTokenUtil;
-  @Autowired
+  @MockBean
   RedisRefreshTokenUtil redisRefreshTokenUtil;
-
+  @MockBean
+  RedisTemplate<Object, Object> redisTemplate;
+  @MockBean
+  RedisKeyValueAdapter keyValueAdapter;
 
   MvcResult setToken() throws Exception {
     token = JwtUtil.generateAccessToken(jwtSubject);
     redisToken = JwtUtil.generateRefreshToken(jwtSubject);
-    redisRefreshTokenUtil.saveRefreshToken(jwtSubject,redisToken,1000000L);
+    redisRefreshTokenUtil.saveRefreshToken(jwtSubject, redisToken, 1000000L);
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
             .header(authorizationHeaderName, authenticationHeaderPrefix + token))
         .andExpect(status().isOk())
@@ -87,9 +101,9 @@ class CommonLogoutInterceptorTest {
   @DisplayName("request에 토큰이 존재할 때 Redis BlackList에 토큰 추가 확인 테스트")
   @Test
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsTokenAtRedisBlackList() throws Exception {
+    Mockito.doNothing().when(redisBlackListTokenUtil).addTokenToBlacklist(token, 30000);
     setToken();
     assertTrue(redisBlackListTokenUtil.isTokenBlacklisted(token));
-
   }
 
   @DisplayName("request에 토큰이 존재할 때 refresh-cookie 제거")
@@ -103,8 +117,14 @@ class CommonLogoutInterceptorTest {
   @Test
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtRedisRefreshTokenUtil()
       throws Exception {
+    Mockito.doNothing().when(redisRefreshTokenUtil)
+        .saveRefreshToken(jwtSubject, redisToken, 1000000L);
     setToken();
+
+    Mockito.verify(redisRefreshTokenUtil).deleteRefreshToken(jwtSubject);
+
     assertNull(redisRefreshTokenUtil.getRefreshToken(redisToken));
+
   }
 }
 

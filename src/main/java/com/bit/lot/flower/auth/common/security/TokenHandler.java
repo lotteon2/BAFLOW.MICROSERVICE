@@ -21,8 +21,8 @@ public class TokenHandler {
     return accessTokenStrategy.createAccessToken(id, claimList);
   }
 
-  public void invalidateToken(String token, HttpServletResponse response) {
+  public void invalidateToken(String id, String token, HttpServletResponse response) {
     deleteStrategy.invalidateAccessToken(token);
-    refreshTokenStrategy.invalidateRefreshToken(token, response);
+    refreshTokenStrategy.invalidateRefreshToken(id, response);
   }
 }
