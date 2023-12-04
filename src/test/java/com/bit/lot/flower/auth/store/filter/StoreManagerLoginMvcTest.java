@@ -106,10 +106,14 @@ class StoreManagerLoginMvcTest {
 
   private void saveEncodedPasswordPendingStoreManager() {
     repository.save(
-        StoreManagerAuth.builder().lastLogoutTime(null).password(encoder.encode(password)).email(
-                email)
-            .status(
-                StoreManagerStatus.ROLE_STORE_MANAGER_PENDING).build());
+        StoreManagerAuth.
+            builder().
+            lastLogoutTime(null).
+            password(encoder.encode(password)).
+            email(email).
+            id(1L).
+            status(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING).
+            build());
   }
 
   private String asJsonString(Object obj) throws JsonProcessingException {
