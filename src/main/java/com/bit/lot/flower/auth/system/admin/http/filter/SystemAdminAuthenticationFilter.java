@@ -55,7 +55,7 @@ public class SystemAdminAuthenticationFilter extends UsernamePasswordAuthenticat
     try {
       SystemAdminLoginDto dto = getLoginDtoFromRequest(request);
       return systemAuthenticationManager.authenticate(
-          new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(),
+          new UsernamePasswordAuthenticationToken(dto.getId(), dto.getPassword(),
               Collections.singleton(new SimpleGrantedAuthority(Role.ROLE_SYSTEM_ADMIN.name()))));
 
     } catch (AuthenticationException | IOException e) {

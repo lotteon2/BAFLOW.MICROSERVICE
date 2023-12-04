@@ -79,7 +79,7 @@ cookie:
 
 system:
   admin:
-    id: bb-flower
+    id: 100
     password: bb-flower-password
 
 store:

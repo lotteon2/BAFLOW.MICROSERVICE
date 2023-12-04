@@ -9,5 +9,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class SystemAdminLoginDto {
   private  Long id;
+
   private  String password;
 }
