@@ -51,11 +51,6 @@ import org.springframework.web.context.WebApplicationContext;
   }
 
 
-  private String createValidToken() {
-    Map<String, Object> claimMap = JwtUtil.addClaims(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME,
-        Role.ROLE_SOCIAL_USER);
-    return JwtUtil.generateAccessTokenWithClaims(testUserId.toString(), claimMap);
-  }
   private MvcResult requestWithUnValidToken()
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")

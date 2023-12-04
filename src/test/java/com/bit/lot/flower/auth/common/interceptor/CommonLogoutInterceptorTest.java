@@ -11,13 +11,11 @@ import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 
-import com.google.common.base.Verify;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,9 +46,11 @@ class CommonLogoutInterceptorTest {
   final String jwtSubject = "10";
   final String authenticationHeaderPrefix = "Bearer ";
   final String authorizationHeaderName = "Authorization";
+  final String ACCESS_EXPIRATION_TIME = "360000";
+  final String REFRESH_EXPIRATION_TIME = "360000";
   @Value("${cookie.refresh.token.name}")
   String refreshCookieName;
-  String token;
+  String jwtToken;
   String redisToken;
   @Autowired
   WebApplicationContext webApplicationContext;
@@ -65,11 +65,11 @@ class CommonLogoutInterceptorTest {
   RedisKeyValueAdapter keyValueAdapter;
 
   MvcResult setToken() throws Exception {
-    token = JwtUtil.generateAccessToken(jwtSubject);
+    jwtToken = JwtUtil.generateAccessToken(jwtSubject);
     redisToken = JwtUtil.generateRefreshToken(jwtSubject);
-    redisRefreshTokenUtil.saveRefreshToken(jwtSubject, redisToken, 1000000L);
+    redisRefreshTokenUtil.saveRefreshToken(jwtSubject, redisToken, Long.parseLong(REFRESH_EXPIRATION_TIME));
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
-            .header(authorizationHeaderName, authenticationHeaderPrefix + token))
+            .header(authorizationHeaderName, authenticationHeaderPrefix + jwtToken))
         .andExpect(status().isOk())
         .andReturn();
   }
@@ -101,9 +101,11 @@ class CommonLogoutInterceptorTest {
   @DisplayName("request에 토큰이 존재할 때 Redis BlackList에 토큰 추가 확인 테스트")
   @Test
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsTokenAtRedisBlackList() throws Exception {
-    Mockito.doNothing().when(redisBlackListTokenUtil).addTokenToBlacklist(token, 30000);
+    Mockito.doNothing().when(redisBlackListTokenUtil)
+        .addTokenToBlacklist(jwtToken, Long.parseLong(ACCESS_EXPIRATION_TIME));
     setToken();
-    assertTrue(redisBlackListTokenUtil.isTokenBlacklisted(token));
+    Mockito.verify(redisBlackListTokenUtil, Mockito.times(1))
+        .addTokenToBlacklist(jwtToken, Long.parseLong(ACCESS_EXPIRATION_TIME));
   }
 
   @DisplayName("request에 토큰이 존재할 때 refresh-cookie 제거")
@@ -118,7 +120,7 @@ class CommonLogoutInterceptorTest {
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtRedisRefreshTokenUtil()
       throws Exception {
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(jwtSubject, redisToken, 1000000L);
+        .saveRefreshToken(jwtSubject, redisToken, Long.parseLong(REFRESH_EXPIRATION_TIME));
     setToken();
 
     Mockito.verify(redisRefreshTokenUtil).deleteRefreshToken(jwtSubject);
