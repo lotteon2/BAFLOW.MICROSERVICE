@@ -59,9 +59,8 @@ public class StoreManagerRestController {
   @ApiOperation(value = "스토어 매니저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/api/auth/stores/login")
-  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal String authId) {
-    String name = storeManagerNameRequest.getName(AuthIdCreator.getAuthIdFromString("248")).getName();
-    log.info("store-manager name: " + name);
+  public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId) {
+    String name = storeManagerNameRequest.getName(authId).getName();
     return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(name));
   }
 
