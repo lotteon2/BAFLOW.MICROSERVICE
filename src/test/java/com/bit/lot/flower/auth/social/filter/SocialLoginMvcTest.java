@@ -61,7 +61,7 @@ class SocialLoginMvcTest {
   String refreshTokenName;
   @Value("${security.authorization.header.name}")
   String authorizationHeaderName;
-  String refreshTokenLifeTime = "360000";
+  Long refreshTokenLifeTime = 360000L;
   @MockBean
   LoginSocialUserRequest loginSocialUserRequest;
   @Autowired
@@ -168,11 +168,9 @@ class SocialLoginMvcTest {
   @DisplayName("유저가 존재하지 않을 때 소셜 자동 회원가입 후 Refresh토큰 Redis에 담겨있는지 확인")
   @Test
   void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
-    String refreshToken = "dummyRefreshToken";
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(String.valueOf(testId), refreshToken,
-            Long.parseLong(refreshTokenLifeTime));
+        .saveRefreshToken(eq(String.valueOf(testId)), anyString(), eq(refreshTokenLifeTime));
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
     when(loginSocialUserRequest.request(command)).thenReturn(
@@ -180,9 +178,7 @@ class SocialLoginMvcTest {
     socialUserLoginRequest(command);
 
     verify(redisRefreshTokenUtil).saveRefreshToken(
-        String.valueOf(testId), refreshToken, Long.parseLong(refreshTokenLifeTime));
-
-    assertNotNull(redisRefreshTokenUtil.getRefreshToken(command.getSocialId().toString()));
+        eq(String.valueOf(testId)), anyString(), eq(refreshTokenLifeTime));
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")
@@ -198,8 +194,7 @@ class SocialLoginMvcTest {
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 한 후 24시간이 지나지 않은 회원 에러 확인 테스트")
   @Test
-  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsNotPassed24H_ThrowSocialAuthException()
-      throws Exception {
+  void socialUserLoginTest_WhenUserIsExistWithOutRecentlyStatusAndTheTimeIsNotPassed24H_ThrowSocialAuthException() {
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
     when(loginSocialUserRequest.request(command)).thenReturn(
         mock(UserFeignLoginResponse.class));

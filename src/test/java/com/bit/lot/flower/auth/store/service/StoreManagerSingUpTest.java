@@ -19,61 +19,61 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-@TestPropertySource(locations="classpath:application-test.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 @ActiveProfiles("test")
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
 class StoreManagerSingUpTest {
 
- private final String VALID_IMAGE_URL = "http://ww.validImageUrl.com";
- private final String VALID_PASSWORD = "123456ab";
- private final String VALID_EMAIL = "valid@gmail.com";
- private final String VALID_NAME_LENGTH_LESS_6 = "valid";
+  private final String VALID_IMAGE_URL = "http://ww.validImageUrl.com";
+  private final String VALID_PASSWORD = "123456ab";
+  private final String VALID_EMAIL = "valid@gmail.com";
+  private final String VALID_NAME_LENGTH_LESS_6 = "valid";
 
- @Mock
- StoreManagerAuthRepository repository;
+  @Mock
+  StoreManagerAuthRepository repository;
 
- @Mock
- BCryptPasswordEncoder encoder;
+  @Mock
+  BCryptPasswordEncoder encoder;
 
- @InjectMocks
+  @InjectMocks
   OnlyVerifiedStoreManagerEmailCanSignUpService storeManagerSingUpService;
 
- private StoreMangerSignUpCommand emailVerifiedDto() {
-  return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
-      .name(VALID_NAME_LENGTH_LESS_6)
-      .businessNumberImage(VALID_IMAGE_URL)
-      .isEmailVerified(true).build();
- }
+  private StoreMangerSignUpCommand emailVerifiedDto() {
+    return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
+        .name(VALID_NAME_LENGTH_LESS_6)
+        .businessNumberImage(VALID_IMAGE_URL)
+        .isEmailVerified(true).build();
+  }
 
 
- private StoreMangerSignUpCommand emailNotVerifiedDto() {
-  return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
-      .name(VALID_NAME_LENGTH_LESS_6)
-      .businessNumberImage(VALID_IMAGE_URL)
-      .isEmailVerified(false).build();
- }
+  private StoreMangerSignUpCommand emailNotVerifiedDto() {
+    return StoreMangerSignUpCommand.builder().email(VALID_EMAIL).password(VALID_PASSWORD)
+        .name(VALID_NAME_LENGTH_LESS_6)
+        .businessNumberImage(VALID_IMAGE_URL)
+        .isEmailVerified(false).build();
+  }
 
 
- @Transactional
- @DisplayName("이메일 인증을 하지 않은 경우 ThrowStoreManagerException")
- @Test
- void SignUp_WhenAllValidationCheckIsSatisfiedButNotEmailIsVerified_ThrowStoreManagerException() {
- StoreMangerSignUpCommand emailVerifiedDto =  emailNotVerifiedDto();
- assertThrows(StoreManagerAuthException.class,()->{
-  storeManagerSingUpService.signup(emailVerifiedDto);
- });
+  @Transactional
+  @DisplayName("이메일 인증을 하지 않은 경우 ThrowStoreManagerException")
+  @Test
+  void SignUp_WhenAllValidationCheckIsSatisfiedButNotEmailIsVerified_ThrowStoreManagerException() {
+    StoreMangerSignUpCommand emailVerifiedDto = emailNotVerifiedDto();
+    assertThrows(StoreManagerAuthException.class, () -> {
+      storeManagerSingUpService.signup(emailVerifiedDto);
+    });
 
- }
+  }
 
- @DisplayName("이메일 인증을 한 경우 NotThrowStoreManagerAuthException")
- @Transactional
- @Test
- void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthException() {
-   StoreMangerSignUpCommand emailVerifiedDto =  emailVerifiedDto();
-  assertDoesNotThrow(()->{
-     storeManagerSingUpService.signup(emailVerifiedDto);
-  });
- }
+  @DisplayName("이메일 인증을 한 경우 NotThrowStoreManagerAuthException")
+  @Transactional
+  @Test
+  void SignUp_WhenAllValidationCheckIsSatisfiedAndEmailIsVerified_NotThrowStoreManagerAuthException() {
+    StoreMangerSignUpCommand emailVerifiedDto = emailVerifiedDto();
+    assertDoesNotThrow(() -> {
+      storeManagerSingUpService.signup(emailVerifiedDto);
+    });
+  }
 }

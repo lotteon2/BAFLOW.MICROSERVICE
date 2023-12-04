@@ -2,27 +2,40 @@ package com.bit.lot.flower.auth.store.filter;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
+import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
+import com.bit.lot.flower.auth.store.http.feign.dto.StoreManagerNameDto;
 import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Random;
 import javax.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,15 +47,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-@TestPropertySource(locations="classpath:application-test.yml")
+@TestPropertySource(locations = "classpath:application-test.yml")
 @ActiveProfiles("test")
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class StoreManagerAuthenticationFilterTest {
+class StoreManagerLoginMvcTest {
 
-  private final String unValidStoreManagerId = "unValidStoreManagerId";
-  private final String unValidStoreManagerPassword = "unValidStoreManagerPassword";
+  final String unValidStoreManagerId = "unValidStoreManagerId";
+  final String unValidStoreManagerPassword = "unValidStoreManagerPassword";
+  final Long refreshLifeTime = 360000L;
   @Value("${store.manager.id}")
   String email;
   @Value("${store.manager.password}")
@@ -51,26 +65,34 @@ class StoreManagerAuthenticationFilterTest {
   String refreshTokenName;
   @Value("${security.authorization.header.name}")
   String authorizationHeaderName;
+
   @Autowired
   StoreManagerAuthRepository repository;
   @Autowired
   StoreManagerAuthenticationFilter authenticationFilter;
   @Autowired
-  RedisRefreshTokenUtil redisRefreshTokenUtil;
-  @Autowired
   BCryptPasswordEncoder encoder;
   @Autowired
   WebApplicationContext webApplicationContext;
+  @MockBean
+  StoreManagerNameRequest<AuthId> storeManagerNameRequest;
+  @MockBean
+  RedisTemplate<Object, Object> redisTemplate;
+  @MockBean
+  RedisRefreshTokenUtil redisRefreshTokenUtil;
+  @MockBean
+  RedisKeyValueAdapter keyValueAdapter;
 
+  Random randomCreator;
 
   MockMvc mvc;
-
 
 
   @BeforeEach
   public void setUp() {
     mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authenticationFilter)
         .build();
+    randomCreator = new Random();
   }
 
   private void saveEncodedPasswordPermittedStoreManager() {
@@ -134,7 +156,11 @@ class StoreManagerAuthenticationFilterTest {
   @DisplayName("스토어매니저 로그인시 JWT토큰 response에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerISExist_JWTTokenInResponse() throws Exception {
+    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+        StoreManagerNameDto.class));
+
     saveEncodedPasswordPermittedStoreManager();
+
     MvcResult validStoreManger = getValidStoreManagerResponse(
         createValidStoreManagerAccountWithPermittedStatus());
     assertNotNull(
@@ -145,7 +171,11 @@ class StoreManagerAuthenticationFilterTest {
   @DisplayName("스토어매니저 로그인시 refresh토큰 HttpOnly쿠키에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerIsExist_RefreshTokenInHttpOnlyCookie() throws Exception {
+    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+        StoreManagerNameDto.class));
+
     saveEncodedPasswordPermittedStoreManager();
+
     MvcResult validStoreManager = getValidStoreManagerResponse(
         createValidStoreManagerAccountWithPermittedStatus());
     assertNotNull(validStoreManager.getResponse().getCookie(refreshTokenName));
@@ -156,19 +186,32 @@ class StoreManagerAuthenticationFilterTest {
   @DisplayName("스토어매니저 로그인시 refresh토큰 Redis에 존재 여부 체크 테스트")
   @Test
   void storeManagerLogin_WhenStoreManagerIsExist_RefreshTokenInRedis() throws Exception {
+
+    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+        StoreManagerNameDto.class));
+
+    Mockito.doNothing().when(redisRefreshTokenUtil)
+        .saveRefreshToken(email, randomCreator.toString(),
+            refreshLifeTime);
+
     saveEncodedPasswordPermittedStoreManager();
-    String refreshRedisIdName = email;
-    MvcResult validStoreManager = getValidStoreManagerResponse(
+
+    getValidStoreManagerResponse(
         createValidStoreManagerAccountWithPermittedStatus());
-    assertNotNull(redisRefreshTokenUtil.getRefreshToken(refreshRedisIdName));
+
+    verify(redisRefreshTokenUtil).saveRefreshToken(
+        email, randomCreator.toString(), refreshLifeTime);
 
   }
 
   @DisplayName("스토어매니저 상태 Pending일 경우 ThrowStoreMangerAuthException")
   @Test
-  void storeManagerLogin_WhenStoreManagerIsExistButStatusIsPending_ThrowStoreMangerAuthException()
-      throws Exception {
+  void storeManagerLogin_WhenStoreManagerIsExistButStatusIsPending_ThrowStoreMangerAuthException() {
+    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+        StoreManagerNameDto.class));
+
     saveEncodedPasswordPendingStoreManager();
+
     assertThrowsExactly(StoreManagerAuthException.class, () -> {
       getUnValidStoreManagerResponse(createValidStoreManagerAccountWithPendingStatus());
     });
@@ -182,6 +225,9 @@ class StoreManagerAuthenticationFilterTest {
   @DisplayName("스토어매니저 올바르지 않은 계정으로 로그인시 BadCredentialExceptionThrow 테스트 ")
   @Test
   void storeManagerLogin_WhenStoreManagerIsNotExist_ThrowBadCredentialException() throws Exception {
+    when(storeManagerNameRequest.getName(new AuthId(randomCreator.nextLong()))).thenReturn(mock(
+        StoreManagerNameDto.class));
+
     saveEncodedPasswordPendingStoreManager();
 
     assertEquals(401, getUnValidStoreManagerResponse(
