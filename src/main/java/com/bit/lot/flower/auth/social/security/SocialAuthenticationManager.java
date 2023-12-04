@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.social.security;
 
+import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
@@ -12,7 +13,7 @@ import org.springframework.security.core.AuthenticationException;
 public class SocialAuthenticationManager implements AuthenticationManager {
 
 
-  private final SocialLoginStrategy socialLoginStrategy;
+  private final SocialLoginStrategy<AuthId> socialLoginStrategy;
 
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {

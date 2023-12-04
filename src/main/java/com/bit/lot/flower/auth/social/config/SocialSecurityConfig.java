@@ -6,7 +6,6 @@ import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandle
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
 import com.bit.lot.flower.auth.social.security.SocialAuthenticationManager;
-import com.bit.lot.flower.auth.social.security.OauthAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.RequiredArgsConstructor;
