@@ -25,7 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class UserWithdrawalServiceTest {
+ class UserWithdrawalServiceTest {
 
   @Autowired
   SocialAuthJpaRepository repository;
