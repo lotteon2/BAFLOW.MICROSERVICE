@@ -3,6 +3,8 @@ package com.bit.lot.flower.auth.common.filter;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
+import com.bit.lot.flower.auth.common.valueobject.KakaoOAuthURLAntURI;
+import com.bit.lot.flower.auth.common.valueobject.SwaggerRequestURI;
 import java.io.IOException;
 import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
@@ -20,23 +22,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private boolean shouldNotFilterSwaggerURI(HttpServletRequest request)  {
     String requestURI = request.getRequestURI();
-    return requestURI.contains("/swagger-ui.html") || requestURI.contains("/v2/api-docs")
-        || requestURI.contains("/webjars") || requestURI.contains("/swagger-resources")
-        || requestURI.contains("/favicon");
+    return requestURI.contains(SwaggerRequestURI.UI_URI) || requestURI.contains(SwaggerRequestURI.API_DOCS_URI)
+        || requestURI.contains(SwaggerRequestURI.WEB_JARS) || requestURI.contains(SwaggerRequestURI.FAVICON)
+        || requestURI.contains(SwaggerRequestURI.RESOURCES);
   }
 
-  private boolean shouldNotFilterOauth2(HttpServletRequest request)  {
+  private boolean shouldNotFilterKakaoOauth2(HttpServletRequest request)  {
 
     String requestURI = request.getRequestURI();
-    return requestURI.contains("/kauth")
-        || requestURI.contains("/oauth") || requestURI.contains("/")
-        || requestURI.contains("/kapi");
+    return requestURI.contains(KakaoOAuthURLAntURI.KAPI)
+        || requestURI.contains(KakaoOAuthURLAntURI.KAUTH) || requestURI.contains(KakaoOAuthURLAntURI.REDIRECT)
+        || requestURI.contains(KakaoOAuthURLAntURI.OAUTH);
   }
 
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+  protected boolean shouldNotFilter(HttpServletRequest request)  {
     String requestURI = request.getRequestURI();
-    return shouldNotFilterSwaggerURI(request) || shouldNotFilterOauth2(request)
+    return shouldNotFilterSwaggerURI(request) || shouldNotFilterKakaoOauth2(request)
         || requestURI.contains("/signup")
         || requestURI.contains("/login")  || requestURI.contains("/emails");
   }
