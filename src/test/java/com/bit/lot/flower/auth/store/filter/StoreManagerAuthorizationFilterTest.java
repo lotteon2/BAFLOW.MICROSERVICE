@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
+import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
+import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;
@@ -23,6 +25,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -53,6 +58,15 @@ public class StoreManagerAuthorizationFilterTest {
   StoreMangerAuthorizationFilter authorizationFilter;
   @Autowired
   WebApplicationContext webApplicationContext;
+  @MockBean
+  RedisTemplate<Object, Object> redisTemplate;
+  @MockBean
+  RedisBlackListTokenUtil redisBlackListTokenUtil;
+  @MockBean
+  RedisRefreshTokenUtil redisRefreshTokenUtil;
+  @MockBean
+  RedisKeyValueAdapter keyValueAdapter;
+
   MockMvc mvc;
   final String claimRoleName = "ROLE";
 

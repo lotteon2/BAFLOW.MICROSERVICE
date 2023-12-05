@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class StoreMangerAuthorizationFilter extends OncePerRequestFilter {
 
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+  protected boolean shouldNotFilter(HttpServletRequest request)  {
     String requestURI = request.getRequestURI();
     return !requestURI.contains("/stores") || requestURI.contains("/stores/login") ||
         requestURI.contains("/stores/signup") ||
