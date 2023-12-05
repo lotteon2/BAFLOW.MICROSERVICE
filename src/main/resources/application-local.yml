@@ -94,7 +94,7 @@ kakao:
     request:
       uri: "/api/auth/social/kakao/login"
   logout:
-    redirect: "http://localhost:8081/login"
+    redirect: "http://localhost:9000/login"
 
 
 service:
