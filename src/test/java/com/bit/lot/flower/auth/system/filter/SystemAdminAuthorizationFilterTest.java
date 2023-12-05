@@ -3,6 +3,8 @@ package com.bit.lot.flower.auth.system.filter;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
+import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
+import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
@@ -15,6 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.redis.core.RedisKeyValueAdapter;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,6 +41,14 @@ class SystemAdminAuthorizationFilterTest {
   private SystemAdminAuthorizationFilter authorizationFilter;
   @Autowired
   private WebApplicationContext webApplicationContext;
+  @MockBean
+  RedisTemplate<Object, Object> redisTemplate;
+  @MockBean
+  RedisBlackListTokenUtil redisBlackListTokenUtil;
+  @MockBean
+  RedisRefreshTokenUtil redisRefreshTokenUtil;
+  @MockBean
+  RedisKeyValueAdapter keyValueAdapter;
   private MockMvc mvc;
 
 

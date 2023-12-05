@@ -63,13 +63,17 @@ public class StoreManagerAuthorizationFilterTest {
   @MockBean
   RedisBlackListTokenUtil redisBlackListTokenUtil;
   @MockBean
-  RedisRefreshTokenUtil redisRefreshTokenUtil;
-  @MockBean
   RedisKeyValueAdapter keyValueAdapter;
 
   MockMvc mvc;
   final String claimRoleName = "ROLE";
 
+
+  @BeforeEach
+  void setUp() {
+    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authorizationFilter)
+        .build();
+  }
 
   private void saveValidStoreManagerUser() {
     repository.save(StoreManagerAuth.builder().email(email).password(password).id(storeManagerPk)
@@ -106,11 +110,6 @@ public class StoreManagerAuthorizationFilterTest {
         .andReturn();
   }
 
-  @BeforeEach
-  void setUp() {
-    mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).addFilter(authorizationFilter)
-        .build();
-  }
 
   /**
    * @throws IllegalArgumentException 해당 error를 해당 Filter에서 try catch하지 않는 이유는 해당 error를
