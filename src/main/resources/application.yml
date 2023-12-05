@@ -1,3 +1,16 @@
+server:
+  port: 9000
 spring:
-  profiles:
-    active: local
+  application:
+    name: auth-service
+  config:
+    activate:
+      on-profile: local, dev, local
+    import: optional:configserver:http://localhost:8888
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "refresh"
+          - "bus-refresh"

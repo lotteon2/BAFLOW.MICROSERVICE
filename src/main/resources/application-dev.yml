@@ -1,8 +1,5 @@
-server:
-  port: ${server.port}
+
 spring:
-  application:
-    name: auth-service
   config:
     activate:
       on-profile: dev

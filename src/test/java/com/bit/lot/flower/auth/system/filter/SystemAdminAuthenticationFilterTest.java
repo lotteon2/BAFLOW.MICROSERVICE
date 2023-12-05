@@ -2,12 +2,10 @@ package com.bit.lot.flower.auth.system.filter;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static reactor.core.publisher.Mono.when;
 
 
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
@@ -47,9 +45,11 @@ import org.springframework.web.context.WebApplicationContext;
 class SystemAdminAuthenticationFilterTest {
 
   @Value("${system.admin.id}")
-  String id;
+  Long id;
   @Value("${system.admin.password}")
   String password;
+  Long unValidId = 1000L;
+  String unValidPassword = "unValidPassword";
   @Value("${cookie.refresh.token.name}")
   String refreshTokenName;
 
@@ -80,7 +80,7 @@ class SystemAdminAuthenticationFilterTest {
 
 
   private SystemAdminLoginDto createUnValidSystemAdminAccount() {
-    return new SystemAdminLoginDto("unValidId", "unValidPassword");
+    return new SystemAdminLoginDto(unValidId, unValidPassword);
   }
 
   private SystemAdminLoginDto createValidSystemAdminAccount() {
@@ -102,7 +102,7 @@ class SystemAdminAuthenticationFilterTest {
 
   private void getUnValidSystemAdminUserResult(SystemAdminLoginDto unValidDto)
       throws Exception {
-    System.out.println("dto:{}" + unValidDto.getEmail());
+    System.out.println("dto:{}" + unValidDto.getId());
     mvc.perform(MockMvcRequestBuilders
             .post("/api/auth/admin/login")
             .contentType(MediaType.APPLICATION_JSON)
@@ -114,7 +114,7 @@ class SystemAdminAuthenticationFilterTest {
   @DisplayName("잘못된 계정으로 로그인 시도")
   @Test
   void Login_WhenIdAndPasswordAreNotMatched_CatchBadCredentialException()
-      throws Exception {
+       {
     SystemAdminLoginDto dto = createUnValidSystemAdminAccount();
     assertThrows(SystemAdminAuthException.class, () -> {
       getUnValidSystemAdminUserResult(dto);

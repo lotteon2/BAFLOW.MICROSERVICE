@@ -1,21 +1,19 @@
 
 spring:
-  redis:
-    host: localhost
-    port: 6379
   config:
     activate:
-      on-profile: local
+      on-profile: dev
+  redis:
+    host: ${spring.redis.host}
+    port: ${spring.redis.port}
   datasource:
-    url: jdbc:mysql://localhost:3306/bb-auth-service?serverTimezone=Asia/Seoul
-    username: root
-    password: k1651227
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${spring.datasoure.url}
+    username: ${spring.datasource.username}
+    password: ${spring.datasoure.password}
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-    show-sql: true
-
   security:
     oauth2:
       client:
@@ -30,9 +28,8 @@ spring:
             client-id: 5dca3ee52a5c5e81b0415473b05366f0
             client-secret: RifFZkO0SBAISOUJn2XsGVRczr0h9qFj
             client-authentication-method: client_secret_post
-            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+            redirect-uri: ${oauth.redirect.domain}/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
-            admin-key: 683205e509c2892ef3444c44e91d1ebe
             client-name: kakao
             scope:
               - profile_nickname
@@ -40,23 +37,21 @@ spring:
 
 
   mail:
-    host: smtp.gmail.com
+    host: ${email.send.host}
     port: 587
-    username: rnwldnd7248@gmail.com
-    password: ${mail.host.port.password}
+    username: ${email.send.email}
+    password: ${email.send.passord}
     properties:
       mail:
-       smtp:
-        auth: true
-        starttls:
-          enable: true
-
-
-
-
-email:
-  send:
-    from: bbFlower@no-reply.co.kr
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+    auth-code-expiration-millis: 1800000
 
 
 feign:
@@ -67,22 +62,34 @@ feign:
         readTimeout: 5000
         loggerLevel: basic
 
+email:
+  send:
+    from: ${email.send.from}
+
+
+jwt:
+  access:
+    secret: ${jwt.access.secret}
+    lifetime: ${jwt.access.lifetime}
+  refresh:
+    secret: ${jwt.refresh.secret}
+    lifetime: ${jwt.refresh.lifetime}
+
+
+
+
 cookie:
   refresh:
     http:
-      domain: localhost:8081
+      domain: ${cookie.refresh.http.domain}
     token:
-      name: refresh-cookie
+        name: ${cookie.refresh.token.name}
 
 system:
   admin:
-    id: 100
-    password: bb-flower-password
+    id: ${system.admin.id}
+    password: ${system.admin.password}
 
-store:
-  manager:
-    id: store-manageer-id
-    password: store-manager-password
 
 security:
   authorization:
@@ -92,11 +99,11 @@ security:
 kakao:
   login:
     request:
-      uri: "/api/auth/social/kakao/login"
+      uri: ${kakao.login.request.uri}
   logout:
-    redirect: "http://localhost:8081/login"
+    redirect: ${kakao.logout.redirect}
 
 
 service:
   user:
-    domain: http://localhost:8082
+    domain: ${service.user.domain}
