@@ -1,19 +1,14 @@
 package com.bit.lot.flower.auth.store.http.controller;
 
 
-import com.bit.lot.flower.auth.common.util.AuthIdCreator;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
-import com.bit.lot.flower.auth.store.http.StoreManagerIdRequest;
 import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
-import com.bit.lot.flower.auth.store.http.feign.StoreManagerNameFeignRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerService;
-import com.bit.lot.flower.auth.store.valueobject.StoreId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
@@ -30,11 +25,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController("store")
 @Api(value="store-auth")
-public class StoreManagerRestController {
+public class StoreManagerRestController{
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
-  private final StoreManagerService<AuthId> storeManagerService;
+  private final StoreManagerService storeManagerService;
   private final StoreMangerCreateRequest storeMangerCreateRequest;
 
 
@@ -67,8 +62,8 @@ public class StoreManagerRestController {
   @ApiOperation(value = "스토어 매니저 로그아웃",notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/api/auth/stores/logout")
-  public ResponseEntity<String> logout(@AuthenticationPrincipal String authId) {
-    storeManagerService.logout(AuthIdCreator.getAuthIdFromString(authId));
+  public ResponseEntity<String> logout(@AuthenticationPrincipal AuthId authId) {
+    storeManagerService.logout(authId);
     return ResponseEntity.ok("스토어 매니저 로그아웃 완료");
   }
 

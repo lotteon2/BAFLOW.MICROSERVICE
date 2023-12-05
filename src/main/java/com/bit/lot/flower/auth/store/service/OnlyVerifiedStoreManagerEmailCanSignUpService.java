@@ -1,5 +1,7 @@
 package com.bit.lot.flower.auth.store.service;
 
+import com.bit.lot.flower.auth.common.valueobject.BaseId;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
@@ -25,7 +27,8 @@ public class OnlyVerifiedStoreManagerEmailCanSignUpService implements
       throw new StoreManagerAuthException("이메일 중복확인과 인증을 해주세요.");
     } else {
       StoreManagerAuth storeManagerAuth = saveStoreMangerWhenEmailIsVerified(dto);
-      return storeManagerAuth.getId();
+      return storeManagerAuth.getId()
+          ;
     }
   }
 

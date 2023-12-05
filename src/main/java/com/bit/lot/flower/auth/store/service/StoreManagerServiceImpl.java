@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.store.service;
 
+
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class StoreManagerServiceImpl<ID extends AuthId> implements StoreManagerService<ID> {
+public class StoreManagerServiceImpl implements StoreManagerService {
 
   private final StoreManagerAuthRepository repository;
   private final StoreManagerSingUpService singUpService;
@@ -23,13 +24,11 @@ public class StoreManagerServiceImpl<ID extends AuthId> implements StoreManagerS
   }
 
   @Override
-  public void logout(ID id) {
-    StoreManagerAuth auth = repository.findById(id.getValue()).orElseThrow(() -> {
+  public void logout(AuthId id) {
+       StoreManagerAuth auth = repository.findById(id.getValue()).orElseThrow(() -> {
       throw new StoreManagerAuthException("존재하지 않는 스토어 매니저 유저입니다.");
     });
     repository.save(StoreManagerDataMapper.updatedCurrentLogOutTime(auth,ZonedDateTime.now()));
   }
-
-
 
 }
