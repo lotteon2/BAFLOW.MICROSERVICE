@@ -55,8 +55,9 @@ public class SystemAdminSecurityConfig {
     return new SystemAdminAuthenticationManager(adminId, adminPassword);
   }
 
+  @Qualifier("systemAdminAuthenticationFilter")
   @Bean
-  public SystemAdminAuthenticationFilter systemAdminAuthenticationFilter() {
+  public UsernamePasswordAuthenticationFilter systemAdminAuthenticationFilter() {
     SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
         systemAuthenticationManager());
     systemAdminAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);

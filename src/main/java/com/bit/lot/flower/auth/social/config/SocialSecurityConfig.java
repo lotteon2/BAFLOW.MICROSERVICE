@@ -55,13 +55,14 @@ public class SocialSecurityConfig {
     return new SocialAuthenticationManager(socialLoginStrategy);
   }
 
+  @Qualifier("SocialAuthenticationFilter")
   @Bean
-  SocialAuthenticationFilter socialAuthenticationFilter() {
-    SocialAuthenticationFilter filter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,
+  UsernamePasswordAuthenticationFilter socialAuthenticationFilter() {
+    SocialAuthenticationFilter socialAuthenticationFilter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,
         socialAuthenticationManager());
-    filter.setFilterProcessesUrl("/api/auth/social/**/login");
-    filter.setAuthenticationSuccessHandler(systemAuthenticationSuccessHandler);
-    return filter;
+    socialAuthenticationFilter.setFilterProcessesUrl("/api/auth/social/**/login");
+    socialAuthenticationFilter.setAuthenticationSuccessHandler(systemAuthenticationSuccessHandler);
+    return socialAuthenticationFilter;
   }
 
 }

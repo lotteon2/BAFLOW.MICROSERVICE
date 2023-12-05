@@ -60,8 +60,9 @@ public class StoreManagerSecurityConfig {
     return new BCryptPasswordEncoder();
   }
 
+  @Qualifier("storeManagerAuthenticationFilter")
   @Bean
-  public StoreManagerAuthenticationFilter storeManagerAuthenticationFilter() {
+  public UsernamePasswordAuthenticationFilter storeManagerAuthenticationFilter() {
     StoreManagerAuthenticationFilter authenticationFilter = new StoreManagerAuthenticationFilter(
         authenticationSuccessHandler,storeAuthenticationManager());
     authenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
