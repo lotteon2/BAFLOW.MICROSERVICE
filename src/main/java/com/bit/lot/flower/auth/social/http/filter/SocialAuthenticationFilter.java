@@ -75,8 +75,7 @@ public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFi
     SecurityContext context = SecurityContextHolder.createEmptyContext();
     context.setAuthentication(authResult);
     SecurityContextHolder.setContext(context);
-    handler.onAuthenticationSuccess(request, response, authResult);
-    chain.doFilter(request, response);
+    handler.onAuthenticationSuccess(request, response,chain, authResult);
   }
 
 

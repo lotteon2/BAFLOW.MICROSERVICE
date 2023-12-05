@@ -99,4 +99,4 @@ kakao:
 
 service:
   user:
-    domain: http://localhost:8082
+    domain: http://localhost:8600
