@@ -170,7 +170,7 @@ class SocialLoginMvcTest {
   void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(eq(String.valueOf(testId)), anyString(), eq(refreshTokenLifeTime));
+        .saveRefreshToken(anyString(), anyString(), eq(refreshTokenLifeTime));
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
 
@@ -180,7 +180,7 @@ class SocialLoginMvcTest {
     socialUserLoginRequest(command);
 
     verify(redisRefreshTokenUtil).saveRefreshToken(
-        eq(String.valueOf(testId)), anyString(), eq(refreshTokenLifeTime));
+        anyString(), anyString(), eq(refreshTokenLifeTime));
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")

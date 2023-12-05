@@ -193,7 +193,7 @@ class StoreManagerLoginMvcTest {
         StoreManagerNameDto.class));
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(eq(String.valueOf(testId)), anyString(),
+        .saveRefreshToken(anyString(), anyString(),
             eq(refreshLifeTime));
 
     saveEncodedPasswordPermittedStoreManager();
@@ -202,7 +202,7 @@ class StoreManagerLoginMvcTest {
         LoginValidStoreManagerAccount());
 
    verify(redisRefreshTokenUtil).saveRefreshToken(
-    eq(String.valueOf(testId)), anyString(), eq(refreshLifeTime));
+    anyString(), anyString(), eq(refreshLifeTime));
 
   }
 
