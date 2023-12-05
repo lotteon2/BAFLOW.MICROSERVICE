@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.common.config;
 
-import com.bit.lot.flower.auth.common.interceptor.CommonLogoutInterceptor;
+import com.bit.lot.flower.auth.common.http.interceptor.CommonLogoutInterceptor;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

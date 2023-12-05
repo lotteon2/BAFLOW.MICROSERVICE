@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.store.config;
 
-import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
-import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.http.interceptor.filter.ExceptionHandlerFilter;
+import com.bit.lot.flower.auth.common.http.interceptor.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 import com.bit.lot.flower.auth.store.http.filter.StoreMangerAuthorizationFilter;

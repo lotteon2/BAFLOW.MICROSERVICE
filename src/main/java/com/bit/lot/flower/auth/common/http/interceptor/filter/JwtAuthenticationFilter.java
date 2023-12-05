@@ -1,10 +1,12 @@
-package com.bit.lot.flower.auth.common.filter;
+package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
+import com.bit.lot.flower.auth.common.valueobject.JWTAuthenticationShouldNotFilterAntMatcher;
 import com.bit.lot.flower.auth.common.valueobject.KakaoOAuthURLAntURI;
 import com.bit.lot.flower.auth.common.valueobject.SwaggerRequestURI;
+import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 import javax.security.sasl.AuthenticationException;
 import javax.servlet.FilterChain;
@@ -39,8 +41,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   protected boolean shouldNotFilter(HttpServletRequest request)  {
     String requestURI = request.getRequestURI();
     return shouldNotFilterSwaggerURI(request) || shouldNotFilterKakaoOauth2(request)
-        || requestURI.contains("/signup")
-        || requestURI.contains("/login")  || requestURI.contains("/emails");
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT);
   }
 
   @Override
@@ -50,7 +53,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     if (redisBlackListTokenUtil.isTokenBlacklisted(token)) {
       throw new AuthenticationException("해당 토큰은 이미 로그아웃 처리된 토큰이라 사용할 수 없는 토큰입니다.");
     }
-    JwtUtil.isTokenValid(token);
+    try {
+      JwtUtil.isTokenValid(token);
+    } catch (ExpiredJwtException e) {
+      response.setStatus(403);
+    }
     filterChain.doFilter(request, response);
   }
 }

@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.common.interceptor;
+package com.bit.lot.flower.auth.common.http.interceptor;
 
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
