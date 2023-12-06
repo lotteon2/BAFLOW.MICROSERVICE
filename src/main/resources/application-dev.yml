@@ -34,6 +34,8 @@ spring:
             scope:
               - profile_nickname
               - account_email
+              - phone_number
+
 
 
   mail:

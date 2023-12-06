@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
-  @Value("${kakao.login.redirect.url}")
-  private String redirectURL;
   private final OauthUserInfoFacade oauthUserInfoFacade;
 
   @Override
