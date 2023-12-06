@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
+import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.JWTAuthenticationShouldNotFilterAntMatcher;
@@ -57,7 +58,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       JwtUtil.isTokenValid(token);
     } catch (ExpiredJwtException e) {
       response.setStatus(403);
+      response.set
     }
     filterChain.doFilter(request, response);
+  }
+
+  private HttpServletResponse setResponseWhenTokenIsExpiredForCheckingRefreshToken(
+      HttpServletResponse response) {
+      response.setStatus(403);
+      JsonBinderUtil.setResponseWithJson(response,403,)
   }
 }

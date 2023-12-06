@@ -22,13 +22,12 @@ public class IssueRefreshRefreshTokenInCookie implements
   @Value("${cookie.refresh.token.name}")
   private  String refreshCookieName;
 
-
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   @Override
   public void createRefreshToken(String userId,HttpServletResponse response) {
     String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
-    redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
+    redisRefreshTokenUtil.saveRefreshToken(refreshToken, userId,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
     response.addCookie(CookieUtil.createHttpOnlyCookie(refreshCookieName, refreshToken,
         Duration.ofDays(1), domain));

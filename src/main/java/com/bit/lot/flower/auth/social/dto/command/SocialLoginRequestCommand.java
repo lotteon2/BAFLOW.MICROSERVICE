@@ -14,5 +14,6 @@ import lombok.NoArgsConstructor;
 public class SocialLoginRequestCommand {
   private AuthId socialId;
   private String email;
+  private String phoneNumber;
   private String nickname;
 }

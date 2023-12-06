@@ -36,9 +36,11 @@ public class OauthUserInfoFacade {
     LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
     LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
     String id = oAuth2User.getName();
-    String email = kakaoAccount.get("email");
+    String email = kakaoAccount.get("account_email");
+    String phoneNumber = kakaoAccount.get("phone_number");
     String nickname = properties.get("nickname");
     return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
+        .phoneNumber(phoneNumber)
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
 

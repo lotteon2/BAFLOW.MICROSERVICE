@@ -25,10 +25,10 @@ public class TokenHandler {
     refreshTokenStrategy.invalidateRefreshToken(id, response);
   }
 
-//  public String renewExpiredToken(String id,
-//      Map<String, Object> claimList,HttpServletResponse response){
-//    refreshTokenStrategy.renewRefreshToken(id,response);
-//    createToken()
-//  }
+  public String renewExpiredToken(String id,
+      Map<String, Object> claimList,HttpServletResponse response){
+    refreshTokenStrategy.renewRefreshToken(id,response);
+    createToken()
+  }
 
 }

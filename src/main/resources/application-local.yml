@@ -27,12 +27,12 @@ spring:
             user-name-attribute: id
         registration:
           kakao:
-            client-id: 5dca3ee52a5c5e81b0415473b05366f0
-            client-secret: RifFZkO0SBAISOUJn2XsGVRczr0h9qFj
+            client-id: 7f313aaa30b302cd7ae2b48cf2d2b7cd
+            client-secret: Wl5VDUbX9KsRymQW2S4MhoPvAPqdD7kC
             client-authentication-method: client_secret_post
             redirect-uri: http://localhost:9000/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
-            admin-key: 683205e509c2892ef3444c44e91d1ebe
+            admin-key: ffc238f9c4e55c2fa85f551f882eda68
             client-name: kakao
             scope:
               - profile_nickname
