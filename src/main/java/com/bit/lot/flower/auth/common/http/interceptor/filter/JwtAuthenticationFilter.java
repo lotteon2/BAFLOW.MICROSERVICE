@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
 import com.bit.lot.flower.auth.common.dto.RenewAccessTokenDto;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
+import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.JWTAuthenticationShouldNotFilterAntMatcher;
@@ -61,12 +62,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       JwtUtil.isTokenValid(token);
     } catch (ExpiredJwtException e) {
-<<<<<<< Updated upstream
-      response.setStatus(403);
-    }
-    filterChain.doFilter(request, response);
-  }
-=======
       setResponseWhenTokenIsExpiredForCheckingRefreshToken(response, e);
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰입니다. Refresh토큰을 확인하세요");
     }
@@ -85,5 +80,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         .role(Role.valueOf(e.getClaims().get(
             SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME, String.class))).build();
   }
->>>>>>> Stashed changes
 }
