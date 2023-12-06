@@ -33,7 +33,7 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
     if (redisRefreshTokenUtil.getRefreshToken(refreshTokenAtCookie) == null) {
       throw new IllegalArgumentException("유효한 접근이 아닙니다. Refresh토큰을 확인해주세요");
     }
-    return tokenHandler.createToken(id, createClaimsRoleMap(role), response);
+    return tokenHandler.createToken(id.getValue().toString(), createClaimsRoleMap(role), response);
   }
 
   private Map<String, Object> createClaimsRoleMap(Role role) {
