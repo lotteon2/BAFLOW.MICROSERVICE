@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.store.security;
 
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
@@ -7,6 +8,7 @@ import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import java.util.Collections;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,7 +52,7 @@ public class StoreAuthenticationManager implements AuthenticationManager {
     if (storeManagerAuth.getStatus().equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
       throw new StoreManagerAuthException("관리자의 승인을 기다려주새요.");
     }
-    return new UsernamePasswordAuthenticationToken(storeManagerAuth.getEmail(),
+    return new UsernamePasswordAuthenticationToken(new AuthId(storeManagerAuth.getId()),
         storeManagerAuth.getPassword(), Collections.singleton(
         new SimpleGrantedAuthority(storeManagerAuth.getStatus().toString())));
   }

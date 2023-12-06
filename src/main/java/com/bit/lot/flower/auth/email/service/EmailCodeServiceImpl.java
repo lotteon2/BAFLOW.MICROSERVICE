@@ -25,7 +25,7 @@ public class EmailCodeServiceImpl implements
   public void create(String email) {
     String randomEmailCode = EmailVerificationCodeGenerator.generateVerificationCode();
     EmailCode code =
-        EmailCode.builder().createdAt(ZonedDateTime.now()).email(email).emailCode(randomEmailCode
+        EmailCode.builder().email(email).emailCode(randomEmailCode
         ).build();
     jpaRepository.save(code);
     sendEmailService.sendEmail(email,SEND_EMAIL_TITLE,randomEmailCode);

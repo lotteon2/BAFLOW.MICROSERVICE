@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public interface RefreshTokenStrategy {
-  public void createRefreshToken(HttpServletRequest request);
-  public void invalidateRefreshToken(HttpServletRequest request, HttpServletResponse response);
+  public void createRefreshToken(String id, HttpServletResponse response);
+  public void invalidateRefreshToken(String id, HttpServletResponse response);
 }

@@ -1,0 +1,102 @@
+
+spring:
+  redis:
+    host: localhost
+    port: 6379
+  config:
+    activate:
+      on-profile: local
+  datasource:
+    url: jdbc:mysql://localhost:3306/bb-auth-service?serverTimezone=Asia/Seoul
+    username: root
+    password: k1651227
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+        registration:
+          kakao:
+            client-id: 5dca3ee52a5c5e81b0415473b05366f0
+            client-secret: RifFZkO0SBAISOUJn2XsGVRczr0h9qFj
+            client-authentication-method: client_secret_post
+            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            admin-key: 683205e509c2892ef3444c44e91d1ebe
+            client-name: kakao
+            scope:
+              - profile_nickname
+              - account_email
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: rnwldnd7248@gmail.com
+    password: ${mail.host.port.password}
+    properties:
+      mail:
+       smtp:
+        auth: true
+        starttls:
+          enable: true
+
+
+
+
+email:
+  send:
+    from: bbFlower@no-reply.co.kr
+
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 5000
+        readTimeout: 5000
+        loggerLevel: basic
+
+cookie:
+  refresh:
+    http:
+      domain: localhost:8081
+    token:
+      name: refresh-cookie
+
+system:
+  admin:
+    id: 100
+    password: bb-flower-password
+
+store:
+  manager:
+    id: store-manageer-id
+    password: store-manager-password
+
+security:
+  authorization:
+    header:
+      name: Authorization
+
+kakao:
+  login:
+    request:
+      uri: "/api/auth/social/kakao/login"
+  logout:
+    redirect: "http://localhost:9000/login"
+
+
+service:
+  user:
+    domain: http://localhost:8600

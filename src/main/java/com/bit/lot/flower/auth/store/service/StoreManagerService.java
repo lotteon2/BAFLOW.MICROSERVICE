@@ -1,11 +1,11 @@
 package com.bit.lot.flower.auth.store.service;
 
-import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
+import org.springframework.stereotype.Service;
 
-public interface StoreManagerService<Id> {
-
-  public void login(String email, String password);
-  public void logout(Id id);
-
+@Service
+public interface StoreManagerService {
+  Long signUp(StoreMangerSignUpCommand signUpDto);
+  void logout(AuthId id);
 }

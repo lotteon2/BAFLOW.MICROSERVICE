@@ -2,60 +2,67 @@ package com.bit.lot.flower.auth.social.config;
 
 import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
-import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
-import com.bit.lot.flower.auth.social.filter.SocialAuthorizationFilter;
-import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
-import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
+import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
+import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
+import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
+import com.bit.lot.flower.auth.social.security.SocialAuthenticationManager;
+import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.ExceptionTranslationFilter;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @RequiredArgsConstructor
+@Configuration
 @EnableWebSecurity
 public class SocialSecurityConfig {
 
+  private final SystemAuthenticationSuccessHandler systemAuthenticationSuccessHandler;
+  private final SocialLoginStrategy<AuthId> socialLoginStrategy;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
-  private final OAuth2UserLoadService oAuth2UserService;
 
+
+  @Order(1)
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain socialSecurityFilterChain(HttpSecurity http) throws Exception {
     http.csrf().disable();
-    http.regexMatcher("/oauth");
-    http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
-    http.oauth2Login(oauth2Configurer -> oauth2Configurer
-        .successHandler(successHandler())
-        .userInfoEndpoint()
-        .userService(oAuth2UserService));
-    http.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    http.addFilterAfter(socialAuthorizationFilter(), JwtAuthenticationFilter.class);
-    http.addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
+    http.authorizeRequests(
+        authorize -> authorize.regexMatchers("^\\/api\\/auth\\/social\\/.*$").permitAll());
+    http
+        .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterAfter(socialAuthorizationFilter(), JwtAuthenticationFilter.class)
+        .addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
     return http.build();
   }
 
   @Bean
-  public SocialAuthorizationFilter socialAuthorizationFilter() {
+  SocialAuthorizationFilter socialAuthorizationFilter() {
     return new SocialAuthorizationFilter();
   }
 
-
+  @Qualifier("socialAuthenticationManager")
   @Bean
-  public AuthenticationSuccessHandler successHandler() {
-    return ((request, response, authentication) -> {
-      DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-      SocialLoginRequestCommand command = SocialLoginRequestCommand.builder()
-          .email(defaultOAuth2User.getAttributes().get("email").toString())
-          .nickname(defaultOAuth2User.getAttributes().get("nickname").toString())
-          .socialId(SocialAuthId.builder()
-              .value((Long) defaultOAuth2User.getAttributes().get("id")).build()).build();
-      request.setAttribute("command", command);
-    });
+  AuthenticationManager socialAuthenticationManager() {
+    return new SocialAuthenticationManager(socialLoginStrategy);
+  }
+
+  @Qualifier("SocialAuthenticationFilter")
+  @Bean
+  UsernamePasswordAuthenticationFilter socialAuthenticationFilter() {
+    SocialAuthenticationFilter socialAuthenticationFilter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,
+        socialAuthenticationManager());
+    socialAuthenticationFilter.setFilterProcessesUrl("/api/auth/social/**/login");
+    socialAuthenticationFilter.setAuthenticationSuccessHandler(systemAuthenticationSuccessHandler);
+    return socialAuthenticationFilter;
   }
 
 }

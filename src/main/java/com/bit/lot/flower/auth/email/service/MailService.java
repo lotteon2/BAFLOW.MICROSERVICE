@@ -36,6 +36,7 @@ public class MailService {
                                              String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
+        message.setFrom(toEmail);
         message.setSubject(title);
         message.setText(text);
 

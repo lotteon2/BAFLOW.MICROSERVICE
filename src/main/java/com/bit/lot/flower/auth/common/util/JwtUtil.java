@@ -3,66 +3,77 @@ package com.bit.lot.flower.auth.common.util;
 
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SignatureException;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.stereotype.Component;
 
+@RequiredArgsConstructor
+@Component
 @Slf4j
 public class JwtUtil {
 
-  @Value("jwt.access.secret")
-  private static String ACCESS_SECRET_KEY;
-  @Value("jwt.refresh.secret")
-  private static String REFRESH_SECRET_KEY;
-  private static SecretKey refreshSecretKey;
-  private static SecretKey accessSecretKey;
+  private static SecretKey accessSecret;
+  private static SecretKey refreshSecret;
+
 
   public static String generateAccessTokenWithClaims(String subject,
       Map<String, Object> claimsList) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME);
-    initKey();
+
+    initAccessKey();
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(expiryDate)
-        .signWith(accessSecretKey)
+        .setExpiration(Date.from(Instant.now().plusMillis(
+            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
+        .signWith(accessSecret)
         .addClaims(claimsList)
         .compact();
   }
 
-  public static Map<String,Object> addClaims(String id, Object value){
-    Map<String,Object> claims =new HashMap<>();
-    claims.put(id,value);
-      return claims;
+  public static Map<String, Object> addClaims(String id, Object value) {
+    Map<String, Object> claims = new HashMap<>();
+    claims.put(id, value);
+    return claims;
   }
 
   public static String generateAccessToken(String subject) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME);
-    initKey();
+
+    initAccessKey();
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(expiryDate)
-        .signWith(accessSecretKey)
+        .setExpiration(Date.from(Instant.now().plusMillis(
+            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
+        .signWith(accessSecret)
         .compact();
   }
 
   public static String generateRefreshToken(String subject) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME);
-    initKey();
+    initRefreshKey();
+
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(expiryDate)
-        .signWith(refreshSecretKey)
+        .setExpiration(Date.from(Instant.now().plusMillis(
+            Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME))))
+        .signWith(refreshSecret)
         .compact();
   }
 
@@ -71,21 +82,38 @@ public class JwtUtil {
   }
 
   public static Claims extractClaims(String token) {
-    return Jwts.parserBuilder().setSigningKey(accessSecretKey).build().parseClaimsJws(token)
+    return Jwts.parserBuilder().setSigningKey(accessSecret).build().parseClaimsJws(token)
         .getBody();
   }
 
-  public static boolean isTokenValid(String token) {
+  public static void isTokenValid(String token) {
     try {
-      Claims claims = extractClaims(token);
-      return !claims.getExpiration().before(new Date());
-    } catch (Exception e) {
-      return false;
+      extractClaims(token);
+    } catch (ExpiredJwtException expiredJwtException) {
+      throw new JwtException("토큰 시간이 만료되었습니다.") {
+      };
+    } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+      throw new IllegalArgumentException("올바르지 않은 접근입니다.");
     }
   }
 
-  private static void initKey() {
-    accessSecretKey = Keys.hmacShaKeyFor(ACCESS_SECRET_KEY.getBytes());
-    refreshSecretKey = Keys.hmacShaKeyFor(REFRESH_SECRET_KEY.getBytes());
+    private static void initRefreshKey() {
+      try {
+        refreshSecret = KeyGenerator.getInstance("HmacSHA256").generateKey();
+
+      } catch (NoSuchAlgorithmException e) {
+        throw new IllegalArgumentException("plz init the secret key");
+      }
+    }
+
+
+    private static void initAccessKey() {
+      try {
+        accessSecret = KeyGenerator.getInstance("HmacSHA256").generateKey();
+
+      } catch (NoSuchAlgorithmException e) {
+        throw new IllegalArgumentException("plz init the secret key");
+      }
+
+    }
   }
-}

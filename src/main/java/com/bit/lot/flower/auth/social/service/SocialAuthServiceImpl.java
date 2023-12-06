@@ -1,38 +1,33 @@
 package com.bit.lot.flower.auth.social.service;
 
-import com.bit.lot.flower.auth.social.entity.SocialAuth;
-import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
-import com.bit.lot.flower.auth.social.valueobject.SocialAuthId;
-import java.util.Optional;
+import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class SocialAuthServiceImpl implements
-    SocialAuthService<SocialAuthId> {
+public class SocialAuthServiceImpl<ID extends AuthId> implements
+    SocialAuthService<ID> {
 
-  private final SocialLoginStrategy loginStrategy;
-  private final SocialUserWithdrawalStrategy<SocialAuthId> userWithdrawalStrategy;
-  private final SocialLogoutStrategy<SocialAuthId> logoutStrategy;
-  private final SignUpStrategy<SocialAuthId> signUpWhenUserIsNotExisted;
-  private final SocialAuthJpaRepository repository;
+  private final SocialLoginStrategy<ID> loginStrategy;
+  private final SocialUserWithdrawalStrategy<ID> userWithdrawalStrategy;
+  private final SocialLogoutStrategy<ID> logoutStrategy;
 
 
   @Transactional
   @Override
-  public void login(SocialAuthId socialId) {
+  public void login(ID socialId) {
     loginStrategy.login(socialId);
   }
 
   @Override
-  public void logout(SocialAuthId socialId) {
+  public void logout(ID socialId) {
     logoutStrategy.logout(socialId);
   }
 
   @Override
-  public void userWithdrawalUserSelf(SocialAuthId socialId) {
+  public void userWithdrawalUserSelf(ID socialId) {
     logoutStrategy.logout(socialId);
     userWithdrawalStrategy.delete(socialId);
   }
