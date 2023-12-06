@@ -1,8 +1,6 @@
 package com.bit.lot.flower.auth.common.security;
 
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,6 +13,7 @@ public class TokenHandler {
   private final JwtAccessTokenCreateProcessor accessTokenStrategy;
   private final JwtAccessTokenDeleteStrategy deleteStrategy;
 
+
   public String createToken(String id,
       Map<String, Object> claimList,HttpServletResponse response) {
     refreshTokenStrategy.createRefreshToken(id,response);
@@ -25,4 +24,6 @@ public class TokenHandler {
     deleteStrategy.invalidateAccessToken(token);
     refreshTokenStrategy.invalidateRefreshToken(id, response);
   }
+
+
 }

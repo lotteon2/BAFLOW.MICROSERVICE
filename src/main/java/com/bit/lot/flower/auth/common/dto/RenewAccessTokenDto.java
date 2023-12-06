@@ -1,19 +1,18 @@
-package com.bit.lot.flower.auth.social.dto.command;
+package com.bit.lot.flower.auth.common.dto;
 
 import com.bit.lot.flower.auth.common.valueobject.BaseId;
+import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class SocialLoginRequestCommand {
-  private AuthId socialId;
-  private String email;
-  private String phoneNumber;
-  private String nickname;
+public class RenewAccessTokenDto<T extends BaseId> {
+  T authId;
+  Role role;
+
 }

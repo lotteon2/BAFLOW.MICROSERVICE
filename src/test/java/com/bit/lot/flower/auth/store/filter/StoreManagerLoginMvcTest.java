@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.store.filter;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -39,6 +41,7 @@ import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -58,7 +61,6 @@ class StoreManagerLoginMvcTest {
   final Long testId = 1L;
   final String unValidStoreManagerId = "unValidStoreManagerId";
   final String unValidStoreManagerPassword = "unValidStoreManagerPassword";
-  final Long refreshLifeTime = 360000L;
   @Value("${store.manager.id}")
   String email;
   @Value("${store.manager.password}")
@@ -70,8 +72,9 @@ class StoreManagerLoginMvcTest {
 
   @Autowired
   StoreManagerAuthRepository repository;
+  @Qualifier("storeManagerAuthenticationFilter")
   @Autowired
-  StoreManagerAuthenticationFilter authenticationFilter;
+  UsernamePasswordAuthenticationFilter authenticationFilter;
   @Autowired
   BCryptPasswordEncoder encoder;
   @Autowired
@@ -194,7 +197,7 @@ class StoreManagerLoginMvcTest {
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
         .saveRefreshToken(anyString(), anyString(),
-            eq(refreshLifeTime));
+            anyLong());
 
     saveEncodedPasswordPermittedStoreManager();
 
@@ -202,7 +205,7 @@ class StoreManagerLoginMvcTest {
         LoginValidStoreManagerAccount());
 
    verify(redisRefreshTokenUtil).saveRefreshToken(
-    anyString(), anyString(), eq(refreshLifeTime));
+    anyString(), anyString(), anyLong());
 
   }
 

@@ -22,7 +22,6 @@ public class IssueRefreshRefreshTokenInCookie implements
   @Value("${cookie.refresh.token.name}")
   private  String refreshCookieName;
 
-
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   @Override
@@ -39,4 +38,10 @@ public class IssueRefreshRefreshTokenInCookie implements
     CookieUtil.deleteCookie(refreshCookieName, domain);
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
+
+  @Override
+  public void renewRefreshToken(String id, HttpServletResponse response) {
+
+  }
+
 }

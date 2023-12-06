@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.common.filter;
+package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
 import com.bit.lot.flower.auth.common.exception.ErrorDTO;
 import com.bit.lot.flower.auth.common.util.JsonBinderUtil;

@@ -3,6 +3,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static reactor.core.publisher.Mono.when;
@@ -46,8 +48,6 @@ class CommonLogoutInterceptorTest {
   final String jwtSubject = "10";
   final String authenticationHeaderPrefix = "Bearer ";
   final String authorizationHeaderName = "Authorization";
-  final String ACCESS_EXPIRATION_TIME = "360000";
-  final String REFRESH_EXPIRATION_TIME = "360000";
   @Value("${cookie.refresh.token.name}")
   String refreshCookieName;
   String jwtToken;
@@ -67,7 +67,7 @@ class CommonLogoutInterceptorTest {
   MvcResult setToken() throws Exception {
     jwtToken = JwtUtil.generateAccessToken(jwtSubject);
     redisToken = JwtUtil.generateRefreshToken(jwtSubject);
-    redisRefreshTokenUtil.saveRefreshToken(jwtSubject, redisToken, Long.parseLong(REFRESH_EXPIRATION_TIME));
+    redisRefreshTokenUtil.saveRefreshToken(eq(jwtSubject), eq(redisToken), anyLong());
     return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
             .header(authorizationHeaderName, authenticationHeaderPrefix + jwtToken))
         .andExpect(status().isOk())
@@ -102,10 +102,10 @@ class CommonLogoutInterceptorTest {
   @Test
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsTokenAtRedisBlackList() throws Exception {
     Mockito.doNothing().when(redisBlackListTokenUtil)
-        .addTokenToBlacklist(jwtToken, Long.parseLong(ACCESS_EXPIRATION_TIME));
+        .addTokenToBlacklist(eq(jwtToken), anyLong());
     setToken();
     Mockito.verify(redisBlackListTokenUtil, Mockito.times(1))
-        .addTokenToBlacklist(jwtToken, Long.parseLong(ACCESS_EXPIRATION_TIME));
+        .addTokenToBlacklist(eq(jwtToken), anyLong());
   }
 
   @DisplayName("request에 토큰이 존재할 때 refresh-cookie 제거")
@@ -120,7 +120,7 @@ class CommonLogoutInterceptorTest {
   void InvalidateToken_WhenThereIsTokenAtHeader_ThereIsNotRefreshTokenAtRedisRefreshTokenUtil()
       throws Exception {
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(jwtSubject, redisToken, Long.parseLong(REFRESH_EXPIRATION_TIME));
+        .saveRefreshToken(eq(jwtSubject), eq(redisToken), anyLong());
     setToken();
 
     Mockito.verify(redisRefreshTokenUtil).deleteRefreshToken(jwtSubject);

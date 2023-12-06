@@ -1,8 +1,8 @@
 package com.bit.lot.flower.auth.system.admin.config;
 
 
-import com.bit.lot.flower.auth.common.filter.ExceptionHandlerFilter;
-import com.bit.lot.flower.auth.common.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.http.interceptor.filter.ExceptionHandlerFilter;
+import com.bit.lot.flower.auth.common.http.interceptor.filter.JwtAuthenticationFilter;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
