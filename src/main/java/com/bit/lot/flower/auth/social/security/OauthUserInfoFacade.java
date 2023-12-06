@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.social.security;
 
+import com.bit.lot.flower.auth.common.util.OauthInfoConvertor;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.valueobject.AuthId;
@@ -26,7 +27,7 @@ public class OauthUserInfoFacade {
   private SocialLoginRequestCommand getOauth2LoginDto(DefaultOAuth2User oAuth2User,
       AuthenticationProvider provider) {
     if (provider == AuthenticationProvider.kakao) {
-      getKakaoDto(oAuth2User);
+      return getKakaoDto(oAuth2User);
     }
     throw new SocialAuthException("아직 존재 하지 않는 인증 제공자입니다.");
   }
@@ -36,12 +37,16 @@ public class OauthUserInfoFacade {
     LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
     LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
     String id = oAuth2User.getName();
-    String email = kakaoAccount.get("account_email");
-    String phoneNumber = kakaoAccount.get("phone_number");
+    String email = kakaoAccount.get("email");
     String nickname = properties.get("nickname");
     return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
-        .phoneNumber(phoneNumber)
+<<<<<<< Updated upstream
+=======
+        .phoneNumber(OauthInfoConvertor.convertInternationalPhoneNumberToDomestic(phoneNumber))
+>>>>>>> Stashed changes
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
+
+
 
 }
