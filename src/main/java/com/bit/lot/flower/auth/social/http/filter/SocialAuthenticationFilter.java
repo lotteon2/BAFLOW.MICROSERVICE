@@ -1,6 +1,5 @@
 package com.bit.lot.flower.auth.social.http.filter;
 
-
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
@@ -20,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
 
 public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 

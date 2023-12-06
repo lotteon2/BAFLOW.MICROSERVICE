@@ -18,7 +18,7 @@ public class CommonLogoutInterceptor implements HandlerInterceptor {
 
   @Override
   public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-      @Nullable ModelAndView modelAndView) throws Exception {
+      @Nullable ModelAndView modelAndView)  {
     String token = ExtractAuthorizationTokenUtil.extractToken(request);
     String id = ExtractAuthorizationTokenUtil.extractUserId(request);
     tokenHandler.invalidateToken(id, token,response);

@@ -12,13 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
+
+  private final OauthUserInfoFacade oauthUserInfoFacade;
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -30,22 +31,15 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) throws IOException, ServletException {
+      Authentication authentication) throws IOException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
-    SocialLoginRequestCommand command = getOauth2LoginDto(defaultOAuth2User);
+    SocialLoginRequestCommand command = oauthUserInfoFacade.getCommand(defaultOAuth2User);
     JsonBinderUtil.setResponseWithJson(response,200, command);
 
+
   }
 
-  private SocialLoginRequestCommand getOauth2LoginDto(OAuth2User oAuth2User) {
-    LinkedHashMap<String, String> kakaoAccount = oAuth2User.getAttribute("kakao_account");
-    LinkedHashMap<String, String> properties = oAuth2User.getAttribute("properties");
-    String id = oAuth2User.getName();
-    String email = kakaoAccount.get("email");
-    String nickname = properties.get("nickname");
-    return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
-        .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
-  }
+
 
 }
 

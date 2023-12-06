@@ -2,11 +2,8 @@ package com.bit.lot.flower.auth.social.http.filter;
 
 import com.bit.lot.flower.auth.common.security.SecurityContextUtil;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
-import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
-import io.jsonwebtoken.Claims;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

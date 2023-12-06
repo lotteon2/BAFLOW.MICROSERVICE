@@ -30,7 +30,7 @@ spring:
             client-id: 5dca3ee52a5c5e81b0415473b05366f0
             client-secret: RifFZkO0SBAISOUJn2XsGVRczr0h9qFj
             client-authentication-method: client_secret_post
-            redirect-uri: http://localhost:8081/login/oauth2/code/kakao
+            redirect-uri: http://localhost:9000/login/oauth2/code/kakao
             authorization-grant-type: authorization_code
             admin-key: 683205e509c2892ef3444c44e91d1ebe
             client-name: kakao
@@ -70,7 +70,7 @@ feign:
 cookie:
   refresh:
     http:
-      domain: localhost:8081
+      domain: localhost:9000
     token:
       name: refresh-cookie
 
@@ -92,9 +92,9 @@ security:
 kakao:
   login:
     request:
-      uri: "/api/auth/social/kakao/login"
+      uri: /api/auth/social/kakao/login
   logout:
-    redirect: "http://localhost:9000/login"
+    redirect: http://localhost:9000/login
 
 
 service:
