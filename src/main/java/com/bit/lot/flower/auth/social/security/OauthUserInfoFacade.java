@@ -9,7 +9,7 @@ import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OauthUserInfoFacade<T extends SocialLoginRequestCommand> {
+public class OauthUserInfoFacade {
 
   private AuthenticationProvider getProvider(DefaultOAuth2User defaultOAuth2User) {
     if (defaultOAuth2User.getAttributes().containsKey("kakao_account")) {
