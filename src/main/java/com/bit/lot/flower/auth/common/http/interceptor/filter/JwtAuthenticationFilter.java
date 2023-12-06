@@ -57,15 +57,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       JwtUtil.isTokenValid(token);
     } catch (ExpiredJwtException e) {
-      response.setStatus(403);
-      response.set
+      setResponseWhenTokenIsExpiredForCheckingRefreshToken(response,e);
+      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰입니다. Refresh토큰을 확인하세요");
     }
     filterChain.doFilter(request, response);
   }
 
-  private HttpServletResponse setResponseWhenTokenIsExpiredForCheckingRefreshToken(
-      HttpServletResponse response) {
-      response.setStatus(403);
-      JsonBinderUtil.setResponseWithJson(response,403,)
+  private void setResponseWhenTokenIsExpiredForCheckingRefreshToken(
+      HttpServletResponse response, ExpiredJwtException e) throws IOException {
+    JsonBinderUtil.setResponseWithJson(response, 403, e.getClaims().getSubject());
   }
 }

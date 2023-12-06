@@ -30,6 +30,7 @@ public class JwtUtil {
   private static SecretKey refreshSecret;
 
 
+
   public static String generateAccessTokenWithClaims(String subject,
       Map<String, Object> claimsList) {
     Date now = new Date();
