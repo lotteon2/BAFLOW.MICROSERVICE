@@ -36,8 +36,7 @@ public class OauthAuthenticationSuccessHandler implements AuthenticationSuccessH
       Authentication authentication) throws IOException {
     DefaultOAuth2User defaultOAuth2User = (DefaultOAuth2User) authentication.getPrincipal();
     SocialLoginRequestCommand command = oauthUserInfoFacade.getCommand(defaultOAuth2User);
-    response.sendRedirect(redirectURL);
-    JsonBinderUtil.setResponseWithJson(response, 302, command);
+    JsonBinderUtil.setResponseWithJson(response, 200, command);
   }
 
 
