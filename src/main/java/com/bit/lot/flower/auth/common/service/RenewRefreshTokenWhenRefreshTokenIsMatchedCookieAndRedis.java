@@ -7,7 +7,6 @@ import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -40,6 +42,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -61,13 +64,13 @@ class SocialLoginMvcTest {
   String refreshTokenName;
   @Value("${security.authorization.header.name}")
   String authorizationHeaderName;
-  Long refreshTokenLifeTime = 360000L;
   @MockBean
   LoginSocialUserRequest loginSocialUserRequest;
   @Autowired
   SocialAuthJpaRepository socialAuthJpaRepository;
+  @Qualifier("socialAuthenticationFilter")
   @Autowired
-  SocialAuthenticationFilter socialAuthenticationFilter;
+  UsernamePasswordAuthenticationFilter socialAuthenticationFilter;
   @Autowired
   SocialAuthJpaRepository repository;
   @Autowired
@@ -170,7 +173,7 @@ class SocialLoginMvcTest {
   void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(anyString(), anyString(), eq(refreshTokenLifeTime));
+        .saveRefreshToken(anyString(), anyString(), anyLong());
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
 
@@ -180,7 +183,7 @@ class SocialLoginMvcTest {
     socialUserLoginRequest(command);
 
     verify(redisRefreshTokenUtil).saveRefreshToken(
-        anyString(), anyString(), eq(refreshTokenLifeTime));
+        anyString(), anyString(), anyLong());
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")

@@ -55,7 +55,7 @@ public class SocialSecurityConfig {
     return new SocialAuthenticationManager(socialLoginStrategy);
   }
 
-  @Qualifier("SocialAuthenticationFilter")
+  @Qualifier("socialAuthenticationFilter")
   @Bean
   UsernamePasswordAuthenticationFilter socialAuthenticationFilter() {
     SocialAuthenticationFilter socialAuthenticationFilter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,

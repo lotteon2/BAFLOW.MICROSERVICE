@@ -20,7 +20,6 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
 public class SocialAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final SystemAuthenticationSuccessHandler handler;
