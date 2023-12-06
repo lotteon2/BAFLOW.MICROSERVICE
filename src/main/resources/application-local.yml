@@ -93,6 +93,8 @@ kakao:
   login:
     request:
       uri: /api/auth/social/kakao/login
+    redirect:
+      uri: ${kakao.login.redirect.url}
   logout:
     redirect: http://localhost:9000/login
 

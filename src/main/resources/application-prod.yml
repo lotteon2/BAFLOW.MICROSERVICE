@@ -100,6 +100,8 @@ kakao:
   login:
     request:
       uri: ${kakao.login.request.uri}
+    redirect:
+      uri: ${kakao.login.redirect.url}
   logout:
     redirect: ${kakao.logout.redirect}
 
