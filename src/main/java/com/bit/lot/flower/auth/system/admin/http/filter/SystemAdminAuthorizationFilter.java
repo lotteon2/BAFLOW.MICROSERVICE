@@ -2,10 +2,7 @@ package com.bit.lot.flower.auth.system.admin.http.filter;
 
 import com.bit.lot.flower.auth.common.security.SecurityContextUtil;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
-import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import io.jsonwebtoken.Claims;
 import java.io.IOException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
