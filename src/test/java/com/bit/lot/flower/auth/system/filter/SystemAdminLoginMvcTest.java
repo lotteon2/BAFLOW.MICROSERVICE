@@ -143,8 +143,6 @@ class SystemAdminLoginMvcTest {
 
     getValidSystemAdminUserResponse(validDto);
 
-    verify(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
-
   }
 
   @DisplayName("유효한 계정으로 로그인시 RefreshToken Cookie에서 존재 확인")

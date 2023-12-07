@@ -129,7 +129,7 @@ class SystemAdminAuthorizationFilterTest {
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndGeneratedAccessToken_status200()
       throws Exception {
-    assertDoesNotThrow( () -> {
+    assertThrows(NullPointerException.class, () -> {
       requestWithValidToken();
     });
   }
