@@ -18,7 +18,7 @@ public class AuthPolicyController {
 
   private final RenewRefreshTokenStrategy<AuthId> renewRefreshTokenStrategy;
 
-  @PostMapping("/api/refresh-token")
+  @PostMapping("/api/auth/refresh-token")
   public ResponseEntity<String> renewRefreshToken(
       @RequestBody RenewAccessTokenDto<AuthId> renewAccessTokenDto, HttpServletRequest request,
       HttpServletResponse response) {
