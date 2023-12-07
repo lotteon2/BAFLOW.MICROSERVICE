@@ -41,7 +41,7 @@ public class SystemAdminRestController {
 
   @ApiOperation(value = "시스템 관리자 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
-  @PostMapping("/api/auth/admin/logout")
+  @PostMapping("/admin/logout")
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("시스템 관리자 로그아웃 완료");
   }

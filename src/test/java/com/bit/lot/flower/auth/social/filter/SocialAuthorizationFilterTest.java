@@ -53,14 +53,14 @@ import org.springframework.web.context.WebApplicationContext;
 
   private MvcResult requestWithUnValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")
+    return mvc.perform(MockMvcRequestBuilders.post("/social/{provider}/logout", "kakao")
             .header("Authorization", "Bearer " + createUnValidToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithoutTokenAtHeader()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao"))
+    return mvc.perform(MockMvcRequestBuilders.post("/social/{provider}/logout", "kakao"))
         .andExpect(MockMvcResultMatchers.status().is4xxClientError())
         .andReturn();
   }

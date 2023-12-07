@@ -121,7 +121,7 @@ class SocialLoginMvcTest {
   private MvcResult socialUserLoginRequest(SocialLoginRequestCommand command)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/social/login")
+            .post("/social/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(command)))
         .andExpect(status().is2xxSuccessful())

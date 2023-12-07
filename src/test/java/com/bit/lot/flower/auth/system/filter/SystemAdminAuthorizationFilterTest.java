@@ -67,21 +67,21 @@ class SystemAdminAuthorizationFilterTest {
 
   private MvcResult requestWithValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout")
             .header("Authorization", "Bearer " + validToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithUnValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout")
             .header("Authorization", "Bearer " + unValidToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithNoTokenAtHeader()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout"))
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout"))
         .andExpect(MockMvcResultMatchers.status().is4xxClientError())
         .andReturn();
   }

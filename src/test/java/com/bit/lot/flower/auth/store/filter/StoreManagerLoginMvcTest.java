@@ -140,7 +140,7 @@ class StoreManagerLoginMvcTest {
   private MvcResult getValidStoreManagerResponse(StoreManagerLoginDto validUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/stores/login")
+            .post("/stores/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(validUserDto)))
         .andExpect(status().is2xxSuccessful())
@@ -150,7 +150,7 @@ class StoreManagerLoginMvcTest {
   private MvcResult getUnValidStoreManagerResponse(StoreManagerLoginDto unValidUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/stores/login")
+            .post("/stores/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(unValidUserDto)))
         .andExpect(status().is4xxClientError())
@@ -203,7 +203,7 @@ class StoreManagerLoginMvcTest {
     getValidStoreManagerResponse(
         LoginValidStoreManagerAccount());
 
-   verify(redisRefreshTokenUtil).saveRefreshToken(
+    verify(redisRefreshTokenUtil).saveRefreshToken(
     anyString(), anyString(), anyLong());
 
   }
