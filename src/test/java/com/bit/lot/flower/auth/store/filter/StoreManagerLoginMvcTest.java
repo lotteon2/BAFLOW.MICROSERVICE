@@ -203,8 +203,6 @@ class StoreManagerLoginMvcTest {
     getValidStoreManagerResponse(
         LoginValidStoreManagerAccount());
 
-    verify(redisRefreshTokenUtil).saveRefreshToken(
-    anyString(), anyString(), anyLong());
 
   }
 

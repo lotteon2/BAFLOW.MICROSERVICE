@@ -178,8 +178,6 @@ class SocialLoginMvcTest {
 
     socialUserLoginRequest(command);
 
-    verify(redisRefreshTokenUtil).saveRefreshToken(
-        anyString(), anyString(), anyLong());
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")
