@@ -22,28 +22,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 
-  private boolean shouldNotFilterSwaggerURI(HttpServletRequest request)  {
-    String requestURI = request.getRequestURI();
-    return requestURI.contains(SwaggerRequestURI.UI_URI) || requestURI.contains(SwaggerRequestURI.API_DOCS_URI)
-        || requestURI.contains(SwaggerRequestURI.WEB_JARS) || requestURI.contains(SwaggerRequestURI.FAVICON)
-        || requestURI.contains(SwaggerRequestURI.RESOURCES);
-  }
-
-  private boolean shouldNotFilterKakaoOauth2(HttpServletRequest request)  {
-
-    String requestURI = request.getRequestURI();
-    return requestURI.contains(KakaoOAuthURLAntURI.KAPI)
-        || requestURI.contains(KakaoOAuthURLAntURI.KAUTH) || requestURI.contains(KakaoOAuthURLAntURI.REDIRECT)
-        || requestURI.contains(KakaoOAuthURLAntURI.OAUTH);
-  }
-
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request)  {
-    String requestURI = request.getRequestURI();
+  protected boolean shouldNotFilter(HttpServletRequest request) {
     return shouldNotFilterSwaggerURI(request) || shouldNotFilterKakaoOauth2(request)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT);
+        || shouldNotFilterBySystemPolicy(request);
   }
 
   @Override
@@ -61,7 +43,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     filterChain.doFilter(request, response);
   }
 
+  private boolean shouldNotFilterSwaggerURI(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(SwaggerRequestURI.UI_URI) || requestURI.contains(
+        SwaggerRequestURI.API_DOCS_URI)
+        || requestURI.contains(SwaggerRequestURI.WEB_JARS) || requestURI.contains(
+        SwaggerRequestURI.FAVICON)
+        || requestURI.contains(SwaggerRequestURI.RESOURCES);
+  }
 
+  private boolean shouldNotFilterKakaoOauth2(HttpServletRequest request) {
+
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(KakaoOAuthURLAntURI.KAPI)
+        || requestURI.contains(KakaoOAuthURLAntURI.KAUTH) || requestURI.contains(
+        KakaoOAuthURLAntURI.REDIRECT)
+        || requestURI.contains(KakaoOAuthURLAntURI.OAUTH);
+  }
+
+  private boolean shouldNotFilterBySystemPolicy(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.REFRESH_ANT);
+
+  }
 
 
 }
