@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.social.http.helper;
 
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
-import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
+import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

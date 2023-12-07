@@ -4,7 +4,6 @@ package com.bit.lot.flower.auth.common.util;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -16,16 +15,15 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
-@Slf4j
 public class JwtUtil {
 
+
+  private JwtUtil(){
+
+  }
   private static SecretKey accessSecret;
   private static SecretKey refreshSecret;
 
@@ -52,7 +50,8 @@ public class JwtUtil {
     return claims;
   }
 
-  public static String generateAccessToken(String subject) {
+  public static String
+  generateAccessToken(String subject) {
     Date now = new Date();
 
     initAccessKey();
@@ -87,11 +86,12 @@ public class JwtUtil {
         .getBody();
   }
 
-  public static void isTokenValid(String token) {
+  public static boolean isTokenValid(String token) {
     try {
       extractClaims(token);
-    } catch (ExpiredJwtException expiredJwtException) {
-      throw new JwtException("토큰 시간이 만료되었습니다.") {
+      return true;
+    } catch (ExpiredJwtException e) {
+      throw new ExpiredJwtException(e.getHeader(),e.getClaims(),e.getMessage()) {
       };
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
       throw new IllegalArgumentException("올바르지 않은 접근입니다.");

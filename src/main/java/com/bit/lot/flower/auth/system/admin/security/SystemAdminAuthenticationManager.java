@@ -2,8 +2,8 @@ package com.bit.lot.flower.auth.system.admin.security;
 
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
 import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.system.admin.dto;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

@@ -28,8 +28,8 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
   @Override
   public String renew(ID id, Role role, HttpServletRequest request,
       HttpServletResponse response) {
-    String refreshTokenAtCookie = CookieUtil.getCookieValue(request, refreshCookieName);
-    if (redisRefreshTokenUtil.getRefreshToken(refreshTokenAtCookie) == null) {
+    CookieUtil.getCookieValue(request, refreshCookieName);
+    if (redisRefreshTokenUtil.getRefreshToken(id.getValue().toString()) == null) {
       throw new IllegalArgumentException("유효한 접근이 아닙니다. Refresh토큰을 확인해주세요");
     }
     return tokenHandler.createToken(id.getValue().toString(), createClaimsRoleMap(role), response);

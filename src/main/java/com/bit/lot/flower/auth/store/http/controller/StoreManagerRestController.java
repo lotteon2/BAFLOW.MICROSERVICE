@@ -1,7 +1,7 @@
 package com.bit.lot.flower.auth.store.http.controller;
 
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;

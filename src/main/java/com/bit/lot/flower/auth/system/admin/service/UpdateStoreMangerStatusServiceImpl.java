@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.system.admin.service;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;

@@ -1,17 +1,11 @@
 package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
-import com.bit.lot.flower.auth.common.dto.RenewAccessTokenDto;
 import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
-import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.JWTAuthenticationShouldNotFilterAntMatcher;
 import com.bit.lot.flower.auth.common.valueobject.KakaoOAuthURLAntURI;
-import com.bit.lot.flower.auth.common.valueobject.Role;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.common.valueobject.SwaggerRequestURI;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.nimbusds.openid.connect.sdk.AuthenticationRequest;
 import io.jsonwebtoken.ExpiredJwtException;
 import java.io.IOException;
 import javax.security.sasl.AuthenticationException;
@@ -28,32 +22,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
 
-  private boolean shouldNotFilterSwaggerURI(HttpServletRequest request)  {
-    String requestURI = request.getRequestURI();
-    return requestURI.contains(SwaggerRequestURI.UI_URI) || requestURI.contains(SwaggerRequestURI.API_DOCS_URI)
-        || requestURI.contains(SwaggerRequestURI.WEB_JARS) || requestURI.contains(SwaggerRequestURI.FAVICON)
-        || requestURI.contains(SwaggerRequestURI.RESOURCES);
-  }
-
-  private boolean shouldNotFilterKakaoOauth2(HttpServletRequest request)  {
-
-    String requestURI = request.getRequestURI();
-    return requestURI.contains(KakaoOAuthURLAntURI.KAPI)
-        || requestURI.contains(KakaoOAuthURLAntURI.KAUTH) || requestURI.contains(KakaoOAuthURLAntURI.REDIRECT)
-        || requestURI.contains(KakaoOAuthURLAntURI.OAUTH);
-  }
-
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request)  {
-    String requestURI = request.getRequestURI();
+  protected boolean shouldNotFilter(HttpServletRequest request) {
     return shouldNotFilterSwaggerURI(request) || shouldNotFilterKakaoOauth2(request)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT);
+        || shouldNotFilterBySystemPolicy(request);
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+  public void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
       FilterChain filterChain) throws ServletException, IOException {
     String token = ExtractAuthorizationTokenUtil.extractToken(request);
     if (redisBlackListTokenUtil.isTokenBlacklisted(token)) {
@@ -62,22 +38,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       JwtUtil.isTokenValid(token);
     } catch (ExpiredJwtException e) {
-      setResponseWhenTokenIsExpiredForCheckingRefreshToken(response, e);
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰입니다. Refresh토큰을 확인하세요");
     }
     filterChain.doFilter(request, response);
   }
 
-  private void setResponseWhenTokenIsExpiredForCheckingRefreshToken(
-      HttpServletResponse response, ExpiredJwtException e) throws IOException {
-    JsonBinderUtil.setResponseWithJson(response, 403, createDtoByToken(e));
+  private boolean shouldNotFilterSwaggerURI(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(SwaggerRequestURI.UI_URI) || requestURI.contains(
+        SwaggerRequestURI.API_DOCS_URI)
+        || requestURI.contains(SwaggerRequestURI.WEB_JARS) || requestURI.contains(
+        SwaggerRequestURI.FAVICON)
+        || requestURI.contains(SwaggerRequestURI.RESOURCES);
+  }
+
+  private boolean shouldNotFilterKakaoOauth2(HttpServletRequest request) {
+
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(KakaoOAuthURLAntURI.KAPI)
+        || requestURI.contains(KakaoOAuthURLAntURI.KAUTH) || requestURI.contains(
+        KakaoOAuthURLAntURI.REDIRECT)
+        || requestURI.contains(KakaoOAuthURLAntURI.OAUTH);
+  }
+
+  private boolean shouldNotFilterBySystemPolicy(HttpServletRequest request) {
+    String requestURI = request.getRequestURI();
+    return requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.REFRESH_ANT);
+
   }
 
 
-  private RenewAccessTokenDto<AuthId> createDtoByToken(ExpiredJwtException e) {
-    return RenewAccessTokenDto.<AuthId>builder()
-        .authId(new AuthId(Long.valueOf(e.getClaims().getSubject())))
-        .role(Role.valueOf(e.getClaims().get(
-            SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME, String.class))).build();
-  }
 }
