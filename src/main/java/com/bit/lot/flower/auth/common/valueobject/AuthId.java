@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social.valueobject;
+package com.bit.lot.flower.auth.common.valueobject;
 
 import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import lombok.Getter;

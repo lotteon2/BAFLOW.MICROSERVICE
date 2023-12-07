@@ -12,14 +12,13 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginDto;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.http.feign.dto.StoreManagerNameDto;
-import com.bit.lot.flower.auth.store.http.filter.StoreManagerAuthenticationFilter;
 
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;

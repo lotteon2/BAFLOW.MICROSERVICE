@@ -2,7 +2,7 @@ package com.bit.lot.flower.auth.common.security;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import java.io.IOException;
 import java.util.Map;
 import javax.servlet.FilterChain;

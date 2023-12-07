@@ -1,9 +1,8 @@
 package com.bit.lot.flower.auth.social.security;
 
-import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.service.SocialLoginStrategy;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;

@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.security;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
@@ -8,7 +8,6 @@ import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import java.util.Collections;
 import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

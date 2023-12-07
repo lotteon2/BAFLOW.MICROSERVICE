@@ -1,12 +1,9 @@
 package com.bit.lot.flower.auth.common.http.controller;
 
 import com.bit.lot.flower.auth.common.dto.RenewAccessTokenDto;
-import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.service.RenewRefreshTokenStrategy;
-import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
-import com.bit.lot.flower.auth.social.valueobject.AuthenticationProvider;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

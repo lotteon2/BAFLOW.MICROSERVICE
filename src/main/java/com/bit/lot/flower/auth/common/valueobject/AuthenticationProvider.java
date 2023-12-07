@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.social.valueobject;
+package com.bit.lot.flower.auth.common.valueobject;
 
 public enum AuthenticationProvider {
   kakao,

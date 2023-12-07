@@ -3,7 +3,7 @@ package com.bit.lot.flower.auth.social.service;
 import com.bit.lot.flower.auth.social.exception.SocialAuthException;
 import com.bit.lot.flower.auth.social.entity.SocialAuth;
 import com.bit.lot.flower.auth.social.repository.SocialAuthJpaRepository;
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import java.time.ZonedDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

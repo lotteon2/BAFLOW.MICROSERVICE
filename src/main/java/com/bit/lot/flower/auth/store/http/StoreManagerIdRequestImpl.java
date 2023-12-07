@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.http;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.http.feign.StoreManagerIdFeignRequest;
 import com.bit.lot.flower.auth.store.http.feign.dto.StoreLoginResponse;
 import lombok.RequiredArgsConstructor;

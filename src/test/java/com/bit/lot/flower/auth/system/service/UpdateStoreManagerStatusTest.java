@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.system.service;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.entity.StoreManagerAuth;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
@@ -8,10 +8,7 @@ import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
 import com.bit.lot.flower.auth.system.admin.service.UpdateStoreMangerStatusService;
 import java.util.Optional;
-import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
-import javax.validation.constraints.AssertTrue;
-import net.bytebuddy.asm.Advice.Unused;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

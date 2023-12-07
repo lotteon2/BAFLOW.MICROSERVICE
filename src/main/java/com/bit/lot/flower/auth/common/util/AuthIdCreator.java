@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.common.util;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 
 public class AuthIdCreator {
 

@@ -1,6 +1,6 @@
 package com.bit.lot.flower.auth.store.service;
 
-import com.bit.lot.flower.auth.social.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import org.springframework.stereotype.Service;
 
