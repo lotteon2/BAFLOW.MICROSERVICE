@@ -39,9 +39,5 @@ public class IssueRefreshRefreshTokenInCookie implements
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
 
-  @Override
-  public void renewRefreshToken(String id, HttpServletResponse response) {
-
-  }
 
 }

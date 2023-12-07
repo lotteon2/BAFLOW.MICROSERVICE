@@ -11,7 +11,6 @@ import org.springframework.security.core.AuthenticationException;
 @RequiredArgsConstructor
 public class SocialAuthenticationManager implements AuthenticationManager {
 
-
   private final SocialLoginStrategy<AuthId> socialLoginStrategy;
 
   @Override
