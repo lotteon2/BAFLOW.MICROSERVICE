@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +26,7 @@ public class SystemAdminRestController {
       + "  ROLE_STORE_MANAGER_PERMITTED,\n"
       + "  ROLE_STORE_MANAGER_PENDING,\n"
       + "  ROLE_STORE_MANAGER_DENIED")
-  @PutMapping("/api/auth/admin/store-manager")
+  @PatchMapping("/auth/admin/store-manager")
   public ResponseEntity<String> updateStoreManagerStatus(
       @Valid @RequestBody UpdateStoreManagerStatusDto dto) {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(), dto.getStatus());

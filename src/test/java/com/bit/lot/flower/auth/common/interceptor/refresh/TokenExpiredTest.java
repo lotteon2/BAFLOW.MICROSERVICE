@@ -31,6 +31,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,18 +52,24 @@ class TokenExpiredTest {
   @Mock
   RedisBlackListTokenUtil redisBlackListTokenUtil;
 
+  MockHttpServletRequest request;
+  MockHttpServletResponse response;
+  MockFilterChain filterChain;
+
+  @BeforeEach
+  void init() {
+    ReflectionTestUtils.setField(JwtUtil.class, "accessSecret", mock(SecretKey.class));
+    Mockito.mockStatic(JwtUtil.class);
+    Mockito.mockStatic(SecurityPolicyStaticValue.class);
+    request = new MockHttpServletRequest();
+    request.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + "unValid");
+    response = new MockHttpServletResponse();
+  }
 
   @Test
   @DisplayName("JWT 토큰이 Expired 되었을 때 에러 Throw")
   void expirationTest_WhenJwtTokenIsExpired_ThrowExpiredJwtException() {
-    ReflectionTestUtils.setField(JwtUtil.class, "accessSecret", mock(SecretKey.class));
-    Mockito.mockStatic(JwtUtil.class);
-    Mockito.mockStatic(SecurityPolicyStaticValue.class);
-    MockHttpServletRequest request = new MockHttpServletRequest();
-    request.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
-        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + "unValid");
-    MockHttpServletResponse response = new MockHttpServletResponse();
-    MockFilterChain filterChain = new MockFilterChain();
 
     when(redisBlackListTokenUtil.isTokenBlacklisted(anyString())).thenReturn(false);
     when(JwtUtil.isTokenValid(anyString())).thenThrow(ExpiredJwtException.class);
@@ -72,10 +79,4 @@ class TokenExpiredTest {
 
   }
 
-
-  @DisplayName("JWT 토큰이 Expired 해당 토큰을 parse하여서 ExceptionHanlderFiltera에 return 객체가 담겨있는지 확인")
-  @Test
-  void ExpirationTest_WhenJwtTokenIsExpired_ResponseHasTheRenewAccessTokenDtoObject() {
-
-  }
 }
