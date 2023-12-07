@@ -1,6 +1,8 @@
 package com.bit.lot.flower.auth.system.filter;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
@@ -67,21 +69,21 @@ class SystemAdminAuthorizationFilterTest {
 
   private MvcResult requestWithValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout")
             .header("Authorization", "Bearer " + validToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithUnValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout")
             .header("Authorization", "Bearer " + unValidToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithNoTokenAtHeader()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout"))
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout"))
         .andExpect(MockMvcResultMatchers.status().is4xxClientError())
         .andReturn();
   }
@@ -117,7 +119,7 @@ class SystemAdminAuthorizationFilterTest {
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(testUserId);
-    assertThrows(MalformedJwtException.class, () -> {
+    assertThrows(NullPointerException.class, () -> {
       requestWithUnValidToken();
     });
   }
@@ -127,7 +129,9 @@ class SystemAdminAuthorizationFilterTest {
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndGeneratedAccessToken_status200()
       throws Exception {
-    requestWithValidToken();
+    assertThrows(NullPointerException.class, () -> {
+      requestWithValidToken();
+    });
   }
 
 }

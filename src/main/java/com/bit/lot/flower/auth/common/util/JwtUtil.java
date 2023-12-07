@@ -8,7 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SignatureException;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +36,7 @@ public class JwtUtil {
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusMillis(
+        .setExpiration(Date.from(Instant.now().plusSeconds(
             Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
         .signWith(accessSecret)
         .addClaims(claimsList)
@@ -58,7 +57,7 @@ public class JwtUtil {
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusMillis(
+        .setExpiration(Date.from(Instant.now().plusSeconds(
             Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
         .signWith(accessSecret)
         .compact();
@@ -71,7 +70,7 @@ public class JwtUtil {
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusMillis(
+        .setExpiration(Date.from(Instant.now().plusSeconds(
             Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME))))
         .signWith(refreshSecret)
         .compact();

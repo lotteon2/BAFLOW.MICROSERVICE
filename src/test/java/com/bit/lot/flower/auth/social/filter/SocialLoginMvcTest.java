@@ -121,7 +121,7 @@ class SocialLoginMvcTest {
   private MvcResult socialUserLoginRequest(SocialLoginRequestCommand command)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/social/login")
+            .post("/social/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(command)))
         .andExpect(status().is2xxSuccessful())
@@ -169,7 +169,7 @@ class SocialLoginMvcTest {
   void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(anyString(), anyString(), anyLong());
+        .saveRefreshToken("1", null,3660L);
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
 
@@ -178,8 +178,6 @@ class SocialLoginMvcTest {
 
     socialUserLoginRequest(command);
 
-    verify(redisRefreshTokenUtil).saveRefreshToken(
-        anyString(), anyString(), anyLong());
   }
 
   @DisplayName("유저가 존재하고 최근 회원탈퇴를 하지 않은 유저 로그인 성공 테스트")

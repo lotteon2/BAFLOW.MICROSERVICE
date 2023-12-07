@@ -5,7 +5,6 @@ import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import java.time.Duration;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,18 +13,17 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class IssueRefreshRefreshTokenInCookie implements
-    RefreshTokenStrategy {
+public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
 
   @Value("${cookie.refresh.http.domain}")
-  private  String domain;
+  private String domain;
   @Value("${cookie.refresh.token.name}")
-  private  String refreshCookieName;
+  private String refreshCookieName;
 
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   @Override
-  public void createRefreshToken(String userId,HttpServletResponse response) {
+  public void createRefreshToken(String userId, HttpServletResponse response) {
     String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
     redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
@@ -39,9 +37,5 @@ public class IssueRefreshRefreshTokenInCookie implements
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
 
-  @Override
-  public void renewRefreshToken(String id, HttpServletResponse response) {
-
-  }
 
 }

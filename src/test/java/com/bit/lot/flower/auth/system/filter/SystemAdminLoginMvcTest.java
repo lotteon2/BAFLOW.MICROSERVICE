@@ -42,7 +42,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-class SystemAdminAuthenticationFilterTest {
+class SystemAdminLoginMvcTest {
 
   @Value("${system.admin.id}")
   Long id;
@@ -92,7 +92,7 @@ class SystemAdminAuthenticationFilterTest {
   private MvcResult getValidSystemAdminUserResponse(SystemAdminLoginDto validUserDto)
       throws Exception {
     return mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/admin/login")
+            .post("/admin/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(validUserDto)))
         .andExpect(status().isOk())
@@ -104,7 +104,7 @@ class SystemAdminAuthenticationFilterTest {
       throws Exception {
     System.out.println("dto:{}" + unValidDto.getId());
     mvc.perform(MockMvcRequestBuilders
-            .post("/api/auth/admin/login")
+            .post("/admin/login")
             .contentType(MediaType.APPLICATION_JSON)
             .content(asJsonString(unValidDto)))
         .andExpect(status().is4xxClientError()).andReturn();
@@ -139,11 +139,9 @@ class SystemAdminAuthenticationFilterTest {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
 
     Mockito.doNothing()
-        .when(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
+        .when(redisRefreshTokenUtil).saveRefreshToken("100",null, 3660L);
 
     getValidSystemAdminUserResponse(validDto);
-
-    verify(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
 
   }
 

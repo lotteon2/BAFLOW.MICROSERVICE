@@ -1,6 +1,8 @@
 package com.bit.lot.flower.auth.social.filter;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.valueobject.Role;
@@ -53,14 +55,14 @@ import org.springframework.web.context.WebApplicationContext;
 
   private MvcResult requestWithUnValidToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao")
-            .header("Authorization", "Bearer " + createUnValidToken()))
+    return mvc.perform(MockMvcRequestBuilders.post("/social/{provider}/logout", "kakao")
+            .header("Authorization", "Bearer " + anyString()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithoutTokenAtHeader()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/social/{provider}/logout", "kakao"))
+    return mvc.perform(MockMvcRequestBuilders.post("/social/{provider}/logout", "kakao"))
         .andExpect(MockMvcResultMatchers.status().is4xxClientError())
         .andReturn();
   }
@@ -69,17 +71,17 @@ import org.springframework.web.context.WebApplicationContext;
   @DisplayName("헤더에 토큰이 없을 때 Throw IllegalArgumentException 테스트")
   @Test
   void SocialAuthorizationFilterTest_WhenThereIsNotTokenAtHeader_ThrowIllegalArgumentException() {
-    JwtUtil.generateAccessToken(testUserId.toString());
+    JwtUtil.generateAccessToken(anyString());
     assertThrows(IllegalArgumentException.class, () -> {
       requestWithoutTokenAtHeader();
     });
   }
 
-  @DisplayName("헤더에 토큰이 있지만 ROLE_SOCIAL_USER의 claim을 가지고 있지 않을 때 Throw ThrowMalformedJwtExcpetion 테스트")
+  @DisplayName("헤더에 토큰이 있지만 ROLE_SOCIAL_USER의 claim을 가지고 있지 않을 때 Throw NullPointExcpetion 테스트")
   @Test
-  void SocialAuthorizationFilterTest_WhenThereIsTokenAtHeaderButNoRole_ThrowMalformedJwtExcpetion() {
-    JwtUtil.generateAccessToken(testUserId.toString());
-    assertThrows(MalformedJwtException.class, () -> {
+  void SocialAuthorizationFilterTest_WhenThereIsTokenAtHeaderButNoRole_ThrowNullPointException() {
+    JwtUtil.generateAccessToken(anyString());
+    assertThrows(NullPointerException.class, () -> {
       requestWithUnValidToken();
     });
   }

@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - 'develop'
+      - 'dev'
 jobs:
   build-and-push-docker-image:
     runs-on: ubuntu-latest

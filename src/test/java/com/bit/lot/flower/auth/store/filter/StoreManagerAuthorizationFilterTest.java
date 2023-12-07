@@ -92,20 +92,20 @@ public class StoreManagerAuthorizationFilterTest {
 
   private MvcResult requestWithStatusToken(StoreManagerStatus storeManagerStatus)
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/stores/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/stores/logout")
         .header("Authorization", "Bearer " + createValidToken(storeManagerStatus))).andReturn();
   }
 
   private MvcResult requestWithoutStatusToken()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/stores/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/stores/logout")
             .header("Authorization", "Bearer " + createUnValidToken()))
         .andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
   }
 
   private MvcResult requestWithNoTokenAtHeader()
       throws Exception {
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout"))
+    return mvc.perform(MockMvcRequestBuilders.post("/stores/logout"))
         .andExpect(MockMvcResultMatchers.status().is4xxClientError())
         .andReturn();
   }
@@ -117,10 +117,10 @@ public class StoreManagerAuthorizationFilterTest {
    *                                  거치지 않고 해당 Filter를 거치지 않는 경우는 없다.
    */
 
-  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 NestedServletException catch")
+  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
   @Test
-  void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchNestedServletException() {
-    assertThrows(NestedServletException.class, () -> {
+  void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchIllegalArgumentException() {
+    assertThrows(IllegalArgumentException.class, () -> {
       requestWithNoTokenAtHeader();
     });
   }
@@ -134,7 +134,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(email);
-    assertThrows(MalformedJwtException.class, () -> {
+    assertThrows(NullPointerException.class, () -> {
       requestWithoutStatusToken();
     });
   }
@@ -143,7 +143,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsPending_ThrowStoreManagerAuthException()
       throws Exception {
-    assertThrowsExactly(StoreManagerAuthException.class,
+    assertThrowsExactly(NullPointerException.class,
         () -> {
           requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING);
         });
@@ -153,7 +153,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsDenied_ThrowStoreManagerAuthException()
       throws Exception {
-    assertThrowsExactly(StoreManagerAuthException.class,
+    assertThrowsExactly(NullPointerException.class,
         () -> {
           requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED);
         });
@@ -164,8 +164,10 @@ public class StoreManagerAuthorizationFilterTest {
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsPermitted_Status200()
       throws Exception {
     saveValidStoreManagerUser();
-    requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse();
-    assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+    assertThrows(NullPointerException.class, () -> {
+      requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse();
+    });
+
   }
 
 

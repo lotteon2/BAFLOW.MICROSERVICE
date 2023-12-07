@@ -60,7 +60,7 @@ public class SocialSecurityConfig {
   UsernamePasswordAuthenticationFilter socialAuthenticationFilter() {
     SocialAuthenticationFilter socialAuthenticationFilter = new SocialAuthenticationFilter(systemAuthenticationSuccessHandler,
         socialAuthenticationManager());
-    socialAuthenticationFilter.setFilterProcessesUrl("/api/auth/social/**/login");
+    socialAuthenticationFilter.setFilterProcessesUrl("/**/social/login");
     socialAuthenticationFilter.setAuthenticationSuccessHandler(systemAuthenticationSuccessHandler);
     return socialAuthenticationFilter;
   }

@@ -8,8 +8,8 @@ import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +25,7 @@ public class SystemAdminRestController {
       + "  ROLE_STORE_MANAGER_PERMITTED,\n"
       + "  ROLE_STORE_MANAGER_PENDING,\n"
       + "  ROLE_STORE_MANAGER_DENIED")
-  @PutMapping("/api/auth/admin/store-manager")
+  @PatchMapping("/admin/store-manager")
   public ResponseEntity<String> updateStoreManagerStatus(
       @Valid @RequestBody UpdateStoreManagerStatusDto dto) {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(), dto.getStatus());
@@ -34,14 +34,14 @@ public class SystemAdminRestController {
 
   @ApiOperation(value = "시스템 관리자 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
-  @PostMapping("/api/auth/admin/login")
+  @PostMapping("/admin/login")
   public ResponseEntity<String> login(){
   return ResponseEntity.ok("시스템 관리자 로그인 완료");
   }
 
   @ApiOperation(value = "시스템 관리자 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
-  @PostMapping("/api/auth/admin/logout")
+  @PostMapping("/admin/logout")
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("시스템 관리자 로그아웃 완료");
   }
