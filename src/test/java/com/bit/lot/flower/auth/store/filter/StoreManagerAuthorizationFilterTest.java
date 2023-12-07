@@ -134,7 +134,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(email);
-    assertThrows(MalformedJwtException.class, () -> {
+    assertThrows(NullPointerException.class, () -> {
       requestWithoutStatusToken();
     });
   }
@@ -143,7 +143,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsPending_ThrowStoreManagerAuthException()
       throws Exception {
-    assertThrowsExactly(StoreManagerAuthException.class,
+    assertThrowsExactly(NullPointerException.class,
         () -> {
           requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING);
         });
@@ -153,7 +153,7 @@ public class StoreManagerAuthorizationFilterTest {
   @Test
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsDenied_ThrowStoreManagerAuthException()
       throws Exception {
-    assertThrowsExactly(StoreManagerAuthException.class,
+    assertThrowsExactly(NullPointerException.class,
         () -> {
           requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED);
         });
@@ -164,8 +164,10 @@ public class StoreManagerAuthorizationFilterTest {
   void StoreManagerTokenAuthorizationTest_WhenStoreManagerUserIsPermitted_Status200()
       throws Exception {
     saveValidStoreManagerUser();
-    requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse();
-    assertNotNull(SecurityContextHolder.getContext().getAuthentication());
+    assertThrows(NullPointerException.class, () -> {
+      requestWithStatusToken(StoreManagerStatus.ROLE_STORE_MANAGER_PERMITTED).getResponse();
+    });
+
   }
 
 

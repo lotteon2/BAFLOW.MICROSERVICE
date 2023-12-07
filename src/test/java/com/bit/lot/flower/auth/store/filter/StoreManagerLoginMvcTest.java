@@ -195,8 +195,8 @@ class StoreManagerLoginMvcTest {
         StoreManagerNameDto.class));
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(anyString(), anyString(),
-            anyLong());
+        .saveRefreshToken("2", null,
+            3660L);
 
     saveEncodedPasswordPermittedStoreManager();
 

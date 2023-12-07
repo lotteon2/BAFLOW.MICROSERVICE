@@ -139,7 +139,7 @@ class SystemAdminLoginMvcTest {
     SystemAdminLoginDto validDto = createValidSystemAdminAccount();
 
     Mockito.doNothing()
-        .when(redisRefreshTokenUtil).saveRefreshToken(anyString(), anyString(), anyLong());
+        .when(redisRefreshTokenUtil).saveRefreshToken("100",null, 3660L);
 
     getValidSystemAdminUserResponse(validDto);
 

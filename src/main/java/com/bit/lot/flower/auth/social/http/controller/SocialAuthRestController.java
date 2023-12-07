@@ -53,7 +53,7 @@ public class SocialAuthRestController {
   @ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴시 로그아웃이 선행 처리가 되어야함"
       + "따라서 Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거 이후 인증 제공자 OAuth2 로그아웃 처리")
-  @DeleteMapping("/{provider}")
+  @DeleteMapping("/social/{provider}")
   public ResponseEntity<String> userWithdrawalUserSelf(
       @PathVariable AuthenticationProvider provider,
       @AuthenticationPrincipal String socialId) {

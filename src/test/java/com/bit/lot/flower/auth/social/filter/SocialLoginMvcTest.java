@@ -169,7 +169,7 @@ class SocialLoginMvcTest {
   void socialUserLoginTest_WhenUserIsNotExist_RefreshInRedis() throws Exception {
 
     Mockito.doNothing().when(redisRefreshTokenUtil)
-        .saveRefreshToken(anyString(), anyString(), anyLong());
+        .saveRefreshToken("1", null,3660L);
 
     SocialLoginRequestCommand command = getSocialLoginRequestCommand(testId);
 

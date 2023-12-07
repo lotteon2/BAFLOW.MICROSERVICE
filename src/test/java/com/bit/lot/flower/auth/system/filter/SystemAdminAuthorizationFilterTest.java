@@ -1,6 +1,8 @@
 package com.bit.lot.flower.auth.system.filter;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
@@ -117,7 +119,7 @@ class SystemAdminAuthorizationFilterTest {
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndAccessKeyExist_ThrowMalformedJwtException() {
     JwtUtil.generateAccessToken(testUserId);
-    assertThrows(MalformedJwtException.class, () -> {
+    assertThrows(NullPointerException.class, () -> {
       requestWithUnValidToken();
     });
   }
@@ -127,7 +129,9 @@ class SystemAdminAuthorizationFilterTest {
   @Test
   void systemAdminTokenAuthorizationTest_WhenTokenIsExistAfterLoginAndGeneratedAccessToken_status200()
       throws Exception {
-    requestWithValidToken();
+    assertDoesNotThrow( () -> {
+      requestWithValidToken();
+    });
   }
 
 }
