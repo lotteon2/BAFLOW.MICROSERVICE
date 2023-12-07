@@ -117,10 +117,10 @@ public class StoreManagerAuthorizationFilterTest {
    *                                  거치지 않고 해당 Filter를 거치지 않는 경우는 없다.
    */
 
-  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 IllegalArugmentException catch")
+  @DisplayName("스토어 매니저 JWT토큰이 존재하지 않을 때 IllegalArgumentException catch")
   @Test
   void StoreManagerTokenAuthorizationTest_WhenTokenIsNotExist_CatchIllegalArgumentException() {
-    assertThrows(NestedServletException.class, () -> {
+    assertThrows(IllegalArgumentException.class, () -> {
       requestWithNoTokenAtHeader();
     });
   }

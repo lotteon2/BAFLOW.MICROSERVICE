@@ -68,14 +68,14 @@ class CommonLogoutInterceptorTest {
     jwtToken = JwtUtil.generateAccessToken(jwtSubject);
     redisToken = JwtUtil.generateRefreshToken(jwtSubject);
     redisRefreshTokenUtil.saveRefreshToken(eq(jwtSubject), eq(redisToken), anyLong());
-    return mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout")
+    return mvc.perform(MockMvcRequestBuilders.post("/admin/logout")
             .header(authorizationHeaderName, authenticationHeaderPrefix + jwtToken))
         .andExpect(status().isOk())
         .andReturn();
   }
 
   void setWithoutTokenAtRequestHeader() throws Exception {
-    mvc.perform(MockMvcRequestBuilders.post("/api/auth/admin/logout"));
+    mvc.perform(MockMvcRequestBuilders.post("/admin/logout"));
   }
 
   @BeforeEach
