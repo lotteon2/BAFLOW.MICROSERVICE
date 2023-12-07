@@ -14,7 +14,7 @@ public class ExtractAuthorizationTokenUtil {
   public static String extractToken(HttpServletRequest request) {
 
     String authorizationHeader = request.getHeader(
-        SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME);
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME);
     if (authorizationHeader != null && authorizationHeader.startsWith(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX)) {
       return authorizationHeader.substring(7);
     } else {

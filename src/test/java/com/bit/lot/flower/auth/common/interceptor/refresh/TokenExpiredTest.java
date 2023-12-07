@@ -42,7 +42,7 @@ class TokenExpiredTest {
     Mockito.mockStatic(JwtUtil.class);
     Mockito.mockStatic(SecurityPolicyStaticValue.class);
     request = new MockHttpServletRequest();
-    request.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
+    request.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + "unValid");
     response = new MockHttpServletResponse();
   }

@@ -25,7 +25,7 @@ public class AuthPolicyController {
     String accessToken = renewRefreshTokenStrategy.renew(renewAccessTokenDto.getAuthId(),
         renewAccessTokenDto.getRole(),
         request, response);
-    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,
+    response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME,
         SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + accessToken);
     return ResponseEntity.ok("재발급 완료");
   }

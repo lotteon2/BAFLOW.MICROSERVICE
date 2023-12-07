@@ -47,7 +47,7 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
       Authentication authentication) {
     String token = tokenHandler.createToken(getIdFromPrincipal(authentication),
         createClaimsRoleMap(), response);
-    response.setHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZAION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX +token );
+    response.setHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME,SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX +token );
   }
 
   private String getIdFromPrincipal(Authentication authentication){
