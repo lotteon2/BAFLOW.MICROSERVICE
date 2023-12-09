@@ -1,8 +1,13 @@
 
+server:
+  port: 9000
 spring:
+  application:
+    name: auth-service
   config:
     activate:
       on-profile: dev
+    import: optional:configserver:http://config-service:8888
   redis:
     host: ${spring.redis.host}
     port: ${spring.redis.port}
@@ -93,17 +98,8 @@ system:
     password: ${system.admin.password}
 
 
-security:
-  authorization:
-    header:
-      name: Authorization
 
 kakao:
-  login:
-    request:
-      uri: ${kakao.login.request.uri}
-    redirect:
-      uri: ${kakao.login.redirect.url}
   logout:
     redirect: ${kakao.logout.redirect}
 
@@ -112,3 +108,10 @@ service:
   user:
     domain: ${service.user.domain}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "refresh"
+          - "bus-refresh"

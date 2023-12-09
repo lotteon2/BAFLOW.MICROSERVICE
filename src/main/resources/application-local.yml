@@ -1,19 +1,17 @@
-
+server:
+  port: 9000
 spring:
-  redis:
-    host: localhost
-    port: 6379
+  application:
+    name: auth-service
   config:
     activate:
       on-profile: local
-  datasource:
-    url: jdbc:mysql://localhost:3306/bb-auth-service?serverTimezone=Asia/Seoul
-    username: root
-    password: k1651227
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    import: optional:configserver:http://localhost:8888
+
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
 
   security:
@@ -80,22 +78,8 @@ system:
     id: 100
     password: bb-flower-password
 
-store:
-  manager:
-    id: store-manageer-id
-    password: store-manager-password
-
-security:
-  authorization:
-    header:
-      name: Authorization
 
 kakao:
-  login:
-    request:
-      uri: /api/auth/social/kakao/login
-    redirect:
-      uri: ${kakao.login.redirect.url}
   logout:
     redirect: http://localhost:9000/login
 
@@ -103,3 +87,12 @@ kakao:
 service:
   user:
     domain: http://localhost:8600
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "refresh"
+          - "bus-refresh"

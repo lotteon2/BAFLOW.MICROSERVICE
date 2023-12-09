@@ -1,19 +1,20 @@
-
+server:
+  port: 9000
 spring:
+  application:
+    name: auth-service
   config:
     activate:
-      on-profile: dev
+      on-profile: prod
+    import: optional:configserver:http://config-service:8888
   redis:
     host: ${spring.redis.host}
     port: ${spring.redis.port}
-  datasource:
-    url: ${spring.datasoure.url}
-    username: ${spring.datasource.username}
-    password: ${spring.datasoure.password}
+
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
   security:
     oauth2:
       client:
@@ -110,3 +111,12 @@ kakao:
 service:
   user:
     domain: ${service.user.domain}
+
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "refresh"
+          - "bus-refresh"
