@@ -25,7 +25,7 @@ spring:
             user-name-attribute: id
         registration:
           kakao:
-            client-id: bf0ed6242fe0afb9b5c021968670d8d0
+            client-id: 7f313aaa30b302cd7ae2b48cf2d2b7cd
             client-secret: Wl5VDUbX9KsRymQW2S4MhoPvAPqdD7kC
             client-authentication-method: client_secret_post
             redirect-uri: http://localhost:9000/login/oauth2/code/kakao
