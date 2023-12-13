@@ -28,7 +28,7 @@ public class OauthSecurityConfig {
             .regexMatchers("/login").permitAll()
             .regexMatchers("kauth.*$").permitAll()
             .regexMatchers("^kapi.*$").permitAll())
-        .formLogin().and().
+            .formLogin().disable().
         oauth2Login(oauth2Configurer -> oauth2Configurer.successHandler(
                 successHandler)
             .userInfoEndpoint()
