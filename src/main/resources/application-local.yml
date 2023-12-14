@@ -72,7 +72,7 @@ system:
 
 kakao:
   logout:
-    redirect: http://localhost:9000/login
+    redirect: http://localhost:3000
 
 
 service:
