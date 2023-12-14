@@ -1,17 +1,15 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
-import com.bit.lot.flower.auth.oauth.util.UserInfoCipherHelper;
+import com.bit.lot.flower.auth.common.valueobject.AuthId;
+import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
-import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
-import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +29,13 @@ public class SocialAuthRestController {
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
   private final SocialAuthService<AuthId> socialAuthService;
   private final LoginSocialUserRequest userDataRequest;
-  private final UserInfoCipherHelper userInfoCipherHelper;
 
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/social/login")
   public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
-      @Valid @RequestBody SocialLoginRequestCommand command) throws Exception {
-    SocialLoginRequestCommand decryptCommand = userInfoCipherHelper.decrypt(command);
-    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(decryptCommand);
+      @Valid @RequestBody SocialLoginRequestCommand command) {
+    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(command);
     return ResponseEntity.ok(userFeignLoginResponse);
   }
 

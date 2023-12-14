@@ -28,7 +28,7 @@ spring:
             client-id: 7f313aaa30b302cd7ae2b48cf2d2b7cd
             client-secret: Wl5VDUbX9KsRymQW2S4MhoPvAPqdD7kC
             client-authentication-method: client_secret_post
-            redirect-uri: http://localhost:8000/api/auth/oauth2/authorization/kakao
+            redirect-uri: http://localhost:3000/login/oauth/
             authorization-grant-type: authorization_code
             admin-key: ffc238f9c4e55c2fa85f551f882eda68
             client-name: kakao
@@ -88,9 +88,6 @@ management:
           - "refresh"
           - "bus-refresh"
 
-client:
-  redirect:
-    domain: http://localhost:3000/login/oauth
 
 user:
   info:

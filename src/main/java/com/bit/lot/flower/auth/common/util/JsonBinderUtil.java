@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 
 public class JsonBinderUtil {
 
-  public static HttpServletResponse setResponseWithJson(HttpServletResponse response, int status,
+  public static HttpServletResponse
+  setResponseWithJson(HttpServletResponse response, int status,
       Object type) throws IOException {
 
     response.setContentType("application/json");
