@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.social.http.helper;
 
 import com.bit.lot.flower.auth.social.http.feign.OauthFeignClientRequest;
 import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
+import java.lang.reflect.InvocationTargetException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -18,10 +19,11 @@ public class OauthLogoutFacadeHelper {
   private String redirectURL;
 
   public void logout(AuthenticationProvider provider) {
+
            if (provider.equals(AuthenticationProvider.kakao)) {
       feignClientRequest.kakaoLogout(clientId,redirectURL);
            }
-    }
-  }
 
+  }
+}
 
