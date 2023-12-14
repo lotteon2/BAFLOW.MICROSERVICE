@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.social.http.controller;
 
 import com.bit.lot.flower.auth.common.util.AuthIdCreator;
+import com.bit.lot.flower.auth.oauth.util.UserInfoCipherHelper;
 import com.bit.lot.flower.auth.social.dto.command.SocialLoginRequestCommand;
 import com.bit.lot.flower.auth.social.dto.response.UserFeignLoginResponse;
 import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
@@ -11,6 +12,7 @@ import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
@@ -28,14 +31,15 @@ public class SocialAuthRestController {
   private final OauthLogoutFacadeHelper oauthLogoutFacadeHelper;
   private final SocialAuthService<AuthId> socialAuthService;
   private final LoginSocialUserRequest userDataRequest;
+  private final UserInfoCipherHelper userInfoCipherHelper;
 
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/social/login")
   public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
-      HttpServletRequest request) {
-    SocialLoginRequestCommand dto = (SocialLoginRequestCommand) request.getAttribute("command");
-    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(dto);
+      @Valid @RequestBody SocialLoginRequestCommand command) throws Exception {
+    SocialLoginRequestCommand decryptCommand = userInfoCipherHelper.decrypt(command);
+    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(decryptCommand);
     return ResponseEntity.ok(userFeignLoginResponse);
   }
 
