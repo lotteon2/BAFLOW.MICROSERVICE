@@ -102,4 +102,10 @@ service:
   user:
     domain: "http://localhost:8082"
 
+client:
+  redirect:
+    domain: http://localhost:3000/login/oauth
 
+user:
+  info:
+    secret: user-secret-user-secret-user-secret-user-secret-user-secret

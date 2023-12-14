@@ -40,11 +40,16 @@ public class OauthUserInfoFacade {
     String email = kakaoAccount.get("email");
     String phoneNumber = kakaoAccount.get("phone_number");
     String nickname = properties.get("nickname");
+    return create(id, email, phoneNumber, nickname);
+
+  }
+
+  private SocialLoginRequestCommand create(String id, String email, String phoneNumber,
+      String nickname) {
     return SocialLoginRequestCommand.builder().email(email).nickname(nickname)
         .phoneNumber(OauthInfoConvertor.convertInternationalPhoneNumberToDomestic(phoneNumber))
         .socialId(AuthId.builder().value(Long.valueOf(id)).build()).build();
   }
-
 
 
 }
