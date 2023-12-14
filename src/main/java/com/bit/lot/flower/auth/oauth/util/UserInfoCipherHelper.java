@@ -34,7 +34,7 @@ public class UserInfoCipherHelper {
       String email = encryptionUtil.decrypt(command.getEmail());
       String socialId = encryptionUtil.decrypt(command.getSocialId().getValue().toString());
       String nickname = encryptionUtil.decrypt(command.getNickname());
-      return createDecryptDto(null, email, new AuthId(Long.valueOf(socialId)), nickname);
+      return createDecryptDto(phoneNumber, email, new AuthId(Long.valueOf(socialId)), nickname);
     }
 
 
