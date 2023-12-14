@@ -34,8 +34,7 @@ public class SocialAuthRestController {
   @ApiOperation(value = "유저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/social/login")
-  public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
-      @Valid @RequestBody SocialLoginRequestCommand command, HttpServletRequest request) {
+  public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(HttpServletRequest request) {
     SocialLoginRequestCommand commandFromAuthenticationFilter = (SocialLoginRequestCommand)request.getAttribute("command");
     UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(commandFromAuthenticationFilter);
     return ResponseEntity.ok(userFeignLoginResponse);
