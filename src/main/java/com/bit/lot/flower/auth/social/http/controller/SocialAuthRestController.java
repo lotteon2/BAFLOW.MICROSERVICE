@@ -10,6 +10,7 @@ import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,8 +35,9 @@ public class SocialAuthRestController {
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/social/login")
   public ResponseEntity<UserFeignLoginResponse> loginWithUserServiceResponse(
-      @Valid @RequestBody SocialLoginRequestCommand command) {
-    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(command);
+      @Valid @RequestBody SocialLoginRequestCommand command, HttpServletRequest request) {
+    SocialLoginRequestCommand commandFromAuthenticationFilter = (SocialLoginRequestCommand)request.getAttribute("command");
+    UserFeignLoginResponse userFeignLoginResponse = userDataRequest.request(commandFromAuthenticationFilter);
     return ResponseEntity.ok(userFeignLoginResponse);
   }
 
