@@ -3,12 +3,17 @@ package com.bit.lot.flower.auth.social.config;
 import com.bit.lot.flower.auth.social.security.OauthAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.service.OAuth2UserLoadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class OauthSecurityConfig {
 
   private final OauthAuthenticationSuccessHandler successHandler;
+
 
   @Order(0)
   @Bean
@@ -28,7 +34,7 @@ public class OauthSecurityConfig {
             .regexMatchers("/login").permitAll()
             .regexMatchers("kauth.*$").permitAll()
             .regexMatchers("^kapi.*$").permitAll())
-            .formLogin().disable().
+        .formLogin().disable().
         oauth2Login(oauth2Configurer -> oauth2Configurer.successHandler(
                 successHandler)
             .userInfoEndpoint()
