@@ -23,7 +23,7 @@ public class UserInfoCipherHelper {
         .append("/")
         .append(encryptionUtil.encrypt(command.getEmail()))
         .append("/")
-        .append(command.getPhoneNumber());
+        .append(encryptionUtil.encrypt(command.getPhoneNumber()));
 
     return sb.toString();
   }
