@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @FeignClient(name = "social-login-request",url="${service.user.domain}")
 public interface LoginSocialUserFeignRequest{
-  @RequestMapping(method = RequestMethod.POST, value = "/users/social")
+  @RequestMapping(method = RequestMethod.POST, value = "/social")
   ResponseEntity<UserFeignLoginResponse> login(@RequestBody SocialLoginRequestCommand userDto);
 
 }
