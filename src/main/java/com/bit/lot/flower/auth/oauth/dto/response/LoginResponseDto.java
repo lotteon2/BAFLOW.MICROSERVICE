@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.oauth.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,11 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginResponseDto {
-  private String tokenType;
+  @JsonProperty("access_token")
   private String accessToken;
-  private String idToken;
-  private String refreshToken;
-  private int expiresIn;
-  private int refreshTokenExpiresIn;
-  private String scope;
 }
