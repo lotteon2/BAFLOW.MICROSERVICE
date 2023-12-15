@@ -10,11 +10,11 @@ public class CookieUtil {
 
   public static Cookie createHttpOnlyCookie(String name, String value, Duration maxAge,
       String path) {
-
     Cookie cookie = new Cookie(name, value);
     cookie.setHttpOnly(true);
     cookie.setMaxAge(Math.toIntExact(maxAge.toMillis()));
     cookie.setPath(path);
+    cookie.setSecure(true);
     return cookie;
   }
 

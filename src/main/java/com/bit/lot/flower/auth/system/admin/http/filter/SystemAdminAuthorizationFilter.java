@@ -16,7 +16,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class SystemAdminAuthorizationFilter extends OncePerRequestFilter {
 
   @Override
-  protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+  protected boolean shouldNotFilter(HttpServletRequest request) {
     String requestURI = request.getRequestURI();
     return !requestURI.contains("/admin") || requestURI.contains("/admin/login");
   }
