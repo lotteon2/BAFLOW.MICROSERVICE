@@ -33,7 +33,7 @@ public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
 
   @Override
   public void invalidateRefreshToken(String id, HttpServletResponse response) {
-    CookieUtil.deleteCookie(refreshCookieName, domain);
+    CookieUtil.deleteCookie(response,refreshCookieName, domain);
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
 
