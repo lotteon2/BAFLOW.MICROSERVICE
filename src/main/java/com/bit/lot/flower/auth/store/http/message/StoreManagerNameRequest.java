@@ -1,4 +1,4 @@
-package com.bit.lot.flower.auth.store.http;
+package com.bit.lot.flower.auth.store.http.message;
 
 import com.bit.lot.flower.auth.common.valueobject.BaseId;
 import com.bit.lot.flower.auth.store.http.feign.dto.StoreManagerNameDto;
