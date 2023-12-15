@@ -5,18 +5,23 @@ import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseCookie;
 
 public class CookieUtil {
 
-  public static Cookie createHttpOnlyCookie(String name, String value, Duration maxAge,
+
+
+  public static ResponseCookie createRefreshNoCORSCookie(String name, String value, Duration maxAge,
       String path) {
-    Cookie cookie = new Cookie(name, value);
-    cookie.setHttpOnly(true);
-    cookie.setMaxAge(Math.toIntExact(maxAge.toMillis()));
-    cookie.setPath(path);
-    cookie.setSecure(true);
-    return cookie;
+    return ResponseCookie.from(name, value)
+        .maxAge(maxAge)
+        .path(path)
+        .secure(true)
+        .sameSite("None")
+        .httpOnly(true)
+        .build();
   }
+
 
   public static String getCookieValue(HttpServletRequest request, String name) {
     Cookie[] cookies = request.getCookies();
