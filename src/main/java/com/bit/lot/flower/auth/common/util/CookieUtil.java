@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpCookie;
-import org.springframework.http.ResponseCookie;
 
 public class CookieUtil {
 
