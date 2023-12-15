@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -63,6 +64,7 @@ public class StoreManagerRestController{
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/stores/logout")
   public ResponseEntity<String> logout(@AuthenticationPrincipal AuthId authId) {
+    log.info(SecurityContextHolder.getContext().getAuthentication().getName());
     storeManagerService.logout(authId);
     return ResponseEntity.ok("스토어 매니저 로그아웃 완료");
   }
