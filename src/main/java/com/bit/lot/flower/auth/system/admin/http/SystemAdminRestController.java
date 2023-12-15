@@ -38,7 +38,7 @@ public class SystemAdminRestController {
 
   @ApiOperation(value = "시스템 관리자 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
-  @PostMapping("/admin/login")
+  @PostMapping("/system/admin/login")
   public ResponseEntity<String> login(){
     log.info("login is processed");
     return ResponseEntity.ok("시스템 관리자 로그인 완료");
@@ -46,7 +46,7 @@ public class SystemAdminRestController {
 
   @ApiOperation(value = "시스템 관리자 로그아웃", notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
       + "Redis에서 제거, HttpOnlyCookie에서 제거")
-  @PostMapping("/admin/logout")
+  @PostMapping("/system/admin/logout")
   public ResponseEntity<String> logout() {
     return ResponseEntity.ok("시스템 관리자 로그아웃 완료");
   }
