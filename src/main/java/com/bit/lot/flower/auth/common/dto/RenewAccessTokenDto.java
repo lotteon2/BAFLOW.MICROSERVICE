@@ -11,7 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class RenewAccessTokenDto<T extends BaseId> {
-  T authId;
-  Role role;
+  private T authId;
+  private Role role;
+  private String expiredAccessToken;
 
 }

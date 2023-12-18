@@ -7,10 +7,10 @@ import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandle
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
 import com.bit.lot.flower.auth.system.admin.security.SystemAdminAuthenticationManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -44,7 +44,7 @@ public class SystemAdminSecurityConfig {
         .addFilterAt(systemAdminAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterAfter(systemAdminAuthorizationFilter(), JwtAuthenticationFilter.class)
-        .addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class);
+        .addFilterAt(exceptionHandlerFilter, ExceptionTranslationFilter.class).cors();
     return http.build();
   }
 
@@ -58,9 +58,8 @@ public class SystemAdminSecurityConfig {
   @Qualifier("systemAdminAuthenticationFilter")
   @Bean
   public UsernamePasswordAuthenticationFilter systemAdminAuthenticationFilter() {
-    SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(
+    SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(authenticationSuccessHandler,
         systemAuthenticationManager());
-    systemAdminAuthenticationFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
     systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/admin/login");
     return systemAdminAuthenticationFilter;
   }

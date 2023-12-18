@@ -4,11 +4,13 @@ package com.bit.lot.flower.auth.store.http.controller;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
-import com.bit.lot.flower.auth.store.http.StoreManagerNameRequest;
+import com.bit.lot.flower.auth.store.http.message.StoreManagerNameRequest;
+import com.bit.lot.flower.auth.store.http.message.StoreManagerStoreIdRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerService;
+import com.bit.lot.flower.auth.store.valueobject.StoreId;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class StoreManagerRestController{
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
+  private final StoreManagerStoreIdRequest<StoreId,AuthId> storeManagerStoreIdRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerService storeManagerService;
   private final StoreMangerCreateRequest storeMangerCreateRequest;
@@ -57,7 +60,8 @@ public class StoreManagerRestController{
   @PostMapping("/stores/login")
   public ResponseEntity<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId) {
     String name = storeManagerNameRequest.getName(authId).getName();
-    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(name));
+    StoreId storeId = storeManagerStoreIdRequest.requestStoreId(authId);
+    return ResponseEntity.ok(StoreManagerMessageMapper.createLoginResponse(name,storeId));
   }
 
   @ApiOperation(value = "스토어 매니저 로그아웃",notes = "Authroization: Bearer 토큰 제거, Refresh토큰"

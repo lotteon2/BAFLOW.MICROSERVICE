@@ -1,8 +1,9 @@
 package com.bit.lot.flower.auth.store.mapper;
 
 import com.bit.lot.flower.auth.store.dto.CreateStoreMangerCommand;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponseWithName;
+import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponseWithNameAndStoreId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
+import com.bit.lot.flower.auth.store.valueobject.StoreId;
 
 public class StoreManagerMessageMapper {
 
@@ -11,8 +12,9 @@ public class StoreManagerMessageMapper {
         dto.getEmail()).name(dto.getName()).id(id).build();
   }
 
-  public static StoreManagerLoginResponseWithName createLoginResponse(String name) {
-    return StoreManagerLoginResponseWithName.builder().name(name)
+  public static StoreManagerLoginResponseWithNameAndStoreId createLoginResponse(String name,
+      StoreId storeId) {
+    return StoreManagerLoginResponseWithNameAndStoreId.builder().name(name).storeId(storeId)
         .build();
   }
 

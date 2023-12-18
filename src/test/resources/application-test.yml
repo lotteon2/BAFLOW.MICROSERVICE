@@ -101,6 +101,8 @@ kakao:
 service:
   user:
     domain: "http://localhost:8082"
+  store:
+    domain: "http://localhost:5000"
 
 client:
   redirect:

@@ -10,7 +10,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @Getter
 public abstract class StoreManagerLoginResponse {
-
   private final String message ="로그인 완료";
   private String name ;
 }

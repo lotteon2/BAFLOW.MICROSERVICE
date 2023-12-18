@@ -69,7 +69,7 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
     SecurityContext context = SecurityContextHolder.createEmptyContext();
     context.setAuthentication(authResult);
     SecurityContextHolder.setContext(context);
-    handler.onAuthenticationSuccess(request, response,chain, authResult);
+    handler.onAuthenticationSuccess(request, response, chain, authResult);
   }
 
 }

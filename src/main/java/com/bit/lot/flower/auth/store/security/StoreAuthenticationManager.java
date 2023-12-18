@@ -41,6 +41,9 @@ public class StoreAuthenticationManager implements AuthenticationManager {
     if (status.equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
       throw new StoreManagerAuthException("관리자의 승인을 기다려주세요.");
     }
+    if(status.equals(StoreManagerStatus.ROLE_STORE_MANAGER_DENIED)){
+      throw new StoreManagerAuthException("잘못된 사업자 등록증입니다. 다시 요청하세요");
+    }
   }
 
   @Transactional
@@ -48,9 +51,7 @@ public class StoreAuthenticationManager implements AuthenticationManager {
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     StoreManagerAuth storeManagerAuth = checkCredential(authentication);
     checkStoreMangerStatus(storeManagerAuth);
-    if (storeManagerAuth.getStatus().equals(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)) {
-      throw new StoreManagerAuthException("관리자의 승인을 기다려주새요.");
-    }
+
     return new UsernamePasswordAuthenticationToken(new AuthId(storeManagerAuth.getId()),
         storeManagerAuth.getPassword(), Collections.singleton(
         new SimpleGrantedAuthority(storeManagerAuth.getStatus().toString())));

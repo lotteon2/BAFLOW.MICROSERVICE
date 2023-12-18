@@ -22,11 +22,11 @@ public class AuthPolicyController {
   public ResponseEntity<String> renewRefreshToken(
       @RequestBody RenewAccessTokenDto<AuthId> renewAccessTokenDto, HttpServletRequest request,
       HttpServletResponse response) {
-    String accessToken = renewRefreshTokenStrategy.renew(renewAccessTokenDto.getAuthId(),
-        renewAccessTokenDto.getRole(),
+    String newAccessToken = renewRefreshTokenStrategy.renew(renewAccessTokenDto.getAuthId(),
+        renewAccessTokenDto.getRole(),renewAccessTokenDto.getExpiredAccessToken(),
         request, response);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME,
-        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + accessToken);
+        SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_PREFIX + newAccessToken);
     return ResponseEntity.ok("재발급 완료");
   }
 
