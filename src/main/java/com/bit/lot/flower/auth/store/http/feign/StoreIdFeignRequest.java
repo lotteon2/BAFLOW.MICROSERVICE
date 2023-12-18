@@ -6,9 +6,8 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@FeignClient(name = "get-store-id",path = "${service.store.domain}")
+@FeignClient(name = "get-store-id", url = "${service.store.domain}")
 public interface StoreIdFeignRequest{
-
   @GetMapping("/stores/id")
   public ResponseEntity<StoreId> request(AuthId storeUserId);
 }

@@ -21,7 +21,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class VerifyEmailServiceTest {
+ class VerifyEmailServiceTest {
 
   private final String testEmail = "rnwldnd7248@gmail.com";
   @Autowired

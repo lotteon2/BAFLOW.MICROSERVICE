@@ -36,17 +36,11 @@ class UpdateStoreManagerStatusTest {
   private WebApplicationContext webApplicationContext;
 
 
-  private UpdateStoreManagerStatusDto dto;
-
-
   private AuthId idBuilder(Long id) {
     return AuthId.builder().value(id).build();
   }
 
-  private void setValidStoreManagerId() {
-    dto = new UpdateStoreManagerStatusDto(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING,
-        idBuilder(1L));
-  }
+
 
   private StoreManagerAuth savePendingStoreManager() {
     StoreManagerAuth auth = repository.save(

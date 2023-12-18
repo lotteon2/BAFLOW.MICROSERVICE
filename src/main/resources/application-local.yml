@@ -87,8 +87,8 @@ kakao:
 service:
   user:
     domain: http://localhost:8600
-  store:
-    domain: http://localhost:5000
+store:
+  domain: http://localhost:5000
 
 
 management:

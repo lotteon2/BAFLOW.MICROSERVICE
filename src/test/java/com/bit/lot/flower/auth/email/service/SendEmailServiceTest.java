@@ -17,7 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @Transactional
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class SendEmailServiceTest {
+ class SendEmailServiceTest {
 
   private final String to = "rnwldnd7248@gmail.com";
   private final String title = "Test email send";
