@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       throw new AuthenticationException("해당 토큰은 이미 로그아웃 처리된 토큰이라 사용할 수 없는 토큰입니다.");
     }
     try {
-      JwtUtil.isTokenValid(token);
+      JwtUtil.isAccessTokenValid(token);
     } catch (ExpiredJwtException e) {
       response.setStatus(401);
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "Expired");

@@ -52,7 +52,7 @@ class TokenExpiredTest {
   void expirationTest_WhenJwtTokenIsExpired_ThrowExpiredJwtException() {
 
     when(redisBlackListTokenUtil.isTokenBlacklisted(anyString())).thenReturn(false);
-    when(JwtUtil.isTokenValid(anyString())).thenThrow(ExpiredJwtException.class);
+    when(JwtUtil.isAccessTokenValid(anyString())).thenThrow(ExpiredJwtException.class);
 
     assertThrows(ExpiredJwtException.class,
         () -> jwtAuthenticationFilter.doFilterInternal(request, response, filterChain));
