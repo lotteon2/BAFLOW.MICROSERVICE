@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RenewRefreshTokenStrategy<ID extends BaseId> {
 
-  String renew(ID id, Role role, HttpServletRequest request,
+  String renew(ID id, Role role, String expiredToken, HttpServletRequest request,
       HttpServletResponse response);
 }
