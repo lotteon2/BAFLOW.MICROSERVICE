@@ -38,7 +38,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     try {
       JwtUtil.isTokenValid(token);
     } catch (ExpiredJwtException e) {
-      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "만료된 토큰입니다. Refresh토큰을 확인하세요");
+      response.setStatus(401);
+      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "Expired");
     }
     filterChain.doFilter(request, response);
   }

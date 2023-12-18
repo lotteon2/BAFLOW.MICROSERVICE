@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.common.http.interceptor.filter;
 
+import com.bit.lot.flower.auth.common.dto.AccessTokenExpiredResponse;
 import com.bit.lot.flower.auth.common.dto.RenewAccessTokenDto;
 import com.bit.lot.flower.auth.common.exception.ErrorDTO;
 import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
@@ -33,9 +34,9 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     }
   }
 
-    private RenewAccessTokenDto<AuthId> createDtoByToken (ExpiredJwtException e){
-      return RenewAccessTokenDto.<AuthId>builder()
-          .authId(new AuthId(Long.valueOf(e.getClaims().getSubject())))
+    private AccessTokenExpiredResponse<AuthId> createDtoByToken (ExpiredJwtException e){
+      return AccessTokenExpiredResponse.<AuthId>builder()
+          .id(new AuthId(Long.valueOf(e.getClaims().getSubject())))
           .role(Role.valueOf(e.getClaims().get(
               SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME, String.class))).build();
     }

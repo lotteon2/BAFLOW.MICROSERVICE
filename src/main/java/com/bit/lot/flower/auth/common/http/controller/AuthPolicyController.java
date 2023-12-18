@@ -18,11 +18,11 @@ public class AuthPolicyController {
 
   private final RenewRefreshTokenStrategy<AuthId> renewRefreshTokenStrategy;
 
-  @PostMapping("/api/auth/refresh-token")
+  @PostMapping("/refresh-token")
   public ResponseEntity<String> renewRefreshToken(
       @RequestBody RenewAccessTokenDto<AuthId> renewAccessTokenDto, HttpServletRequest request,
       HttpServletResponse response) {
-    String newAccessToken = renewRefreshTokenStrategy.renew(renewAccessTokenDto.getAuthId(),
+    String newAccessToken = renewRefreshTokenStrategy.renew(renewAccessTokenDto.getId(),
         renewAccessTokenDto.getRole(),renewAccessTokenDto.getExpiredAccessToken(),
         request, response);
     response.addHeader(SecurityPolicyStaticValue.TOKEN_AUTHORIZATION_HEADER_NAME,
