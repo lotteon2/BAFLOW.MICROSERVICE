@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
@@ -16,8 +17,8 @@ public class GetStoreManagerByStatusService {
   private final StoreManagerAuthRepository repository;
 
 
-  public List<Long> getIdListByStatus(StoreManagerStatus storeManagerStatus) {
-    List<StoreManagerAuth> storeManagerAuthList = repository.findAllByStatus(storeManagerStatus);
+  public List<Long> getIdListByStatus(StoreManagerStatus storeManagerStatus, Pageable pageable) {
+    List<StoreManagerAuth> storeManagerAuthList = repository.findAllByStatus(storeManagerStatus,pageable);
     return entityToIdMap(storeManagerAuthList);
   }
 

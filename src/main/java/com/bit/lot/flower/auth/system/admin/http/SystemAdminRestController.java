@@ -11,12 +11,14 @@ import java.util.List;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -30,8 +32,9 @@ public class SystemAdminRestController {
 
   @GetMapping("/store-manager/{status}")
   public ResponseEntity<List<Long>> getStoreManagerApplications(
-      @PathVariable StoreManagerStatus status) {
-    return ResponseEntity.ok(getStoreManagerByStatusService.getIdListByStatus(status));
+      @PathVariable StoreManagerStatus status,
+       Pageable pageable) {
+    return ResponseEntity.ok(getStoreManagerByStatusService.getIdListByStatus(status,pageable));
   }
 
 
