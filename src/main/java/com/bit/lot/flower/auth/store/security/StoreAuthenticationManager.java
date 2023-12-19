@@ -50,6 +50,7 @@ public class StoreAuthenticationManager implements AuthenticationManager {
   @Override
   public Authentication authenticate(Authentication authentication) throws AuthenticationException {
     StoreManagerAuth storeManagerAuth = checkCredential(authentication);
+
     checkStoreMangerStatus(storeManagerAuth);
 
     return new UsernamePasswordAuthenticationToken(new AuthId(storeManagerAuth.getId()),

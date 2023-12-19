@@ -55,8 +55,10 @@ public class StoreManagerAuthenticationFilter extends UsernamePasswordAuthentica
       return storeManagerAuthenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword(), null));
     } catch (BadCredentialsException | IOException e) {
+      response.setStatus(401);
       throw new BadCredentialsException("존재하지 않는 시스템 어드민 유저입니다.");
     } catch (StoreManagerAuthException e) {
+      response.setStatus(403);
       throw new StoreManagerAuthException(e.getMessage());
     }
   }

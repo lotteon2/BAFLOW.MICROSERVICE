@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.oauth.facade;
 import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.oauth.util.access.GetKakaoAccessKeyHttpUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor

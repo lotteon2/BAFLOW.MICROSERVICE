@@ -14,6 +14,6 @@ public class StoreManagerStoreIdRequestImpl implements
   private final StoreIdFeignRequest feignRequest;
   @Override
   public StoreId requestStoreId(AuthId storeManagerId) {
-    return feignRequest.request(storeManagerId).getBody();
+    return feignRequest.request(storeManagerId.getValue()).getBody();
   }
 }
