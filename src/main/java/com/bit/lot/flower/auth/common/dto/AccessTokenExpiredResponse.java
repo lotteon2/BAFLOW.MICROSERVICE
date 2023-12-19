@@ -6,13 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class RenewAccessTokenDto<T extends BaseId> {
+public class AccessTokenExpiredResponse<T extends BaseId> {
   private T id;
   private Role role;
-  private String expiredAccessToken;
-
 }

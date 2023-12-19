@@ -60,7 +60,7 @@ public class SystemAdminSecurityConfig {
   public UsernamePasswordAuthenticationFilter systemAdminAuthenticationFilter() {
     SystemAdminAuthenticationFilter systemAdminAuthenticationFilter = new SystemAdminAuthenticationFilter(authenticationSuccessHandler,
         systemAuthenticationManager());
-    systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/admin/login");
+    systemAdminAuthenticationFilter.setFilterProcessesUrl("/**/system/admin/login");
     return systemAdminAuthenticationFilter;
   }
 

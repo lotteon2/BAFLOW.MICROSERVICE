@@ -24,12 +24,12 @@ public class ExtractAuthorizationTokenUtil {
 
   public static String extractUserId(HttpServletRequest request){
     String token = extractToken(request);
-    return JwtUtil.extractSubject(token);
+    return JwtUtil.extractAccessTokenSubject(token);
   }
 
     public static String extractRole(HttpServletRequest request) {
     String token = ExtractAuthorizationTokenUtil.extractToken(request);
-    Claims claims = JwtUtil.extractClaims(token);
+    Claims claims = JwtUtil.extractAccessTokenClaims(token);
     return (String) claims.get(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME);
   }
 
