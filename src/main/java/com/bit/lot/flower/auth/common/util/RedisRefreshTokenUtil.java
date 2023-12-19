@@ -1,17 +1,24 @@
 package com.bit.lot.flower.auth.common.util;
 
 import java.util.concurrent.TimeUnit;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Component
-public class
-RedisRefreshTokenUtil {
+public class RedisRefreshTokenUtil {
 
-    private final RedisTemplate<Object, Object> redisTemplate;
+
+    private RedisTemplate<Object, Object> redisTemplate;
+
+    public RedisRefreshTokenUtil(
+        RedisTemplate<Object, Object> redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
+
 
     public void
     saveRefreshToken(String userId, String refreshToken, long expirationTimeInSeconds) {
