@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -11,14 +12,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisRefreshTokenUtil {
 
+    private  RedisTemplate<String, Object> redisTemplate;
 
-    private RedisTemplate<Object, Object> redisTemplate;
 
+    @Autowired
     public RedisRefreshTokenUtil(
-        RedisTemplate<Object, Object> redisTemplate) {
+        RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
-
 
     public void
     saveRefreshToken(String userId, String refreshToken, long expirationTimeInSeconds) {

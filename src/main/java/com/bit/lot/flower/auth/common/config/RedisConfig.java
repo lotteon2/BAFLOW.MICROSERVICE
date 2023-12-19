@@ -21,7 +21,6 @@ public class RedisConfig {
   private String password;
 
 
-
   @Bean
   RedisConnectionFactory jedisConnectionFactory() {
        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
