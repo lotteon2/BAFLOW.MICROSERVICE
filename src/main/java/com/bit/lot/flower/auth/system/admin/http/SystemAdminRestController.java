@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SystemAdminRestController {
 
   private final UpdateStoreMangerStatusService<AuthId> updateStoreMangerStatusService;
-  private final GetStoreManagerByStatusService getStoreManagerByStatusService
+  private final GetStoreManagerByStatusService getStoreManagerByStatusService;
 
   @GetMapping("/store-manager/{status}")
   public ResponseEntity<List<Long>> getStoreManagerApplications(
