@@ -9,6 +9,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,6 +23,17 @@ public class JwtUtil {
 
   public static String accessKey;
   public static String refreshKey;
+
+  @Value("${encrypt.key.access}")
+  private void setAccessKey(String accessKey) {
+    JwtUtil.accessKey = accessKey;
+  }
+
+  @Value("${encrypt.key.refresh}")
+  private void setRefreshKey(String refreshKey) {
+    JwtUtil.refreshKey = refreshKey;
+  }
+
 
   private JwtUtil() {
 
@@ -76,7 +88,7 @@ public class JwtUtil {
 
   public static Claims extractAccessTokenClaims(String accessToken) {
     return Jwts.parserBuilder()
-        .setSigningKey(accessKey).
+        .setSigningKey(accessKey.getBytes()).
         build()
         .parseClaimsJws(accessToken)
         .getBody();
@@ -84,7 +96,7 @@ public class JwtUtil {
 
   public static Claims extractRefreshToken(String refreshToken) {
     return Jwts.parserBuilder()
-        .setSigningKey(refreshKey).
+        .setSigningKey(refreshKey.getBytes()).
         build()
         .parseClaimsJws(refreshToken)
         .getBody();
@@ -112,16 +124,6 @@ public class JwtUtil {
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
       throw new IllegalArgumentException("올바르지 않은 접근입니다.");
     }
-  }
-
-  @Value("${encrypt.key.access}")
-  private void setAccessKey(String accessKey) {
-    JwtUtil.accessKey = accessKey;
-  }
-
-  @Value("${encrypt.key.refresh}")
-  private void setRefreshKey(String refreshKey) {
-    JwtUtil.refreshKey = refreshKey;
   }
 
 
