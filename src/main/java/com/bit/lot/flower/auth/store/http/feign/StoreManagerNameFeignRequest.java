@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 
-@FeignClient(name = "store-manager-name-request", url = "${service.store.domain}")
+@FeignClient(name = "store-manager-name-request", url = "${service.user.domain}")
 public interface StoreManagerNameFeignRequest {
   @GetMapping(value = "/stores/{storeManagerId}")
   ResponseEntity<StoreManagerNameDto> request(@PathVariable Long storeManagerId);
