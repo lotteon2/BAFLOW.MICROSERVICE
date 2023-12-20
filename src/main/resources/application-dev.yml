@@ -14,3 +14,6 @@ management:
         include:
           - "refresh"
           - "bus-refresh"
+          - "health"
+
+
