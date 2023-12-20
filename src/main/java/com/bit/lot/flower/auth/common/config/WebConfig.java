@@ -2,10 +2,12 @@ package com.bit.lot.flower.auth.common.config;
 
 import com.bit.lot.flower.auth.common.http.interceptor.CommonLogoutInterceptor;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -44,10 +46,11 @@ public class WebConfig implements WebMvcConfigurer {
   public void addCorsMappings(CorsRegistry registry) {
     registry.addMapping("/**")
         .allowedOrigins("http://localhost:3000", "http://localhost:3001", "http://localhost:3002")
-        .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+        .allowedMethods("*")
         .allowedHeaders("*")
-        .exposedHeaders("Set-Cookie", "Authorization", "refresh-cookie")
+        .exposedHeaders("*")
         .allowCredentials(true);
+
   }
 
 
