@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 public class StoreId  extends BaseId<Long> {
-
     @JsonProperty("storeId")
     public Long getStoreIdValue() {
         return this.getValue();
