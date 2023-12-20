@@ -14,7 +14,7 @@ public class StoreManagerMessageMapper {
 
   public static StoreManagerLoginResponseWithNameAndStoreId createLoginResponse(String name,
       StoreId storeId) {
-    return StoreManagerLoginResponseWithNameAndStoreId.builder().name(name).storeId(storeId)
+    return StoreManagerLoginResponseWithNameAndStoreId.builder().name(name).storeId(storeId.getValue())
         .build();
   }
 
