@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.system.admin.http;
 
+import bloomingblooms.response.CommonResponse;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import com.bit.lot.flower.auth.system.admin.dto.UpdateStoreManagerStatusDto;
@@ -30,10 +31,10 @@ public class SystemAdminRestController {
   private final GetStoreManagerByStatusService getStoreManagerByStatusService;
 
   @GetMapping("/store-manager/{status}")
-  public ResponseEntity<List<Long>> getStoreManagerApplications(
+  public CommonResponse<List<Long>> getStoreManagerApplications(
       @PathVariable StoreManagerStatus status,
        Pageable pageable) {
-    return ResponseEntity.ok(getStoreManagerByStatusService.getIdListByStatus(status,pageable));
+    return CommonResponse.success(getStoreManagerByStatusService.getIdListByStatus(status,pageable));
   }
 
 
