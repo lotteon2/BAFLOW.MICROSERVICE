@@ -43,10 +43,10 @@ public class SystemAdminRestController {
       + "  ROLE_STORE_MANAGER_PENDING,\n"
       + "  ROLE_STORE_MANAGER_DENIED")
   @PatchMapping("/admin/store-manager")
-  public ResponseEntity<String> updateStoreManagerStatus(
+  public CommonResponse<String> updateStoreManagerStatus(
       @Valid @RequestBody UpdateStoreManagerStatusDto dto) {
     updateStoreMangerStatusService.update(dto.getStoreManagerId(), dto.getStatus());
-    return ResponseEntity.ok("업데이트 완료");
+    return CommonResponse.success("업데이트 완료");
   }
 
 
