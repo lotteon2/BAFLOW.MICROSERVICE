@@ -15,4 +15,6 @@ import lombok.experimental.SuperBuilder;
 public class StoreManagerLoginResponseWithNameAndStoreId extends
     StoreManagerLoginResponse {
   private Long storeId;
+
+
 }

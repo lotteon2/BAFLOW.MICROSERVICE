@@ -13,6 +13,6 @@ public class StoreManagerNameFeignRequestImpl implements StoreManagerNameRequest
   private final StoreManagerNameFeignRequest storeManagerFeignRequest;
   @Override
   public StoreManagerNameDto getName(AuthId storeManagerAuthId) {
-    return storeManagerFeignRequest.request(storeManagerAuthId.getValue()).getBody();
+    return storeManagerFeignRequest.request(storeManagerAuthId.getValue()).getData();
   }
 }
