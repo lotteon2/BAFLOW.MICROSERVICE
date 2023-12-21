@@ -14,6 +14,6 @@ public class CreateSocialUserRequestImpl implements LoginSocialUserRequest {
 
   @Override
   public UserFeignLoginResponse request(SocialLoginRequestCommand dto) {
-   return  feignRequest.login(dto).getBody();
+   return  feignRequest.login(dto).getData();
   }
 }

@@ -11,6 +11,9 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
-public class UserId extends BaseId<UUID> {
+public class UserId extends BaseId<Long> {
 
+  public UserId(Long value) {
+    super(value);
+  }
 }
