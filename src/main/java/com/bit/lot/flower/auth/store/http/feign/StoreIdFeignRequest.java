@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(name = "get-store-id", url = "${service.store.domain}")
 public interface StoreIdFeignRequest{
-  @GetMapping("/stores/id")
+  @GetMapping("/client/stores/id")
   public ResponseEntity<StoreId> request(@RequestHeader Long userId);
 }

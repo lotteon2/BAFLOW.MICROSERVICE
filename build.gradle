@@ -57,6 +57,7 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
     implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     implementation 'org.springframework.kafka:spring-kafka'
+        implementation 'io.github.lotteon-maven:blooming-blooms-utils:0.1.6-alpha'
     implementation 'io.lettuce:lettuce-core:6.2.3.RELEASE'
 
 
