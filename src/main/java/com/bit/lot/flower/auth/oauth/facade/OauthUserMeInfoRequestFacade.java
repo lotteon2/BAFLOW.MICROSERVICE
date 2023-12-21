@@ -1,5 +1,6 @@
 package com.bit.lot.flower.auth.oauth.facade;
 
+import com.bit.lot.flower.auth.common.util.OauthInfoConvertor;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.common.valueobject.AuthenticationProvider;
 import com.bit.lot.flower.auth.oauth.dto.response.LoginResponseDto;
@@ -43,7 +44,8 @@ public class OauthUserMeInfoRequestFacade {
     String phoneNumber = (String) kakaoAccount.get("phone_number");
 
 
-    return new SocialLoginRequestCommand(new AuthId(id),email,phoneNumber,nickname);
+    return new SocialLoginRequestCommand(new AuthId(id),email,
+        OauthInfoConvertor.convertInternationalPhoneNumberToDomestic(phoneNumber),nickname);
 
   }
 
