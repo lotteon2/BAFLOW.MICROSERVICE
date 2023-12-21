@@ -7,4 +7,5 @@ import org.springframework.stereotype.Component;
 @Component
 public interface StoreManagerStoreIdRequest<Target extends StoreId, ID extends AuthId> {
   Target requestStoreId(ID storeManagerId);
+
 }

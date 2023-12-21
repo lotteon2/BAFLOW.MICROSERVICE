@@ -4,9 +4,11 @@ package com.bit.lot.flower.auth.store.http.controller;
 import bloomingblooms.response.CommonResponse;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
+import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponseWithNameAndStoreId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.http.message.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.http.message.StoreManagerStoreIdRequest;
+import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
@@ -59,10 +61,17 @@ public class StoreManagerRestController{
   @ApiOperation(value = "스토어 매니저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
       + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/stores/login")
-  public CommonResponse<StoreManagerLoginResponse> login(@AuthenticationPrincipal AuthId authId) {
+  public CommonResponse<StoreManagerLoginResponseWithNameAndStoreId> login(
+      @AuthenticationPrincipal AuthId authId) {
     String name = storeManagerNameRequest.getName(authId).getName();
     StoreId storeId = storeManagerStoreIdRequest.requestStoreId(authId);
-    return CommonResponse.success(StoreManagerMessageMapper.createLoginResponse(name,storeId));
+    if (storeId == null) {
+      return CommonResponse.success(
+          StoreManagerLoginResponseWithNameAndStoreId.builder().storeId(null).name(name).build());
+
+    } else {
+      return CommonResponse.success(StoreManagerMessageMapper.createLoginResponse(name,storeId.getValue()));
+    }
   }
 
   @ApiOperation(value = "스토어 매니저 로그아웃",notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
