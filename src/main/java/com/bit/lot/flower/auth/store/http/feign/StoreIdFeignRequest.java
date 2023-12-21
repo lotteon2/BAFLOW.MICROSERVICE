@@ -1,6 +1,5 @@
 package com.bit.lot.flower.auth.store.http.feign;
 
-import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
