@@ -20,6 +20,7 @@ public class SocialLoginRequestCommand {
   private AuthId socialId;
   @NotNull
   private String email;
+  @NotNull
   private String phoneNumber;
   @NotNull
   private String nickname;
