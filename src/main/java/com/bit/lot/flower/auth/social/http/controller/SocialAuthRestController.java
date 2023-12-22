@@ -10,7 +10,6 @@ import com.bit.lot.flower.auth.social.http.helper.OauthLogoutFacadeHelper;
 import com.bit.lot.flower.auth.social.http.valueobject.UserId;
 import com.bit.lot.flower.auth.social.message.LoginSocialUserRequest;
 import com.bit.lot.flower.auth.social.service.SocialAuthService;
-import io.swagger.annotations.ApiOperation;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
