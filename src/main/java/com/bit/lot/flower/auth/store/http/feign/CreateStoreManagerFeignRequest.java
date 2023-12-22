@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @FeignClient(value = "create-store-manager-request", url = "${service.user.domain}")
 public interface CreateStoreManagerFeignRequest {
-  @PostMapping("/store-manager")
+  @PostMapping("/client/store-manager")
   CommonResponse<String> create(CreateStoreMangerCommand createStoreMangerCommand);
 }
