@@ -3,23 +3,18 @@ package com.bit.lot.flower.auth.store.http.controller;
 
 import bloomingblooms.response.CommonResponse;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
-import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponse;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponseWithNameAndStoreId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.http.message.StoreManagerNameRequest;
 import com.bit.lot.flower.auth.store.http.message.StoreManagerStoreIdRequest;
-import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerService;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RestController("store")
-@Api(value="store-auth")
+@RestController
 public class StoreManagerRestController{
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
@@ -40,14 +34,12 @@ public class StoreManagerRestController{
   private final StoreMangerCreateRequest storeMangerCreateRequest;
 
 
-  @ApiOperation(value = "중복 이메일 체크",notes = "회원가입시 중복 이메일을 체크한다.")
   @PostMapping("/stores/emails/{email}")
   public CommonResponse<String> emailDuplicationCheck(@PathVariable String email) {
     emailDuplicationCheckerService.isDuplicated(email);
     return CommonResponse.success("중복 이메일이 아닙니다.");
   }
 
-  @ApiOperation(value = "회원가입", notes = "회원가입시 이메일 인증을 완료한 스토어 매니저만 회원가입이 가능함")
   @PostMapping("/stores/signup")
   public CommonResponse<String> signup(@Valid @RequestBody StoreMangerSignUpCommand dto) {
     emailDuplicationCheckerService.isDuplicated(dto.getEmail());
@@ -58,8 +50,6 @@ public class StoreManagerRestController{
   }
 
 
-  @ApiOperation(value = "스토어 매니저 로그인", notes = "Authroization: Bearer 토큰 생성, Refresh토큰"
-      + "Redis에 생성, HttpOnlyCookie에 생성")
   @PostMapping("/stores/login")
   public CommonResponse<StoreManagerLoginResponseWithNameAndStoreId> login(
       @AuthenticationPrincipal AuthId authId) {
@@ -74,8 +64,6 @@ public class StoreManagerRestController{
     }
   }
 
-  @ApiOperation(value = "스토어 매니저 로그아웃",notes = "Authroization: Bearer 토큰 제거, Refresh토큰"
-      + "Redis에서 제거, HttpOnlyCookie에서 제거")
   @PostMapping("/stores/logout")
   public CommonResponse<String> logout(@AuthenticationPrincipal AuthId authId) {
     log.info(SecurityContextHolder.getContext().getAuthentication().getName());
