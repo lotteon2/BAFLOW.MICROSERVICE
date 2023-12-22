@@ -2,7 +2,6 @@ package com.bit.lot.flower.auth.social.dto.command;
 
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

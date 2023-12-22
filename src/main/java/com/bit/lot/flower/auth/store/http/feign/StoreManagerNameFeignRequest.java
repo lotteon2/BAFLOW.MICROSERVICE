@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "store-manager-name-request", url = "${service.user.domain}")
 public interface StoreManagerNameFeignRequest {
-  @GetMapping(value = "/stores/{storeManagerId}")
+  @GetMapping(value = "/client/stores/{storeManagerId}")
   CommonResponse<StoreManagerNameDto> request(@PathVariable Long storeManagerId);
 }
