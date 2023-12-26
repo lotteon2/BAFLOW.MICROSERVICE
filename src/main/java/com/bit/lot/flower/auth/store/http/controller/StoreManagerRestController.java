@@ -30,7 +30,7 @@ public class StoreManagerRestController{
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
   private final StoreManagerStoreIdRequest<StoreId,AuthId> storeManagerStoreIdRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
-  private final StoreManagerService storeManagerService;
+  private final StoreManagerService<AuthId> storeManagerService;
   private final StoreMangerCreateRequest storeMangerCreateRequest;
 
 
