@@ -18,7 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class SystemAdminRestController {
 
+  private final UpdateStoreMangerStatusService<AuthId> updateStoreMangerStatusService;
 
+ @PatchMapping("/admin/store-manager")
+  public CommonResponse<String> updateStoreManagerStatus(
+      @Valid @RequestBody UpdateStoreManagerStatusDto dto) {
+    updateStoreMangerStatusService.update(dto.getStoreManagerId(), dto.getStatus());
+    return CommonResponse.success("업데이트 완료");
+  }
 
 
   @PostMapping("/system/admin/login")
