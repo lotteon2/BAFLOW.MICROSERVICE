@@ -5,7 +5,7 @@ import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import org.springframework.stereotype.Service;
 
 @Service
-public interface StoreManagerService {
+public interface StoreManagerService<ID extends AuthId> {
   Long signUp(StoreMangerSignUpCommand signUpDto);
-  void logout(AuthId id);
+  void logout(ID id);
 }
