@@ -6,7 +6,6 @@ import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerDataMapper;
 import com.bit.lot.flower.auth.store.repository.StoreManagerAuthRepository;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
-import javax.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
