@@ -14,7 +14,7 @@ public class StoreMangerCreateRequestImpl implements
   private final CreateStoreManagerFeignRequest feignRequest;
   @Override
   public void publish(CreateStoreMangerCommand dto) throws JsonProcessingException {
-    sqsPublisher.publish(dto.getName());
+    sqsPublisher.publish();
     feignRequest.create(dto);
   }
 }

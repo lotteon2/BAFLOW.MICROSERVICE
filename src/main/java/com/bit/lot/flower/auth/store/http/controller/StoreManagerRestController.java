@@ -12,6 +12,7 @@ import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
 import com.bit.lot.flower.auth.store.service.StoreManagerService;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +42,8 @@ public class StoreManagerRestController{
   }
 
   @PostMapping("/stores/signup")
-  public CommonResponse<String> signup(@Valid @RequestBody StoreMangerSignUpCommand dto) {
+  public CommonResponse<String> signup(@Valid @RequestBody StoreMangerSignUpCommand dto)
+      throws JsonProcessingException {
     emailDuplicationCheckerService.isDuplicated(dto.getEmail());
     Long getSignedUpId = storeManagerService.signUp(dto);
     storeMangerCreateRequest.publish(

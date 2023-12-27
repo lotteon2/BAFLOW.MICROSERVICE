@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.store.message;
 
 import bloomingblooms.domain.notification.NotificationData;
 import bloomingblooms.domain.notification.NotificationKind;
+import bloomingblooms.domain.notification.NotificationURL;
 import bloomingblooms.domain.notification.PublishNotificationInformation;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.model.SendMessageRequest;
@@ -17,17 +18,15 @@ public class CreateStoreManagerSqsPublisher {
 
   private final AmazonSQS sqs;
   private final ObjectMapper objectMapper;
-  private final String message = "님이 가입 문의를 신청하였습니다.";
   @Value("${cloud.aws.sqs.newcomer-queue.url}")
   private String queueUrl;
 
-  public void publish(String name) throws JsonProcessingException {
+  public void publish() throws JsonProcessingException {
 
-    PublishNotificationInformation newStoreManagerInfo = PublishNotificationInformation.builder()
-        .content(name + message).notificationKind(
-            NotificationKind.NEWCOMER).notificationUrl(queueUrl).build();
+    PublishNotificationInformation newStoreManagerInfo = PublishNotificationInformation.getData(
+        NotificationURL.NEWCOMER,NotificationKind.NEWCOMER);
 
-    NotificationData<String> notificationData = NotificationData.notifyData(newStoreManagerInfo);
+    NotificationData<Void> notificationData = NotificationData.notifyData(newStoreManagerInfo);
 
     SendMessageRequest sendMessageRequest = new SendMessageRequest(
         queueUrl, objectMapper.writeValueAsString(notificationData));
