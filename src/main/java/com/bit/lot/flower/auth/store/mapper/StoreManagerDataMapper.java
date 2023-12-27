@@ -6,6 +6,9 @@ import java.time.ZonedDateTime;
 
 public class StoreManagerDataMapper {
 
+  private StoreManagerDataMapper(){
+
+  }
   public static StoreManagerAuth createStoreManger(String email, String password) {
     return StoreManagerAuth.builder().status(StoreManagerStatus.ROLE_STORE_MANAGER_PENDING)
         .password(password).email(email).lastLogoutTime(null).build();
