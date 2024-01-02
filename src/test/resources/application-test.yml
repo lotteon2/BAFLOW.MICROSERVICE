@@ -1,0 +1,118 @@
+
+server:
+  port: 9000
+spring:
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    config:
+      enabled: false
+  datasource:
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;MODE=MySQL
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  security:
+    oauth2:
+      client:
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+        registration:
+          kakao:
+            client-id: 5dca3ee52a5c5e81b0415473b05366f0
+            client-secret: RifFZkO0SBAISOUJn2XsGVRczr0h9qFj
+            client-authentication-method: client_secret_post
+            redirect-uri: http://localhost:9000/login/oauth2/code/kakao
+            authorization-grant-type: authorization_code
+            admin-key: 683205e509c2892ef3444c44e91d1ebe
+            client-name: kakao
+            scope:
+              - profile_nickname
+              - account_email
+
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: rnwldnd7248@gmail.com
+    password: vegamlgvjroclqrh
+    properties:
+      mail:
+       smtp:
+        auth: true
+        starttls:
+          enable: true
+
+
+
+
+email:
+  send:
+    from: bbFlower@no-reply.co.kr
+
+
+
+
+cookie:
+  refresh:
+    http:
+      domain: localhost:9000
+    token:
+      name: refresh-cookie
+
+system:
+  admin:
+    id: 100
+    password: bb-flower-password
+
+store:
+  manager:
+    id: store-manageer-id
+    password: store-manager-password
+
+security:
+  authorization:
+    header:
+      name: Authorization
+
+kakao:
+  login:
+    request:
+      uri: "/social/kakao/login"
+  logout:
+    redirect: "http://localhost:9000/login"
+
+
+service:
+  user:
+    domain: "http://localhost:8082"
+  store:
+    domain: "http://localhost:5000"
+
+client:
+  redirect:
+    domain: http://localhost:3000/login/oauth
+
+user:
+  info:
+    secret: user-secret-user-secret-user-secret-user-secret-user-secret
+
+encrypt:
+  key:
+    access: access-keyaccess-keyaccess-keyaccess-keyaccess-keyaccess-keyaccess-key
+    refresh: refresh-keyrefresh-keyrefresh-keyrefresh-keyrefresh-keyrefresh-keyfresh-key
