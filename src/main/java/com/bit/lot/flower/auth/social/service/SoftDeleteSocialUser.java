@@ -21,7 +21,7 @@ public class SoftDeleteSocialUser<ID extends AuthId> implements
     SocialAuth socialAuth = repository.findById(userId.getValue()).orElseThrow(() -> {
       throw new SocialAuthException("존재하지 않는 소셜 계정입니다.");
     });
-    if (socialAuth.isRecentlyOut()) {
+    if (Boolean.TRUE.equals(socialAuth.getIsDeleted())) {
       throw new SocialAuthException("이미 회원 탈퇴가 진행된 계정입니다.");
     }
 
@@ -31,6 +31,6 @@ public class SoftDeleteSocialUser<ID extends AuthId> implements
   }
 
   private SocialAuth socialAuthUpdateStatus(SocialAuth socialAuth){
-    return SocialAuth.builder().lastLogoutTime(socialAuth.getLastLogoutTime()).isRecentlyOut(true).oauthId(socialAuth.getOauthId()).build();
+    return SocialAuth.builder().lastLogoutTime(socialAuth.getLastLogoutTime()).oauthId(socialAuth.getOauthId()).build();
   }
 }

@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 @Getter
 @Entity
 public class SocialAuth extends BaseEntity {
-
   @Id
   private Long oauthId;
-  private boolean isRecentlyOut;
   private ZonedDateTime lastLogoutTime;
 }

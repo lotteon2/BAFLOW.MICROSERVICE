@@ -18,14 +18,21 @@ public class canSignUpAfter24H implements
   private final SocialAuthJpaRepository repository;
   @Override
   public void resignUp(SocialAuth socialAuth) {
-    if(socialAuth.isRecentlyOut()){
-      if(socialAuth.getLastLogoutTime().plusHours(RESIGN_UP_POSSIBLE_TIME_AFTER_WITHDRAWAL).isAfter(
-          ZonedDateTime.now())){
+    if (Boolean.TRUE.equals(socialAuth.getIsDeleted())) {
+      if (socialAuth.getLastLogoutTime().plusHours(RESIGN_UP_POSSIBLE_TIME_AFTER_WITHDRAWAL)
+          .isAfter(
+              ZonedDateTime.now())) {
         throw new SocialAuthException("24시간 이내에는 재 회원가입을 할 수 없습니다.");
-      }
-      else{
-        repository.save(socialAuth);
+      } else {
+        SocialAuth updatedSocialAuth = updatedResignUpSocialAuth(socialAuth);
+        updatedSocialAuth.setIsDeleted(false);
+        repository.save(updatedSocialAuth);
       }
     }
+  }
+
+  private SocialAuth updatedResignUpSocialAuth(SocialAuth socialAuth) {
+    return SocialAuth.builder().lastLogoutTime(null)
+        .oauthId(socialAuth.getOauthId()).build();
   }
 }

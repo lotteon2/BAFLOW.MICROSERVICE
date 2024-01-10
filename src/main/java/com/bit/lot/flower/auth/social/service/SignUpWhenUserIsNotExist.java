@@ -22,7 +22,7 @@ public class SignUpWhenUserIsNotExist<ID extends AuthId> implements
     Optional<SocialAuth> optionalSocialAuth = repository.findById(socialId.getValue());
     if (optionalSocialAuth.isEmpty()) {
       signUpWhenUserIsNotExisted.signUp(socialId);
-    } else if (optionalSocialAuth.get().isRecentlyOut()) {
+    } else if (Boolean.TRUE.equals(optionalSocialAuth.get().getIsDeleted())) {
       resignUpStrategy.resignUp(optionalSocialAuth.get());
     }
   }

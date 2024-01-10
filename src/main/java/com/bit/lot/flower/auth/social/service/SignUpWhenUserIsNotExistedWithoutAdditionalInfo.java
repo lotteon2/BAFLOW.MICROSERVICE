@@ -15,7 +15,7 @@ public class SignUpWhenUserIsNotExistedWithoutAdditionalInfo<ID extends AuthId> 
 
   @Override
   public SocialAuth signUp(ID socialId) {
-    SocialAuth socialAuth = SocialAuth.builder().isRecentlyOut(false).lastLogoutTime(null)
+    SocialAuth socialAuth = SocialAuth.builder().lastLogoutTime(null)
         .oauthId(socialId.getValue()).build();
     return repository.save(socialAuth);
   }

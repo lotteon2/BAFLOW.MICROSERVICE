@@ -21,7 +21,7 @@ public class UpdateLastLogoutTime<ID extends AuthId> implements
       throw new SocialAuthException("존재하지 않은 유저입니다.");
     });
     repository.save(SocialAuth.builder().oauthId(socialAuth.getOauthId())
-        .isRecentlyOut(socialAuth.isRecentlyOut()).lastLogoutTime(
+        .lastLogoutTime(
             ZonedDateTime.now()).build());
   }
 }
