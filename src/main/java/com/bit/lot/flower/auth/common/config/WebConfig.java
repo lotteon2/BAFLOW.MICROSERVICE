@@ -2,12 +2,10 @@ package com.bit.lot.flower.auth.common.config;
 
 import com.bit.lot.flower.auth.common.http.interceptor.CommonLogoutInterceptor;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;

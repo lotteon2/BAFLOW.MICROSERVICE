@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.common.util;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -11,12 +12,25 @@ import org.springframework.http.ResponseCookie;
 public class CookieUtil {
 
 
+  private CookieUtil(){
 
-  public static ResponseCookie createRefreshNoCORSCookie(String name, String value, Duration maxAge,
-      String path) {
+  }
+
+  public static Cookie createCookie(String name, String value, int maxAge,String domain) {
+   Cookie cookie = new Cookie(name, value);
+        cookie.setMaxAge(maxAge);
+        cookie.setPath("/");
+        cookie.setDomain(domain);
+        cookie.setSecure(false);
+        cookie.setHttpOnly(true);
+        return cookie;
+  }
+
+  public static ResponseCookie createRefreshNoCORSCookie(String name, String value, Duration maxAge,String domain) {
     return ResponseCookie.from(name, value)
         .maxAge(maxAge)
-        .path(path)
+        .path("/")
+        .domain(domain)
         .secure(true)
         .sameSite("None")
         .httpOnly(true)

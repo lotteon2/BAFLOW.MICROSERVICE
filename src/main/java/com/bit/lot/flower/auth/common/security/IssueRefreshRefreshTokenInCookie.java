@@ -15,6 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
 
+  @Value("${cookie.refresh.http.life-time}")
+  private Long lifeTime;
   @Value("${cookie.refresh.http.domain}")
   private String domain;
   @Value("${cookie.refresh.token.name}")
@@ -27,9 +29,8 @@ public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
     String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
     redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
-    response.setHeader(refreshCookieName,
-        CookieUtil.createRefreshNoCORSCookie(refreshCookieName, refreshToken,
-        Duration.ofDays(1), domain).toString());
+    response.addCookie(CookieUtil.createCookie(refreshCookieName, refreshToken,
+        lifeTime.intValue(), domain));
   }
 
   @Override

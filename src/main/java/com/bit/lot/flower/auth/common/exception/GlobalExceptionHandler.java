@@ -33,11 +33,19 @@ public class GlobalExceptionHandler {
     errorResponse.put("errors", errors);
     return errorResponse;
   }
+
   @ExceptionHandler(JwtException.class)
   public ResponseEntity<Map<String, List<String>>> jwtException(
       JwtException ex) {
     List<String> errors = Collections.singletonList(ex.getMessage());
-    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
+  }
+
+  @ExceptionHandler(AuthException.class)
+  public ResponseEntity<Map<String, List<String>>> illegalArgumentException(
+      AuthException ex) {
+    List<String> errors = Collections.singletonList(ex.getMessage());
+    return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.UNAUTHORIZED);
   }
 
 
@@ -47,6 +55,7 @@ public class GlobalExceptionHandler {
     List<String> errors = Collections.singletonList(ex.getMessage());
     return new ResponseEntity<>(getErrorsMap(errors), new HttpHeaders(), HttpStatus.BAD_REQUEST);
   }
+
   @ExceptionHandler(StoreManagerAuthException.class)
   public ResponseEntity<Map<String, List<String>>> storeManagerException(
       StoreManagerAuthException ex) {

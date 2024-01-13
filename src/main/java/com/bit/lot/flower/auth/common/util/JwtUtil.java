@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.util;
 
 
+import com.bit.lot.flower.auth.common.exception.AuthException;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -110,7 +111,7 @@ public class JwtUtil {
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage()) {
       };
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      throw new IllegalArgumentException("올바르지 않은 접근입니다.");
+      throw new AuthException("유효하지 않은 토큰입니다.");
     }
   }
 
@@ -122,7 +123,7 @@ public class JwtUtil {
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "refresh-token이 만료되었습니다.") {
       };
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      throw new IllegalArgumentException("올바르지 않은 접근입니다.");
+      throw new AuthException("올바르지 않은 토큰입니다.");
     }
   }
 
