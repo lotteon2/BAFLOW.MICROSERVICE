@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.common.service;
 import com.bit.lot.flower.auth.common.exception.AuthException;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.CookieUtil;
-import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;

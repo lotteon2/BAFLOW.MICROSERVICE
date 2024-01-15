@@ -29,8 +29,8 @@ public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
     String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
     redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
         Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
-    response.addCookie(CookieUtil.createCookie(refreshCookieName, refreshToken,
-        lifeTime.intValue(), domain));
+//    response.addCookie(CookieUtil.createCookie(refreshCookieName, refreshToken,
+//        lifeTime.intValue(), domain));
   }
 
   @Override
