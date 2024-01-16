@@ -2,7 +2,6 @@ package com.bit.lot.flower.auth.common.util;
 
 
 import com.bit.lot.flower.auth.common.exception.AuthException;
-import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,72 +9,45 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
-import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class JwtUtil {
 
 
-  public static String accessKey;
-  public static String refreshKey;
-
-  @Value("${encrypt.key.access}")
-  private void setAccessKey(String accessKey) {
-    JwtUtil.accessKey = accessKey;
-  }
-
-  @Value("${encrypt.key.refresh}")
-  private void setRefreshKey(String refreshKey) {
-    JwtUtil.refreshKey = refreshKey;
-  }
-
-
   private JwtUtil() {
 
   }
 
-  public static String generateAccessTokenWithClaims(String subject,
+  public static String generateTokenWithClaims(String subject,String key,long duration,
       Map<String, Object> claimsList) {
     Date now = new Date();
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
         .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
-        .signWith(Keys.hmacShaKeyFor(accessKey.getBytes()), SignatureAlgorithm.HS256)
+            duration)))
+        .signWith(Keys.hmacShaKeyFor(key.getBytes()), SignatureAlgorithm.HS256)
         .addClaims(claimsList)
         .compact();
   }
 
   public static String
-  generateAccessToken(String subject) {
+  generateToken(String subject,String key,long duration) {
     Date now = new Date();
     return Jwts.builder()
         .setSubject(subject)
         .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.ACCESS_EXPIRATION_TIME))))
-        .signWith(Keys.hmacShaKeyFor(accessKey.getBytes()), SignatureAlgorithm.HS256)
+        .setExpiration(Date.from(Instant.now().plusSeconds((duration))))
+        .signWith(Keys.hmacShaKeyFor(key.getBytes()), SignatureAlgorithm.HS256)
         .compact();
   }
 
-  public static String generateRefreshToken(String subject) {
-    Date now = new Date();
 
-    return Jwts.builder()
-        .setSubject(subject)
-        .setIssuedAt(now)
-        .setExpiration(Date.from(Instant.now().plusSeconds(
-            Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME))))
-        .signWith(Keys.hmacShaKeyFor(refreshKey.getBytes()), SignatureAlgorithm.HS256)
-        .compact();
-  }
 
   public static Map<String, Object> addClaims(String id, Object value) {
     Map<String, Object> claims = new HashMap<>();
@@ -83,29 +55,22 @@ public class JwtUtil {
     return claims;
   }
 
-  public static String extractAccessTokenSubject(String token) {
-    return extractAccessTokenClaims(token).getSubject();
+  public static String extractTokenSubject(String token,String key) {
+    return extractTokenClaims(token,key).getSubject();
   }
 
-  public static Claims extractAccessTokenClaims(String accessToken) {
+  public static Claims extractTokenClaims(String token, String key) {
     return Jwts.parserBuilder()
-        .setSigningKey(accessKey.getBytes()).
+        .setSigningKey(key.getBytes()).
         build()
-        .parseClaimsJws(accessToken)
+        .parseClaimsJws(token)
         .getBody();
   }
 
-  public static Claims extractRefreshToken(String refreshToken) {
-    return Jwts.parserBuilder()
-        .setSigningKey(refreshKey.getBytes()).
-        build()
-        .parseClaimsJws(refreshToken)
-        .getBody();
-  }
 
-  public static boolean isAccessTokenValid(String accessToken) {
+  public static boolean isTokenValid(String token, String key) {
     try {
-      extractAccessTokenClaims(accessToken);
+      extractTokenClaims(token,key);
       return true;
     } catch (ExpiredJwtException e) {
       throw new ExpiredJwtException(e.getHeader(), e.getClaims(), e.getMessage()) {
@@ -115,17 +80,7 @@ public class JwtUtil {
     }
   }
 
-  public static boolean isRefreshTokenValid(String refreshToken) {
-    try {
-      extractRefreshToken(refreshToken);
-      return true;
-    } catch (ExpiredJwtException e) {
-      throw new ExpiredJwtException(e.getHeader(), e.getClaims(), "refresh-token이 만료되었습니다.") {
-      };
-    } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      throw new AuthException("올바르지 않은 토큰입니다.");
-    }
-  }
+
 
 
 }

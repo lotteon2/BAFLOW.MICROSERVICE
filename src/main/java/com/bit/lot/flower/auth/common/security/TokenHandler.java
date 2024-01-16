@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class TokenHandler {
 
   private final RefreshTokenStrategy refreshTokenStrategy;
-  private final JwtAccessTokenCreateProcessor accessTokenStrategy;
+  private final JwtTokenProcessor accessTokenStrategy;
   private final JwtAccessTokenDeleteStrategy deleteStrategy;
 
 

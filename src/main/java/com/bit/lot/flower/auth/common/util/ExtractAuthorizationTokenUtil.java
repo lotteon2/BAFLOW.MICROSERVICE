@@ -1,7 +1,6 @@
 package com.bit.lot.flower.auth.common.util;
 
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import io.jsonwebtoken.Claims;
 import javax.servlet.http.HttpServletRequest;
 
 public class ExtractAuthorizationTokenUtil {
@@ -22,15 +21,6 @@ public class ExtractAuthorizationTokenUtil {
     }
   }
 
-  public static String extractUserId(HttpServletRequest request){
-    String token = extractToken(request);
-    return JwtUtil.extractAccessTokenSubject(token);
-  }
 
-    public static String extractRole(HttpServletRequest request) {
-    String token = ExtractAuthorizationTokenUtil.extractToken(request);
-    Claims claims = JwtUtil.extractAccessTokenClaims(token);
-    return (String) claims.get(SecurityPolicyStaticValue.CLAIMS_ROLE_KEY_NAME);
-  }
 
 }

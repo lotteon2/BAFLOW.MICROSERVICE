@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.system.admin.config;
 
 import com.bit.lot.flower.auth.common.http.interceptor.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.http.interceptor.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.security.JwtTokenProcessor;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthenticationFilter;
 import com.bit.lot.flower.auth.system.admin.http.filter.SystemAdminAuthorizationFilter;
@@ -32,6 +33,7 @@ public class SystemAdminSecurityConfig {
   private final SystemAuthenticationSuccessHandler authenticationSuccessHandler;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
+  private final JwtTokenProcessor jwtTokenProcessor;
 
 
   @Order(3)
@@ -66,7 +68,7 @@ public class SystemAdminSecurityConfig {
 
   @Bean
   public SystemAdminAuthorizationFilter systemAdminAuthorizationFilter() {
-    return new SystemAdminAuthorizationFilter();
+    return new SystemAdminAuthorizationFilter(jwtTokenProcessor);
   }
 
 

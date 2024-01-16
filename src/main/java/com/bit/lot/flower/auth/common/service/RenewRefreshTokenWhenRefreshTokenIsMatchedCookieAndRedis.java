@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.service;
 
 import com.bit.lot.flower.auth.common.exception.AuthException;
+import com.bit.lot.flower.auth.common.security.JwtTokenProcessor;
 import com.bit.lot.flower.auth.common.security.TokenHandler;
 import com.bit.lot.flower.auth.common.util.CookieUtil;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
@@ -31,6 +32,8 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
   @Value("${cookie.refresh.token.name}")
   private String refreshCookieName;
 
+  private final JwtTokenProcessor jwtTokenProcessor;
+
   @Override
   public String renew(ID id, Role role, String expiredAccessToken, HttpServletRequest request,
       HttpServletResponse response) {
@@ -48,7 +51,7 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
 
   private void isRefreshTokenValid(String refreshToken) {
     try {
-      JwtUtil.isRefreshTokenValid(refreshToken);
+      jwtTokenProcessor.validateRefreshToken(refreshToken);
     } catch (ExpiredJwtException e) {
       throw new JwtException("refresh 토큰이 만료되었습니다. 다시 로그인 해주세요.");
     }
@@ -57,7 +60,7 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
 
   private void isTokenValid(String token) {
     try {
-      JwtUtil.isAccessTokenValid(token.substring(7));
+      jwtTokenProcessor.validateRefreshToken(token.substring(7));
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException | StringIndexOutOfBoundsException e) {
       throw new AuthException("유효하지 않은 토큰입니다.");
     }
