@@ -16,13 +16,14 @@ public class TokenHandler {
 
   public String createToken(String id,
       Map<String, Object> claimList,HttpServletResponse response) {
-    refreshTokenStrategy.createRefreshToken(id,response);
+    refreshTokenStrategy.createRefreshToken(id, claimList, response);
     return accessTokenStrategy.createAccessToken(id, claimList);
   }
 
-  public void invalidateToken(String id, String token, HttpServletResponse response) {
+  public void invalidateToken(String id, String token, Map<String, Object> claimList,
+      HttpServletResponse response) {
     deleteStrategy.invalidateAccessToken(token);
-    refreshTokenStrategy.invalidateRefreshToken(id, response);
+    refreshTokenStrategy.invalidateRefreshToken(id, claimList, response);
   }
 
 
