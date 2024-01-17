@@ -2,7 +2,6 @@ package com.bit.lot.flower.auth.store.http.filter;
 
 import com.bit.lot.flower.auth.common.security.JwtTokenProcessor;
 import com.bit.lot.flower.auth.common.security.SecurityContextUtil;
-import com.bit.lot.flower.auth.common.util.ExtractAuthorizationTokenUtil;
 import com.bit.lot.flower.auth.store.exception.StoreManagerAuthException;
 import com.bit.lot.flower.auth.store.valueobject.StoreManagerStatus;
 import java.io.IOException;

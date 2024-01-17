@@ -2,6 +2,7 @@ package com.bit.lot.flower.auth.social.config;
 
 import com.bit.lot.flower.auth.common.http.interceptor.filter.ExceptionHandlerFilter;
 import com.bit.lot.flower.auth.common.http.interceptor.filter.JwtAuthenticationFilter;
+import com.bit.lot.flower.auth.common.security.JwtTokenProcessor;
 import com.bit.lot.flower.auth.common.security.SystemAuthenticationSuccessHandler;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthenticationFilter;
 import com.bit.lot.flower.auth.social.http.filter.SocialAuthorizationFilter;
@@ -29,6 +30,7 @@ public class SocialSecurityConfig {
   private final SocialLoginStrategy<AuthId> socialLoginStrategy;
   private final JwtAuthenticationFilter jwtAuthenticationFilter;
   private final ExceptionHandlerFilter exceptionHandlerFilter;
+  private final JwtTokenProcessor jwtTokenProcessor;
 
 
   @Order(1)
@@ -46,7 +48,7 @@ public class SocialSecurityConfig {
 
   @Bean
   SocialAuthorizationFilter socialAuthorizationFilter() {
-    return new SocialAuthorizationFilter();
+    return new SocialAuthorizationFilter(jwtTokenProcessor);
   }
 
   @Qualifier("socialAuthenticationManager")

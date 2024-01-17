@@ -20,9 +20,8 @@ public class JwtTokenProcessor {
 
   public String extractUserId(HttpServletRequest request) {
 
-    String token = JwtUtil.extractTokenSubject(ExtractAuthorizationTokenUtil.extractToken(request),
+    return JwtUtil.extractTokenSubject(ExtractAuthorizationTokenUtil.extractToken(request),
         accessKey);
-    return JwtUtil.extractTokenSubject(token,accessKey);
   }
 
   public  String extractRole(HttpServletRequest request) {

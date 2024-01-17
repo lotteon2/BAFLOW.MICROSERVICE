@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 public class TokenHandler {
 
   private final RefreshTokenStrategy refreshTokenStrategy;
-  private final JwtTokenProcessor accessTokenStrategy;
+  private final JwtTokenProcessor jwtTokenProcessor;
   private final JwtAccessTokenDeleteStrategy deleteStrategy;
 
 
   public String createToken(String id,
       Map<String, Object> claimList,HttpServletResponse response) {
-    String accessToken = accessTokenStrategy.createAccessToken(id, claimList);
+    String accessToken = jwtTokenProcessor.createAccessToken(id, claimList);
     refreshTokenStrategy.createRefreshToken(accessToken, response);
 
     return accessToken;

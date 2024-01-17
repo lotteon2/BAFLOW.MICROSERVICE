@@ -15,7 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class SocialAuthorizationFilter extends OncePerRequestFilter {
 
-  private JwtTokenProcessor jwtTokenProcessor;
+  private final JwtTokenProcessor jwtTokenProcessor;
 
 
   @Override
