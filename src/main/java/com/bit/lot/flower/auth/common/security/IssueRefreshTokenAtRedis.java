@@ -22,7 +22,7 @@ public class IssueRefreshTokenAtRedis implements RefreshTokenStrategy {
   public void createRefreshToken(String accessToken, HttpServletResponse response) {
     String refreshToken = JwtUtil.generateRefreshToken(accessToken);
     redisRefreshTokenUtil.saveRefreshToken(accessToken, refreshToken,
-        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME)+30L);
+        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
 
   }
 

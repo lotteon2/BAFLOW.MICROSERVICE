@@ -7,14 +7,12 @@ import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -35,27 +33,28 @@ public class RenewRefreshTokenWhenAccessTokenExpired implements
 
   @Override
   public String renew(AuthId id, Role role, String expiredToken, HttpServletRequest request,
-      HttpServletResponse response) throws IOException {
+      HttpServletResponse response) {
     checkTokenIsRegisteredAsBlackList(expiredToken);
-    String refreshToken = redisRefreshTokenUtil.getRefreshToken(expiredToken);
     try {
+      String refreshToken = redisRefreshTokenUtil.getRefreshToken(expiredToken.substring(7));
       JwtUtil.isRefreshTokenValid(refreshToken);
       String newAccessToken = JwtUtil.generateAccessTokenWithClaims(String.valueOf(id.getValue()),
           createRoleMap(role));
       redisRefreshTokenUtil.saveRefreshToken(newAccessToken, refreshToken,
           Long.parseLong(refreshTokenLifeTime) + 60L);
+      redisBlackListTokenUtil.addTokenToBlacklist(expiredToken,
+          Long.parseLong(refreshTokenLifeTime));
       return newAccessToken;
-    } catch (ExpiredJwtException e) {
-      setResponseWhenRefreshIsExpired(response);
+    } catch (ExpiredJwtException | AuthException e ) {
+      throw new AuthException("message: Refresh-Expired");
     } catch (MalformedJwtException | UnsupportedJwtException | IllegalArgumentException e) {
-      throw new AuthException("유효하지 않은 토큰입니다.");
+      throw new IllegalArgumentException("유효하지 않은 토큰입니다.");
     }
-     throw new IOException("Response 응답 실패");
   }
 
   private void checkTokenIsRegisteredAsBlackList(String accessToken) {
     if (redisBlackListTokenUtil.isTokenBlacklisted(accessToken)) {
-      throw new AuthException("로그아웃 처리된 토큰은 사용할 수 없습니다.");
+      throw new AuthException("이미 사용된 토큰은 사용할 수 없습니다.");
     }
 
   }
@@ -66,15 +65,4 @@ public class RenewRefreshTokenWhenAccessTokenExpired implements
     return roleClaims;
   }
 
-  private void setResponseWhenRefreshIsExpired(HttpServletResponse response)
-      throws IOException {
-
-    response.setStatus(401);
-
-    response.setContentType("application/json");
-
-    String jsonResponse = "{\"message\":\"Refresh-Expired\"}";
-
-    response.getWriter().write(jsonResponse);
-  }
 }

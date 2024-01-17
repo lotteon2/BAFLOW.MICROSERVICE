@@ -3,7 +3,6 @@ package com.bit.lot.flower.auth.common.http.interceptor.filter;
 import com.bit.lot.flower.auth.common.dto.AccessTokenExpiredResponse;
 import com.bit.lot.flower.auth.common.exception.ErrorDTO;
 import com.bit.lot.flower.auth.common.util.JsonBinderUtil;
-import com.bit.lot.flower.auth.common.valueobject.AuthId;
 import com.bit.lot.flower.auth.common.valueobject.Role;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.ExpiredJwtException;
