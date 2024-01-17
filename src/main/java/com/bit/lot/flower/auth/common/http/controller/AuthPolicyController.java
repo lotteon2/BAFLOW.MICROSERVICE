@@ -4,7 +4,6 @@ import com.bit.lot.flower.auth.common.dto.RenewAccessTokenDto;
 import com.bit.lot.flower.auth.common.service.RenewRefreshTokenStrategy;
 import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
-import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class AuthPolicyController {
   @PostMapping("/refresh-token")
   public ResponseEntity<String> renewRefreshToken(
       @RequestBody RenewAccessTokenDto<AuthId> renewAccessTokenDto, HttpServletRequest request,
-      HttpServletResponse response) throws IOException {
+      HttpServletResponse response) {
     String newAccessToken = renewRefreshTokenStrategy.renew(
         renewAccessTokenDto.getId(),renewAccessTokenDto.getRole(),renewAccessTokenDto.getExpiredAccessToken(),
         request, response);

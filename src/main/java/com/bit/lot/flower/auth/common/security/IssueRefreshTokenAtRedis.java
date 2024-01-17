@@ -16,13 +16,14 @@ import org.springframework.stereotype.Component;
 public class IssueRefreshTokenAtRedis implements RefreshTokenStrategy {
 
 
+  private final JwtTokenProcessor jwtTokenProcessor;
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   @Override
   public void createRefreshToken(String accessToken, HttpServletResponse response) {
-    String refreshToken = JwtUtil.generateRefreshToken(accessToken);
+    String refreshToken = jwtTokenProcessor.createRefreshToken(accessToken);
     redisRefreshTokenUtil.saveRefreshToken(accessToken, refreshToken,
-        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
+        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME)+30L);
 
   }
 

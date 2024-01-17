@@ -10,7 +10,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-@Slf4j
 public class SystemAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
   private final TokenHandler tokenHandler;
@@ -50,8 +48,6 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
     String token = tokenHandler.createToken(getIdFromPrincipal(authentication),
         createClaimsRoleMap(), response);
     response.setHeader("Authorization","Bearer "+token );
-    log.warn("Authorization Header from the response:{}" + response.getHeader("Authorization"));
-
   }
 
   private String getIdFromPrincipal(Authentication authentication){

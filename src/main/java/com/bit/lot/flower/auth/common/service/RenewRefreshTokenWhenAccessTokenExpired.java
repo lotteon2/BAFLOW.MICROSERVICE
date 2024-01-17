@@ -1,6 +1,7 @@
 package com.bit.lot.flower.auth.common.service;
 
 import com.bit.lot.flower.auth.common.exception.AuthException;
+import com.bit.lot.flower.auth.common.security.JwtTokenProcessor;
 import com.bit.lot.flower.auth.common.util.JwtUtil;
 import com.bit.lot.flower.auth.common.util.RedisBlackListTokenUtil;
 import com.bit.lot.flower.auth.common.util.RedisRefreshTokenUtil;
@@ -10,7 +11,6 @@ import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 public class RenewRefreshTokenWhenAccessTokenExpired implements
     RenewRefreshTokenStrategy<AuthId> {
 
+  private final JwtTokenProcessor jwtTokenProcessor;
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
@@ -37,8 +38,8 @@ public class RenewRefreshTokenWhenAccessTokenExpired implements
     checkTokenIsRegisteredAsBlackList(expiredToken);
     try {
       String refreshToken = redisRefreshTokenUtil.getRefreshToken(expiredToken.substring(7));
-      JwtUtil.isRefreshTokenValid(refreshToken);
-      String newAccessToken = JwtUtil.generateAccessTokenWithClaims(String.valueOf(id.getValue()),
+      jwtTokenProcessor.validateRefreshToken(refreshToken);
+      String newAccessToken = jwtTokenProcessor.createAccessToken(String.valueOf(id.getValue()),
           createRoleMap(role));
       redisRefreshTokenUtil.saveRefreshToken(newAccessToken, refreshToken,
           Long.parseLong(refreshTokenLifeTime) + 60L);
@@ -66,3 +67,4 @@ public class RenewRefreshTokenWhenAccessTokenExpired implements
   }
 
 }
+
