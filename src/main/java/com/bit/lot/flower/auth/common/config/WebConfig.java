@@ -48,8 +48,8 @@ public class WebConfig implements WebMvcConfigurer {
             "https://blooming.blooms.store.stockey.kr",
             "https://blooming.blooms.admin.stockey.kr")
         .allowedMethods("*")
-        .allowedHeaders("Authorization","*")
-        .exposedHeaders("Authorization","*")
+        .allowedHeaders("*")
+        .exposedHeaders("*")
         .allowCredentials(true);
 
   }
