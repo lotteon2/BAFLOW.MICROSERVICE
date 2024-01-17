@@ -13,29 +13,21 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
+public class IssueRefreshTokenAtRedis implements RefreshTokenStrategy {
 
-  @Value("${cookie.refresh.http.life-time}")
-  private Long lifeTime;
-  @Value("${cookie.refresh.http.domain}")
-  private String domain;
-  @Value("${cookie.refresh.token.name}")
-  private String refreshCookieName;
 
   private final RedisRefreshTokenUtil redisRefreshTokenUtil;
 
   @Override
-  public void createRefreshToken(String userId, HttpServletResponse response) {
-    String refreshToken = JwtUtil.generateRefreshToken(String.valueOf(userId));
-    redisRefreshTokenUtil.saveRefreshToken(userId, refreshToken,
-        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME));
-//    response.addCookie(CookieUtil.createCookie(refreshCookieName, refreshToken,
-//        lifeTime.intValue(), domain));
+  public void createRefreshToken(String accessToken, HttpServletResponse response) {
+    String refreshToken = JwtUtil.generateRefreshToken(accessToken);
+    redisRefreshTokenUtil.saveRefreshToken(accessToken, refreshToken,
+        Long.parseLong(SecurityPolicyStaticValue.REFRESH_EXPIRATION_TIME)+30L);
+
   }
 
   @Override
   public void invalidateRefreshToken(String id, HttpServletResponse response) {
-    CookieUtil.deleteCookie(response,refreshCookieName, domain);
     redisRefreshTokenUtil.deleteRefreshToken(id);
   }
 
