@@ -13,7 +13,6 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -82,9 +81,7 @@ public class RenewRefreshTokenWhenRefreshTokenIsMatchedCookieAndRedis<ID extends
   private String createNewTokenWithInvalidatingTheOldToken(ID id, Role role,
       String expiredAccessToken,
       HttpServletResponse response) {
-    Map<String, Object> roleClaims = new HashMap<>();
-    roleClaims.put("ROLE",role);
-    tokenHandler.invalidateToken(id.getValue().toString(), expiredAccessToken,roleClaims, response);
+    tokenHandler.invalidateToken(id.getValue().toString(), expiredAccessToken, response);
     return tokenHandler.createToken(id.getValue().toString(), createClaimsRoleMap(role), response);
   }
 
