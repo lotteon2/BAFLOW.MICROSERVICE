@@ -48,14 +48,15 @@ public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
   }
 
   public String parseTheDomainByRole(Map<String, Object> claimList) {
-    String role = (String) claimList.get("ROLE");
+    String role = (String)claimList.get("ROLE");
     if (role.equals(Role.ROLE_SOCIAL_USER.name())) {
       return mallDomain;
     } else if (role.equals(Role.ROLE_STORE_MANAGER.name())) {
       return storeDomain;
-    } else if (role.equals(Role.ROLE_SYSTEM_ADMIN.name())) {
+    } else {
       return adminDomain;
     }
-    throw new IllegalArgumentException("존재하지 않는 역할입니다.");
   }
-  }
+
+
+}
