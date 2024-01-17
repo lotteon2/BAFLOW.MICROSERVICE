@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class AccessTokenExpiredResponse<T extends BaseId> {
-  private T id;
+public class AccessTokenExpiredResponse {
+
+  private final String message = "Expired";
   private Role role;
+  private Long id;
 }

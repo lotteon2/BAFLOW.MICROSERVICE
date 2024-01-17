@@ -1,9 +1,8 @@
 package com.bit.lot.flower.auth.common.util;
 
+import com.bit.lot.flower.auth.common.exception.AuthException;
 import java.util.concurrent.TimeUnit;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -21,23 +20,21 @@ public class RedisRefreshTokenUtil {
         this.redisTemplate = redisTemplate;
     }
 
-    public void
-    saveRefreshToken(String userId, String refreshToken, long expirationTimeInSeconds) {
-        String key = getRefreshTokenKey(userId);
-        redisTemplate.opsForValue().set(key, refreshToken, expirationTimeInSeconds, TimeUnit.SECONDS);
+    public void saveRefreshToken(String key, String refreshToken, long expirationTimeInSeconds) {
+        redisTemplate.opsForValue()
+            .set(key, refreshToken, expirationTimeInSeconds, TimeUnit.SECONDS);
     }
 
-    public String getRefreshToken(String userId) {
-        String key = getRefreshTokenKey(userId);
-        return (String) redisTemplate.opsForValue().get(key);
+    public String getRefreshToken(String key) {
+        String value = (String) redisTemplate.opsForValue().get(key);
+        if(value == null){
+            throw new AuthException("refresh 토큰이 만료되었습니다.");
+        }
+        return value;
     }
 
-    public void deleteRefreshToken(String userId) {
-        String key = getRefreshTokenKey(userId);
+    public void deleteRefreshToken(String key) {
         redisTemplate.delete(key);
     }
 
-    private String getRefreshTokenKey(String userId) {
-        return "refresh_token:" + userId;
-    }
 }

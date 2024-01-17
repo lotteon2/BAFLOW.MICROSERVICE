@@ -16,8 +16,9 @@ public class TokenHandler {
 
   public String createToken(String id,
       Map<String, Object> claimList,HttpServletResponse response) {
-    refreshTokenStrategy.createRefreshToken(id,response);
-    return accessTokenStrategy.createAccessToken(id, claimList);
+    String accessToken = accessTokenStrategy.createAccessToken(id, claimList);
+    refreshTokenStrategy.createRefreshToken(accessToken, response);
+    return accessToken;
   }
 
   public void invalidateToken(String id, String token, HttpServletResponse response) {

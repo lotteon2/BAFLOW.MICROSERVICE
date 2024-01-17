@@ -70,8 +70,6 @@ email:
 
 cookie:
   refresh:
-    http:
-      domain: localhost:9000
     token:
       name: refresh-cookie
 
