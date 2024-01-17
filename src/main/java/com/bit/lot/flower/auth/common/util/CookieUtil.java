@@ -2,7 +2,6 @@ package com.bit.lot.flower.auth.common.util;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

@@ -48,10 +48,10 @@ public class IssueRefreshRefreshTokenInCookie implements RefreshTokenStrategy {
   }
 
   public String parseTheDomainByRole(Map<String, Object> claimList) {
-    Role role = (Role) claimList.get("ROLE");
-    if (role.equals(Role.ROLE_SOCIAL_USER)) {
+    String role = (String)claimList.get("ROLE");
+    if (role.equals(Role.ROLE_SOCIAL_USER.name())) {
       return mallDomain;
-    } else if (role.equals(Role.ROLE_STORE_MANAGER)) {
+    } else if (role.equals(Role.ROLE_STORE_MANAGER.name())) {
       return storeDomain;
     } else {
       return adminDomain;
