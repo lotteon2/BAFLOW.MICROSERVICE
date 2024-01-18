@@ -50,7 +50,7 @@ public class WebConfig implements WebMvcConfigurer {
         .allowedMethods("*")
         .allowedHeaders("*")
         .exposedHeaders("*")
-        .allowCredentials(true);
+        .allowCredentials(false);
 
   }
 

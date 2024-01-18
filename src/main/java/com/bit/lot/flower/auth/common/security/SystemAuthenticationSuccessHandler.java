@@ -46,7 +46,7 @@ public class SystemAuthenticationSuccessHandler implements AuthenticationSuccess
 
   @Override
   public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-      Authentication authentication) {
+      Authentication authentication)  {
     String token = tokenHandler.createToken(getIdFromPrincipal(authentication),
         createClaimsRoleMap(), response);
     response.setHeader("Authorization","Bearer "+token );
