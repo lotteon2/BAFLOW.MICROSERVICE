@@ -7,9 +7,14 @@ import com.bit.lot.flower.auth.store.valueobject.StoreId;
 
 public class StoreManagerMessageMapper {
 
+  private StoreManagerMessageMapper(){
+
+
+  }
+
   public static CreateStoreMangerCommand createStoreManagerCommandWithPk(StoreMangerSignUpCommand dto, Long id) {
     return CreateStoreMangerCommand.builder().businessNumberImage(dto.getBusinessNumberImage()).email(
-        dto.getEmail()).name(dto.getName()).id(id).build();
+        dto.getEmail()).name(dto.getName()).id(id).businessNumber(dto.getBusinessNumber()).build();
   }
 
   public static StoreManagerLoginResponseWithNameAndStoreId createLoginResponse(String name,

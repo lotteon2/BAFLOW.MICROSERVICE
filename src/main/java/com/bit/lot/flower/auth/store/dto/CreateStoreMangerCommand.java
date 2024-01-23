@@ -12,12 +12,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class CreateStoreMangerCommand {
+
   @NotNull
   private Long id;
   @NotNull
   private String email;
   @NotNull
   private String businessNumberImage;
+  @NotNull
+  private String businessNumber;
   @NotNull
   private String name;
 
