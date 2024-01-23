@@ -5,6 +5,9 @@ import com.bit.lot.flower.auth.common.security.TokenHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.web.firewall.DefaultHttpFirewall;
+import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -51,7 +54,11 @@ public class WebConfig implements WebMvcConfigurer {
         .allowedHeaders("*")
         .exposedHeaders("*")
         .allowCredentials(false);
+  }
 
+  @Bean
+  public HttpFirewall defaultHttpFirewall() {
+    return new DefaultHttpFirewall();
   }
 
 

@@ -67,7 +67,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     return requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.SIGNUP_ANT)
         || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.LOGIN_ANT)
         || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.EMAIL_ANT)
-        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.REFRESH_ANT);
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.REFRESH_ANT)
+        || requestURI.contains(JWTAuthenticationShouldNotFilterAntMatcher.STORE_MANAGER_OCR);
 
   }
 

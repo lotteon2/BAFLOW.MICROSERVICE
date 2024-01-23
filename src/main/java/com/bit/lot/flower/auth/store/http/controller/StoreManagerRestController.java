@@ -3,6 +3,7 @@ package com.bit.lot.flower.auth.store.http.controller;
 
 import bloomingblooms.response.CommonResponse;
 import com.bit.lot.flower.auth.common.valueobject.AuthId;
+import com.bit.lot.flower.auth.store.dto.BusinessImageUrlDto;
 import com.bit.lot.flower.auth.store.dto.StoreManagerLoginResponseWithNameAndStoreId;
 import com.bit.lot.flower.auth.store.dto.StoreMangerSignUpCommand;
 import com.bit.lot.flower.auth.store.http.message.StoreManagerNameRequest;
@@ -10,6 +11,7 @@ import com.bit.lot.flower.auth.store.http.message.StoreManagerStoreIdRequest;
 import com.bit.lot.flower.auth.store.mapper.StoreManagerMessageMapper;
 import com.bit.lot.flower.auth.store.message.StoreMangerCreateRequest;
 import com.bit.lot.flower.auth.store.service.EmailDuplicationCheckerService;
+import com.bit.lot.flower.auth.store.service.RequestBusinessNumberFromImageService;
 import com.bit.lot.flower.auth.store.service.StoreManagerService;
 import com.bit.lot.flower.auth.store.valueobject.StoreId;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,13 +29,20 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-public class StoreManagerRestController{
+public class StoreManagerRestController {
 
   private final StoreManagerNameRequest<AuthId> storeManagerNameRequest;
-  private final StoreManagerStoreIdRequest<StoreId,AuthId> storeManagerStoreIdRequest;
+  private final StoreManagerStoreIdRequest<StoreId, AuthId> storeManagerStoreIdRequest;
   private final EmailDuplicationCheckerService emailDuplicationCheckerService;
   private final StoreManagerService<AuthId> storeManagerService;
   private final StoreMangerCreateRequest storeMangerCreateRequest;
+  private final RequestBusinessNumberFromImageService requestBusinessNumberFromImageService;
+
+  @PostMapping("/stores/business-image-number")
+  public CommonResponse<String> getBusinessNumber(@RequestBody BusinessImageUrlDto dto) {
+    return CommonResponse.success(
+        requestBusinessNumberFromImageService.getBusinessNumber(dto.getImageUrl()));
+  }
 
 
   @PostMapping("/stores/emails/{email}")

@@ -20,7 +20,8 @@ public class StoreMangerAuthorizationFilter extends OncePerRequestFilter {
     String requestURI = request.getRequestURI();
     return !requestURI.contains("/stores") || requestURI.contains("/stores/login") ||
         requestURI.contains("/stores/signup") ||
-        requestURI.contains("/stores/emails");
+        requestURI.contains("/stores/emails") ||
+        requestURI.contains("/stores/business-image-number");
   }
 
 

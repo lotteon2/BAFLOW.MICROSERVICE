@@ -32,4 +32,6 @@ public class StoreMangerSignUpCommand {
   @URL
   @NotNull
   private String businessNumberImage;
+  @NotNull
+  private String businessNumber;
 }

@@ -10,7 +10,6 @@ import com.bit.lot.flower.auth.common.valueobject.SecurityPolicyStaticValue;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +21,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class RenewRefreshTokenWhenAccessTokenExpired implements
+public class RenewRefreshInRedisTokenWhenAccessTokenExpired implements
     RenewRefreshTokenStrategy<AuthId> {
 
   private final RedisBlackListTokenUtil redisBlackListTokenUtil;
